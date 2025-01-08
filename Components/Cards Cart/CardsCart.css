@@ -72,6 +72,7 @@
     align-items: center;
     justify-content: center;
     width: 150px;
+    padding: 10px;
     border-left: 2px solid var(--primary-color);
 }
 

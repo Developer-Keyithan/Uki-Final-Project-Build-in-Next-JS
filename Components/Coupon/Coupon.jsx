@@ -7,7 +7,7 @@ function CouponCardItem({ data, isSelected, onClick }) {
     return (
         <div className={`coupon-item select ${isSelected ? 'selected' : ''}`} onClick={onClick}>
             <h3 className='coupon-name'>{data.name}</h3>
-            <p className="coupon-decription">{data.decription}</p>
+            <p className="coupon-decription">{data.description}</p>
         </div>
     );
 }

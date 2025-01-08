@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { TiHome } from "react-icons/ti";
 import { MdWork } from "react-icons/md";
 import { FaLocationDot } from "react-icons/fa6";
+import Image from 'next/image';
 
 function CardsCardItem({ data, isSelected, onClick }) {
     let card = '';
@@ -42,7 +43,7 @@ function CardsCardItem({ data, isSelected, onClick }) {
             </div>
 
             <div className='cards-type'>
-                <img src={card} alt={alt} />
+                <Image src={card} alt={alt} />
             </div>
         </div>
     );

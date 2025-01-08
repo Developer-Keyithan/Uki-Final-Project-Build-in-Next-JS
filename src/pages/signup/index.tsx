@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './SignUp.css'
 import Link from 'next/link';
 
@@ -13,34 +13,66 @@ import { HiMiniShoppingBag } from "react-icons/hi2";
 import { RiMoonClearFill } from "react-icons/ri";
 
 import Toggle from '../../../Components/Toggle/Toggle';
+import axios from 'axios';
+import { useRouter } from 'next/router';
 
 const SignUp = () => {
+
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [mobileNumber, setMobileNumber] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [userType, setUserType] = useState('consumer');
+
+    const router = useRouter();
+
+    let message = '';
+
+    if (password !== confirmPassword) {
+        message = "Passwords are not match"
+    }
+
+    const handleSubmit = async (e: any) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post('/api/user', { firstName, lastName, mobileNumber, confirmPassword, userType })
+
+            if (response.status === 200) {
+                router.push('/products')
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
     return (
         <div className='signup-container'>
             <div className="signup-content-container">
                 <div className="signup-content">
                     <h1>Sign Up</h1>
-                    <form method='POST' className="signup-form">
+                    <form onSubmit={handleSubmit} method='POST' className="signup-form">
                         <div className='name-container'>
                             <div className="first-name">
                                 <label htmlFor="first-name">First Name</label>
-                                <input className='text-input name' type="text" name="first-name" id="" placeholder='Enter Your First Name' />
+                                <input onChange={(e) => setFirstName(e.target.value)} className='text-input name' type="text" name="first-name" id="" placeholder='Enter Your First Name' />
                             </div>
 
                             <div className="first-name">
                                 <label htmlFor="last-name">Last Name</label>
-                                <input className='text-input name' type="text" name="last-name" id="" placeholder='Enter Your Last Name' />
+                                <input onChange={(e) => setLastName(e.target.value)} className='text-input name' type="text" name="last-name" id="" placeholder='Enter Your Last Name' />
                             </div>
                         </div>
                         <label htmlFor="mobile-number">Mobile Number</label>
-                        <input className='text-input' type="text" name="mobile-number" placeholder='Enter Your Mobile Number' />
+                        <input onChange={(e) => setMobileNumber(e.target.value)} className='text-input' type="number" name="mobile-number" placeholder='Enter Your Mobile Number' />
 
                         <label htmlFor="password">Password</label>
-                        <input className='text-input' type="text" name="password" placeholder='Enter Your Password' />
+                        <input onChange={(e) => setPassword(e.target.value)} className='text-input' type="password" name="password" placeholder='Enter Your Password' />
 
                         <label htmlFor="password">Confirm Password</label>
-                        <input className='text-input' type="text" name="password" placeholder='Re-enter Your Password' />
-                        <div className='show-password'><input type="checkbox" name="show-password" id="" /><p>Show Password</p></div>
+                        <input onChange={(e) => setConfirmPassword(e.target.value)} className='text-input' type="password" name="password" placeholder='Re-enter Your Password' />
+                        <p>{message}</p>
+                        <div className='show-password'><input onChange={(e) => setFirstName(e.target.value)} type="checkbox" name="show-password" id="" /><p>Show Password</p></div>
 
                         <button className='signup-btn' type='submit'>Sign Up <MdOutlineLogin /></button>
                     </form>

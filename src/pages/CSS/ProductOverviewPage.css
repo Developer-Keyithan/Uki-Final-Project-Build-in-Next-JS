@@ -1,0 +1,22 @@
+.overview-container {
+    position: relative;
+}
+
+.overview-main {
+    margin-left: 12vw;
+}
+
+.related-products {
+    margin: 20px;
+}
+
+.related-products h2 {
+    margin-bottom: 30px;
+}
+
+.product-carts {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    gap: 20px;
+    border-radius: 10px;
+}

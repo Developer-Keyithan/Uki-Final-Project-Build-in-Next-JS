@@ -23,6 +23,10 @@
     border-radius: 10px;
 }
 
+.card-card-container h2 {
+    font-size: 18px;
+}
+
 .card-card {
     display: flex;
     flex-direction: column;

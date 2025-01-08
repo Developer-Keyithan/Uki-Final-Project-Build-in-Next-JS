@@ -36,8 +36,10 @@
     overflow: hidden;
 }
 
-.main-image > img {
-    height: 20vw;
+.main-image .img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
 }
 
 .related-images {
@@ -53,7 +55,9 @@
 }
 
 .related-img {
-    height: 3.2vw;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
     cursor: pointer;
 }
 

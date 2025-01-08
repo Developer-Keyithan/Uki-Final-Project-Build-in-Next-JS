@@ -34,7 +34,7 @@ const Cart: React.FC<CartProps> = ({ data }) => {
   return (
     <div className="cart" onClick={handleNavigate} style={{ cursor: 'pointer' }}>
       <div className="image">
-        <Image src={data.image} alt={data.name+'image'} layout="responsive" style={{ height: '100%', objectFit: 'cover' }} />
+        <Image className='img' src={data.image} alt={data.name+'image'} />
       </div>
       <div className="cart-content">
         <div className="cart-name">
@@ -42,7 +42,7 @@ const Cart: React.FC<CartProps> = ({ data }) => {
           <p>{data.deliveryType}</p>
         </div>
         <p>
-          <h3 className="new-price">Rs. {data.newPrice}</h3>
+          <b className="new-price">Rs. {data.newPrice}</b>
           <span className="old-price"> {data.oldPrice}</span>
         </p>
         <RatingCart />

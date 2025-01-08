@@ -4,7 +4,7 @@ import './Pagination.css'
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { FaArrowRightLong } from "react-icons/fa6";
 
-const  Pagination = () => {
+const Pagination: React.FC = () => {
     return (
         <div className='page-number-container'>
             <button><FaArrowLeftLong /> Previous</button>
@@ -22,4 +22,4 @@ const  Pagination = () => {
     )
 }
 
-export default  Pagination
+export default Pagination

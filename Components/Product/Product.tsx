@@ -8,7 +8,7 @@ import { RiArrowDropDownLine } from "react-icons/ri";
 import { LuFilter } from "react-icons/lu";
 import { RxCross2 } from "react-icons/rx";
 
-interface Product {
+interface product {
   id: string;
   image: string | StaticImageData;
   relatedImages: (string | StaticImageData)[];
@@ -24,10 +24,10 @@ interface Product {
 }
 
 interface FilterProps {
-  data: Product[];
+  data: product[];
 }
 
-const Filter: React.FC<FilterProps> = ({ data }) => {
+const Products: React.FC<FilterProps> = ({ data }) => {
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
 
   const handleFilterClick = (filter: string) => {
@@ -95,4 +95,4 @@ const Filter: React.FC<FilterProps> = ({ data }) => {
   );
 };
 
-export default Filter;
+export default Products;

@@ -1,4 +1,4 @@
-import '../CSS/OrderPage.css'
+import './style.css'
 
 import AddressCart from '../../../Components/Address Cart/AddressCart'
 import CardsCart from '../../../Components/Cards Cart/CardsCart'

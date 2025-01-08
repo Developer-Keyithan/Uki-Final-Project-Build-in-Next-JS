@@ -1,3 +1,7 @@
+*{
+    font-family: 'Poppins';
+}
+
 .overview-container {
     position: relative;
 }

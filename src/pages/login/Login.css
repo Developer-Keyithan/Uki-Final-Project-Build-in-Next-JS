@@ -15,10 +15,12 @@
     --secondary-button-hover-color: #834100;
     --cart-bg: #EFEFEF;
     --gradient: linear-gradient(0deg, #007546, #00D480) ;
+
+    font-family: 'Poppins', sans-serif;
 }
 
 .login-container {
-    background: url(../../Assets/Login-Background16.jpg) no-repeat center / cover;
+    background: url(../../../Assets/Login-Background16.jpg) no-repeat center / cover;
 }
 
 .login-content-container {
@@ -47,6 +49,7 @@
 .login-content > h1 {
     margin-bottom: 50px;
     font-size: 40px;
+    color: var(--primary-color);
 }
 
 .login-form {
@@ -81,7 +84,7 @@
 
 .password-options {
     display: flex;
-    gap: 305px;
+    gap: 281px;
     margin-top: 5px;
 }
 

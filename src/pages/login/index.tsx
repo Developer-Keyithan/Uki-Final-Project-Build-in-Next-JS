@@ -1,6 +1,5 @@
 import React from 'react'
 import './Login.css'
-import { Link } from 'react-router-dom'
 
 import { MdOutlineLogin } from "react-icons/md";
 import { FaGoogle } from "react-icons/fa";
@@ -12,9 +11,10 @@ import { TiHome } from "react-icons/ti";
 import { HiMiniShoppingBag } from "react-icons/hi2";
 import { RiMoonClearFill } from "react-icons/ri";
 
-import Toggle from '../Toggle/Toggle';
+import Toggle from '../../../Components/Toggle/Toggle';
+import Link from 'next/link';
 
-const Login = () => {
+const Login: React.FC = () => {
     return (
         <div className='login-container'>
             <div className="login-content-container">
@@ -31,7 +31,7 @@ const Login = () => {
                         <input type="text" name="password" placeholder='Enter Your Password' />
                         <div className='password-options'>
                             <div className='show-password'><input type="checkbox" name="show-password" id="" /><p>Show Password</p></div>
-                            <Link to="/forgot-password">Forgot Password</Link>
+                            <Link href="/forgot-password">Forgot Password</Link>
                         </div>
                     </div>
 
@@ -47,7 +47,7 @@ const Login = () => {
                         <button className='login-api'><FaTiktok /></button>
                     </div>
                 </div>
-                <p>Don't have an account. <Link to="/SignUp">Sign Up</Link> </p>
+                <p>Don't have an account. <Link href="/signup">Sign Up</Link> </p>
             </div>
 
             {/* <Link to="/signup">

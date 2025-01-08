@@ -8,7 +8,6 @@ const Hero: React.FC = () => {
   return (
     <div className="hero-container">
       <div className="hero-image">
-        <Image src={HeroImage} alt="Agriculture background" layout="responsive" />
         <div className="image-gradient"></div>
       </div>
       <div className="hero-content">
@@ -17,15 +16,11 @@ const Hero: React.FC = () => {
           Welcome to <strong>Fshop</strong>. We believe in better agriculture for a better future.
         </p>
         <div className="hero-btn">
-          <Link href="/SignUp">
-            <a>
+          <Link href="/signup">
               <button className="btn-primary">Sign Up</button>
-            </a>
           </Link>
-          <Link href="/Login">
-            <a>
+          <Link href="/login">
               <button className="btn-secondary">Login</button>
-            </a>
           </Link>
         </div>
       </div>

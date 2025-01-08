@@ -8,10 +8,6 @@ import { RiSendPlaneFill } from "react-icons/ri";
 import { GrLocation } from "react-icons/gr";
 
 const Contact: React.FC = () => {
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        alert("Message sent successfully!");
-    };
 
     return (
         <div className='contact-container'>
@@ -45,7 +41,7 @@ const Contact: React.FC = () => {
                         </div>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="contact-form">
+                    <form className="contact-form">
                         <h3>Send us a Message</h3>
 
                         <label htmlFor="name">Full Name:</label>

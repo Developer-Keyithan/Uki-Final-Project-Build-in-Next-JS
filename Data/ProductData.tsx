@@ -57,6 +57,10 @@ const ProductData: Product[] = [
   createProduct("PR0018", "Chilli"),
   createProduct("PR0019", "Potato"),
   createProduct("PR0020", "Tomato"),
+  createProduct("PR0021", "Chilli"),
+  createProduct("PR0022", "Potato"),
+  createProduct("PR0023", "Tomato"),
+  createProduct("PR0024", "Chilli")
 ];
 
 export default ProductData;

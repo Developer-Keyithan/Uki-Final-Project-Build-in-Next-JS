@@ -62,7 +62,7 @@ const Filter: React.FC<FilterProps> = ({ data }) => {
             <button type='button' onClick={() => handleFilterClick('Organic')}>Organic</button>
             <button type='button' onClick={() => handleFilterClick('Free Delivery')}>Free Delivery</button>
             <button type='button' onClick={() => handleFilterClick('In-Stock')}>In-Stock</button>
-            <button type='button' onClick={() => handleFilterClick('4 stars and above')}>4 stars and above</button>
+            {/* <button type='button' onClick={() => handleFilterClick('4 stars and above')}>4 stars and above</button> */}
           </div>
         </div>
         <div className='price-range'>

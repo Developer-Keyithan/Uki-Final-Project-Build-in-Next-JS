@@ -1,9 +1,14 @@
-import { useRouter } from 'next/router';
+'use client'
+
+import { useRouter} from 'next/navigation'
 import { StaticImageData } from "next/image";
 import './Cart.css';
 import RatingCart from '../Rating Cart/RatingCart';
 import Toggle from '../Toggle/Toggle';
 import { FaRegHeart } from "react-icons/fa";
+
+import Image from 'next/image';
+
 
 interface ProductData {
   id: string;
@@ -19,16 +24,17 @@ interface CartProps {
 }
 
 const Cart: React.FC<CartProps> = ({ data }) => {
-  const router = useRouter();
+  const router = useRouter()
 
   const handleNavigate = () => {
-    router.push(`/Overview/${data.id}`);
+    router.push(`/overview/${data.id}`);
   };
+
 
   return (
     <div className="cart" onClick={handleNavigate} style={{ cursor: 'pointer' }}>
       <div className="image">
-        <img src={data.image as string} alt={data.name} />
+        <Image src={data.image} alt={data.name+'image'} layout="responsive" style={{ height: '100%', objectFit: 'cover' }} />
       </div>
       <div className="cart-content">
         <div className="cart-name">
@@ -39,7 +45,7 @@ const Cart: React.FC<CartProps> = ({ data }) => {
           <h3 className="new-price">Rs. {data.newPrice}</h3>
           <span className="old-price"> {data.oldPrice}</span>
         </p>
-        <RatingCart rating={4.5} />
+        <RatingCart />
       </div>
       <button className='add-to-cart'>Add to Cart</button>
       <i className='fav-icon'>

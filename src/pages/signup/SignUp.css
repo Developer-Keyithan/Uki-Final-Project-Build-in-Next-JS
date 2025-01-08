@@ -15,10 +15,12 @@
     --secondary-button-hover-color: #834100;
     --cart-bg: #EFEFEF;
     --gradient: linear-gradient(0deg, #007546, #00D480);
+
+    font-family: 'Poppins', sans-serif;
 }
 
 .signup-container {
-    background: url(../../Assets/Login-Background16.jpg) no-repeat center / cover;
+    background: url(../../../Assets/Login-Background16.jpg) no-repeat center / cover;
 }
 
 .signup-content-container {
@@ -44,9 +46,10 @@
     height: fit-content;
 }
 
-.signup-content>h1 {
+.signup-content > h1 {
     margin-bottom: 50px;
     font-size: 40px;
+    color: var(--primary-color);
 }
 
 .signup-form {
@@ -85,7 +88,7 @@
     width: 17rem;
 }
 
-.password-options {
+.show-password {
     display: flex;
     gap: 305px;
     margin-top: 5px;
@@ -113,10 +116,16 @@
     cursor: pointer;
 }
 
+.api-btn {
+    text-align: center;
+    margin-top: 20px;
+}
+
 .signup-api-btn {
     display: flex;
     width: 35rem;
     justify-content: space-around;
+    margin-top: 20px;
 }
 
 .signup-api {

@@ -1,6 +1,6 @@
 import React from 'react'
 import './SignUp.css'
-import { Link } from 'react-router-dom'
+import Link from 'next/link';
 
 import { MdOutlineLogin } from "react-icons/md";
 import { FaGoogle } from "react-icons/fa";
@@ -12,7 +12,7 @@ import { TiHome } from "react-icons/ti";
 import { HiMiniShoppingBag } from "react-icons/hi2";
 import { RiMoonClearFill } from "react-icons/ri";
 
-import Toggle from '../Toggle/Toggle';
+import Toggle from '../../../Components/Toggle/Toggle';
 
 const SignUp = () => {
     return (
@@ -54,7 +54,7 @@ const SignUp = () => {
                             <button className='signup-api'><FaTiktok /></button>
                         </div>
                     </div>
-                    <p>Already have an account. <Link to="/Login">Login</Link> </p>
+                    <p>Already have an account. <Link href="/login">Login</Link> </p>
                 </div>
 
                 {/* <Link to="/signup">
@@ -66,7 +66,7 @@ const SignUp = () => {
             </div>
 
             <Toggle link="/" position={{ left: '10px' }} icon={<TiHome />} />
-            <Toggle link="/Products" position={{left: '60px'}} icon={<HiMiniShoppingBag />} />
+            <Toggle link="/products" position={{left: '60px'}} icon={<HiMiniShoppingBag />} />
             <Toggle position={{left: '110px'}} icon={<RiMoonClearFill />} />
         </div>
 

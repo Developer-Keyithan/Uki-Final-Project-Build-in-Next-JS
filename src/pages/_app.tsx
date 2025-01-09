@@ -15,7 +15,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
                 pauseOnFocusLoss
                 draggable
                 pauseOnHover
-                theme="dark"
             />
             <Component {...pageProps} />
         </>

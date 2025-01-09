@@ -33,7 +33,7 @@
 
 .login-content {
     padding: 75px;
-    box-shadow: 0 0 10px #000;
+    box-shadow: 0 0 10px;
     z-index: 100;
     background: #fff4;
     border-radius: 10px;
@@ -90,6 +90,7 @@
 .show-password {
     display: flex;
     gap: 10px;
+    cursor: pointer;
 }
 
 .login-btn {

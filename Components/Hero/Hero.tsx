@@ -1,10 +1,20 @@
+"use client";
+
 import React from 'react';
-import HeroImage from '../../Assets/Hero.jpg';
 import './Hero.css';
-import Image from 'next/image';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const Hero: React.FC = () => {
+  const router = useRouter();
+
+  const handleSignup = () => {
+    router.push('/signup');
+  };
+
+  const handleLogin = () => {
+    router.push('/login');
+  };
+
   return (
     <div className="hero-container">
       <div className="hero-image">
@@ -16,12 +26,8 @@ const Hero: React.FC = () => {
           Welcome to <strong>Fshop</strong>. We believe in better agriculture for a better future.
         </p>
         <div className="hero-btn">
-          <Link href="/signup">
-              <button className="btn-primary">Sign Up</button>
-          </Link>
-          <Link href="/login">
-              <button className="btn-secondary">Login</button>
-          </Link>
+          <button onClick={handleSignup} className="btn-primary">Sign Up</button>
+          <button onClick={handleLogin} className="btn-secondary">Login</button>
         </div>
       </div>
     </div>

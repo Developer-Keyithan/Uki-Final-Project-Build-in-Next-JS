@@ -61,7 +61,7 @@ function ProductOverviewPage() {
       </div>
       <Footer />
       <Toggle position={{ right: '10px' }} icon={<RiMoonClearFill />} />
-      <Toggle link='/Cart' position={{ right: '60px' }} icon={<IoCartOutline />} />
+      <Toggle link='/cart' position={{ right: '60px' }} icon={<IoCartOutline />} />
     </div>
   );
 }

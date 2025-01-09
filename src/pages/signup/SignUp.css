@@ -36,7 +36,7 @@
 
 .signup-content {
     padding: 75px;
-    box-shadow: 0 0 10px #000;
+    box-shadow: 0 0 10px #0009;
     z-index: 100;
     background: #fff4;
     border-radius: 10px;
@@ -94,6 +94,7 @@
     display: flex;
     gap: 5px;
     margin-top: 5px;
+    cursor: pointer;
 }
 
 .signup-btn {

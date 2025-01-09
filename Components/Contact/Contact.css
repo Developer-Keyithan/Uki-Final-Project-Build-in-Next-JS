@@ -61,8 +61,18 @@
     margin-left: 25px;
 }
 
+.reach-us > div > p {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
 .contact-detail > div > p {
     margin-left: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .contact-form {

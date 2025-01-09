@@ -17,7 +17,8 @@
 }
 
 .Products-container {
-    margin-top: -25vh;
+    position: relative;
+    bottom: 25vh;
     margin-bottom: 20px;
     z-index: 1000;
 }
@@ -46,6 +47,10 @@
 .show-more button:hover {
     background: var(--primary-button-hover-color);
     cursor: pointer;
+}
+
+.About-container {
+    margin-top: -25vh;
 }
 
 ::-webkit-scrollbar {

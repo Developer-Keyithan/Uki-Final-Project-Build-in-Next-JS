@@ -24,6 +24,35 @@ const Login: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        const errors = [];
+
+        if (!emailOrMobileNumber) errors.push('e-mail or mobile number');
+        if (!password) errors.push('password');
+
+        if (errors.length > 0) {
+            const errorMessage = errors
+                .map((field, index) => {
+                    if (index === 0) {
+                        return field.charAt(0).toUpperCase() + field.slice(1);
+                    } else {
+                        return field;
+                    }
+                })
+                .join(', ')
+                .replace(/,([^,]*)$/, ' and$1');
+            const plural = errors.length > 1 ? 'are' : 'is';
+            const lastWord = errors.length > 1 ? 'them' : 'it'
+
+            toast.error(`${errorMessage} ${plural} most important to log in, please fill ${lastWord}.`, {
+                style: {
+                    width: '700px',
+                    display: 'flex',
+                    justifyContent: 'center'
+                },
+            });
+            return;
+        }
+
         try {
             const response = await axios.post('/api/user/login', {
                 emailOrMobileNumber,
@@ -31,27 +60,20 @@ const Login: React.FC = () => {
             });
 
             if (response.status === 200) {
-                console.log(response)
                 toast.success(response.data.message, {
                     style: {
-                        width: '600px',
-                        height: '100px',
+                        width: '400px',
                         display: 'flex',
-                        justifyContent: 'center',
-                        background: 'darkgreen',
-                        color: 'white'
+                        justifyContent: 'center'
                     },
                 });
                 router.push('/products');
             } else {
                 toast.error(response.data.error, {
                     style: {
-                        width: '600px',
-                        height: '100px',
+                        width: '400px',
                         display: 'flex',
-                        justifyContent: 'center',
-                        background: 'darkred',
-                        color: 'white',
+                        justifyContent: 'center'
                     },
                 });
             }
@@ -61,12 +83,9 @@ const Login: React.FC = () => {
                 error.response?.data?.error || "Something went wrong. Please try again.",
                 {
                     style: {
-                        width: '600px',
-                        height: '100px',
+                        width: '400px',
                         display: 'flex',
-                        justifyContent: 'center',
-                        background: 'darkred',
-                        color: 'white',
+                        justifyContent: 'center'
                     },
                 }
             );
@@ -87,7 +106,6 @@ const Login: React.FC = () => {
                                 type="text"
                                 name="mobile-number"
                                 placeholder="Enter Your E-mail or Mobile Number"
-                                required
                             />
                         </div>
 
@@ -98,16 +116,11 @@ const Login: React.FC = () => {
                                 type={showPassword ? 'text' : 'password'}
                                 name="password"
                                 placeholder="Enter Your Password"
-                                required
                             />
                             <div className="password-options">
-                                <div className="show-password">
-                                    <input
-                                        type="checkbox"
-                                        name="show-password"
-                                        onChange={handleShowPassword}
-                                    />
-                                    <p>Show Password</p>
+                                <div onClick={handleShowPassword} className='show-password'>
+                                    <input checked={showPassword} type="checkbox" />
+                                    <p>Show Passwords</p>
                                 </div>
                                 <Link href="/forgot-password">Forgot Password</Link>
                             </div>

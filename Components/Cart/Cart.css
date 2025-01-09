@@ -13,13 +13,13 @@
     --secondary-button-color: #FF8000;
     --primary-button-hover-color: #006B12;
     --secondary-button-hover-color: #834100;
-    --cart-bg: #EFEFEF;
+    --cart-bg: #000000;
 }
 
 .cart {
     display: flex;
     flex-direction: column;
-    box-shadow: 0 0 5px #0005;
+    box-shadow: 0 0 2px #0005;
     color: var(--text-color);
     overflow: hidden;
     transition: 0.3s ease-in-out;

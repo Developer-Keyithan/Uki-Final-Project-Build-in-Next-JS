@@ -48,16 +48,26 @@ const SignUp = () => {
                 toast.success('User account successfully created!', {
                     style: { width: '600px', height: '100px', display: 'flex', justifyContent: 'center', background: 'darkgreen' },
                 });
-            }
-
-            if(response.status === 500) {
+            } else {
                 toast('Failed to create account. Try again!'), {
                     style: { width: '600px', height: '100px', display: 'flex', justifyContent: 'center', background: 'darkred' },
                 };
             }
 
-        } catch (err) {
-            console.log(err)
+        } catch (error: any) {
+            toast.error(
+                error.response?.data?.error || "Something went wrong. Please try again.",
+                {
+                    style: {
+                        width: '600px',
+                        height: '100px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        background: 'darkred',
+                        color: 'white',
+                    },
+                }
+            );
         }
     }
 
@@ -117,8 +127,8 @@ const SignUp = () => {
             </div>
 
             <Toggle link="/" position={{ left: '10px' }} icon={<TiHome />} />
-            <Toggle link="/products" position={{left: '60px'}} icon={<HiMiniShoppingBag />} />
-            <Toggle position={{left: '110px'}} icon={<RiMoonClearFill />} />
+            <Toggle link="/products" position={{ left: '60px' }} icon={<HiMiniShoppingBag />} />
+            <Toggle position={{ left: '110px' }} icon={<RiMoonClearFill />} />
         </div>
 
     )

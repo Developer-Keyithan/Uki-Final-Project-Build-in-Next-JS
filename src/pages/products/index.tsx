@@ -16,7 +16,9 @@ const ProductPage = () => {
     <div>
       <Sidebar />
       <div className='bg'></div>
-      <Product data={productData} />
+      <div className="productPage-product-container">
+        <Product data={productData} />
+      </div>
       <div className="pageNumber">
         <Pagination />
       </div>

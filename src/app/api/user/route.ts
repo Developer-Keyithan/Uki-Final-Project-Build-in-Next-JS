@@ -12,15 +12,21 @@ export const POST = async (req: Request) => {
 
         const newUser = { firstName, lastName, mobileNumber, email, password, userType };
 
-        console.log("User to save:", newUser);
+        const user = await User.findOne(email, mobileNumber);
+
+    if (!user) {
+      return NextResponse.json(
+        { error: "User exist. Please login" },
+        { status: 401 }
+      );
+    }
 
         const createUser = await User.create(newUser);
 
         return NextResponse.json({ createUser }, { status: 200 });
     } catch (error: any) {
-        console.error("Error saving body:", error.message);
         return NextResponse.json(
-            { message: "Failed to save body.", error: error.message },
+            { message: "Failed to save body." },
             { status: 500 }
         );
     }

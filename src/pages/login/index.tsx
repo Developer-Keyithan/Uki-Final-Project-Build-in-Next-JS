@@ -31,6 +31,7 @@ const Login: React.FC = () => {
             });
 
             if (response.status === 200) {
+                console.log(response)
                 toast.success(response.data.message, {
                     style: {
                         width: '600px',
@@ -42,9 +43,7 @@ const Login: React.FC = () => {
                     },
                 });
                 router.push('/products');
-            } 
-            
-            if (response.status !== 200) {
+            } else {
                 toast.error(response.data.error, {
                     style: {
                         width: '600px',
@@ -52,12 +51,25 @@ const Login: React.FC = () => {
                         display: 'flex',
                         justifyContent: 'center',
                         background: 'darkred',
-                        color: 'white'
+                        color: 'white',
                     },
                 });
             }
-        } catch (error) {
 
+        } catch (error: any) {
+            toast.error(
+                error.response?.data?.error || "Something went wrong. Please try again.",
+                {
+                    style: {
+                        width: '600px',
+                        height: '100px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        background: 'darkred',
+                        color: 'white',
+                    },
+                }
+            );
         }
     };
 

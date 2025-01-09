@@ -17,13 +17,9 @@
 }
 
 .Products-container {
-    position: absolute;
-    top: 55vh;
-    z-index: 500;
-}
-
-.About-container {
-    margin-top: 129.5vh;
+    margin-top: -25vh;
+    margin-bottom: 20px;
+    z-index: 1000;
 }
 
 .show-more  {
@@ -45,8 +41,6 @@
     font-size: 16px;
     transition: 0.3s ease-in-out;
     margin-left: 60px;
-    position: relative;
-    bottom: 40px;
 }
 
 .show-more button:hover {

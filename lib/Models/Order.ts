@@ -1,7 +1,8 @@
 import { Schema, model, models } from "mongoose";
 
 const orderSchema = new Schema(
-    {
+    {   
+        userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
         products: [{
             productId: { type: Schema.Types.ObjectId, ref: "Product", required: true },
             quantity: {
@@ -15,6 +16,7 @@ const orderSchema = new Schema(
         couponDiscount: { type: Number, required: true, default: 0, min: 0 },
         promoCodeDiscount: { type: Number, required: true, default: 0, min: 0 },
         totalPrice: { type: Number, required: true, min: 0 },
+        status: { type: String, required: true }
     },
     { timestamps: true }
 );

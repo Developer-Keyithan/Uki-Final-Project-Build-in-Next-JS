@@ -1,15 +1,25 @@
 import { Schema, model, models } from "mongoose";
 import bcrypt from 'bcrypt';
-import { unique } from "next/dist/build/utils";
 
 const userSchema = new Schema(
     {
         firstName: { type: String, required: true },
         lastName: { type: String, required: true },
-        email: { type: String, unique: true, sparse: true },
+        email: {
+            type: String,
+            unique: true,
+            sparse: true,
+            required: false,
+            match: [/.+@.+\..+/, "Invalid email format"]
+        },
         mobileNumber: { type: Number, required: true, unique: true },
         password: { type: String, required: true },
         userType: { type: String, required: true },
+        profileImage: { type: String, required: false },
+        favourites: {
+            favProducts: [{ type: Schema.Types.ObjectId, ref: "Product" }],
+            favReviews: [{ type: Schema.Types.ObjectId, ref: "Review" }]
+        }
     },
     { timestamps: true }
 );

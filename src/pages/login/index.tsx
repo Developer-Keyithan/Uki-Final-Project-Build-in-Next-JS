@@ -62,7 +62,7 @@ const Login: React.FC = () => {
             if (response.status === 200) {
                 toast.success(response.data.message, {
                     style: {
-                        width: '400px',
+                        width: '500px',
                         display: 'flex',
                         justifyContent: 'center'
                     },
@@ -71,7 +71,7 @@ const Login: React.FC = () => {
             } else {
                 toast.error(response.data.error, {
                     style: {
-                        width: '400px',
+                        width: '500px',
                         display: 'flex',
                         justifyContent: 'center'
                     },
@@ -83,7 +83,7 @@ const Login: React.FC = () => {
                 error.response?.data?.error || "Something went wrong. Please try again.",
                 {
                     style: {
-                        width: '400px',
+                        width: '500px',
                         display: 'flex',
                         justifyContent: 'center'
                     },

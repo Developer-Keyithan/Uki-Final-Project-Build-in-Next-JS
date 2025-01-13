@@ -1,7 +1,6 @@
 import './style.css';
 import Review from '../../../../Components/Reviews/Review';
 import ProductCart from '../../../../Components/Product Cart/ProductCart';
-import Sidebar from '../../../../Components/Sidebar/Sidebar';
 import Footer from '../../../../Components/Footer/Footer';
 import Cart from '../../../../Components/Cart/Cart';
 import Toggle from '../../../../Components/Toggle/Toggle';
@@ -13,6 +12,7 @@ import { IoCartOutline } from "react-icons/io5";
 import { useRouter } from 'next/router';
 
 import { StaticImageData } from "next/image";
+import Navbar from '../../../../Components/Navbar/Navbar';
 
 interface ProductData {
   id: string;
@@ -44,13 +44,14 @@ function ProductOverviewPage() {
 
   return (
     <div className='overview-container'>
-      <Sidebar />
-      <div className='overview-main'>
+      <Navbar />
+      <hr className='sticky top-16' />
+      <div className='overview-main mx-60'>
         <div className='overview-carts'>
           {selectedProduct && <ProductCart key={selectedProduct.id} {...selectedProduct} />}
         </div>
         <div className="related-products">
-          <h2>Related Product</h2>
+          <h2 className='text-2xl font-semibold'>Related Product</h2>
           <div className='product-carts'>
             {sampleData.map((item: Product, index: number) => (
               <Cart key={index} data={item} />
@@ -60,8 +61,6 @@ function ProductOverviewPage() {
         <Review />
       </div>
       <Footer />
-      <Toggle position={{ right: '10px' }} icon={<RiMoonClearFill />} />
-      <Toggle link='/cart' position={{ right: '60px' }} icon={<IoCartOutline />} />
     </div>
   );
 }

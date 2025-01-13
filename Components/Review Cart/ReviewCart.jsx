@@ -15,7 +15,7 @@ function ReviewCart({ name, time, review, image }) {
                         <i className='profile-icon'><FaRegCircleUser /></i>
                     )}
                     <div className="name-and-time">
-                        <h3>{name}</h3>
+                        <h3 className='font-semibold'>{name}</h3>
                         <p>{time} Ago</p>
                     </div>
                 </div>

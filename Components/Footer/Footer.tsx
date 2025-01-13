@@ -8,21 +8,21 @@ import { FaLinkedinIn } from "react-icons/fa";
 const Footer: React.FC = () => {
   return (
     <div className='footer-container'>
-      <div className='footer-top'>
+      <div className='footer-top px-60'>
         <div className='content'>
           <div className='footer-section'>
-            <h3>About Us</h3>
+            <h3 className='font-semibold text-xl'>About Us</h3>
             <p>We’re a platform dedicated to directly connecting farmers with consumers, ensuring fresh, high-quality agricultural products reach your doorstep. No middlemen, just pure, farm-fresh goodness.</p>
           </div>
 
           <div className="footer-section">
-            <h3>Our Mission</h3>
+            <h3 className='font-semibold text-xl'>Our Mission</h3>
             <p>Connecting farmers and consumers directly for a better and more sustainable future. We empower local farmers while bringing fresh produce to your table.</p>
           </div>
         </div>
 
         <div className='footer-section'>
-          <h3>Quick Links</h3>
+          <h3 className='font-semibold text-xl'>Quick Links</h3>
           <a href="/home">Home</a>
           <a href="/shop">Shop</a>
           <a href="/about-us">About Us</a>
@@ -33,7 +33,7 @@ const Footer: React.FC = () => {
         </div>
 
         <div className='footer-section'>
-          <h3>Follow Us</h3>
+          <h3 className='font-semibold text-xl'>Follow Us</h3>
           <p>Stay connected with us for updates, special offers, and more!</p>
           <div className="social-icons">
             <a href="/"><FaFacebookF /></a>
@@ -44,15 +44,15 @@ const Footer: React.FC = () => {
         </div>
 
         <div className='footer-section'>
-          <h3>Contact Us</h3>
+          <h3 className='font-semibold text-xl'>Contact Us</h3>
           <p>Phone: +94 76 0202 918</p>
           <p>Email: sathyjaseelankeyithan@gmail.com</p>
           <p>Address: No:52, 2nd Cross Street, Vavuniya</p>
         </div>
       </div>
-      <div className='footer-middle'>
+      <div className='footer-middle px-60'>
         <div className="footer-section news-letter">
-          <h3>Newsletter</h3>
+          <h3 className='font-semibold text-xl'>Newsletter</h3>
           <div>
             <input type="text" placeholder='Enter Your Email Address' />
             <button>Subscribe</button>
@@ -60,7 +60,7 @@ const Footer: React.FC = () => {
         </div>
       </div>
       <div className='footer-bottom'>
-        <p>&copy; 2024 FarmLink. All rights reserved.</p>
+        <p>&copy; 2024 Fshop. All rights reserved.</p>
       </div>
     </div>
   );

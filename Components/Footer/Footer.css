@@ -32,6 +32,7 @@
     grid-template-columns: 2fr 0.5fr 1fr 1fr;
     gap: 20px;
     padding: 0 1.5vw;
+    margin-top: 30px;
 }
 
 .footer-top .content {
@@ -82,12 +83,13 @@
 
 .news-letter>div>input {
     height: 5vh;
-    width: 85%;
+    width: 80%;
     background: none;
     border: none;
     outline: none;
     padding: 15px;
     font-size: 16px;
+    color: var(--text-color);
 }
 
 .news-letter>div>input::placeholder {
@@ -97,7 +99,7 @@
 
 .news-letter>div>button {
     height: 5vh;
-    width: 15%;
+    width: 20%;
     border-radius: 5px;
     border: none;
     background: var(--primary-color);

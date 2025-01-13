@@ -65,7 +65,7 @@ const ProductCart = ({
   };
 
   return (
-    <div className='productcart-container'>
+    <div className='productcart-container border-[1px] border-gray-800 mt-5 rounded-[5px]'>
       <div className="product-images">
         <div className="main-image">
           <Image src={image} className='img' alt="Main product image" />
@@ -83,7 +83,7 @@ const ProductCart = ({
       </div>
 
       <div className="product-overview-content">
-        <h1>{name}</h1>
+        <h1 className='text-4xl font-semibold'>{name}</h1>
         <p>{description}</p>
 
         <div className='product-content-icons'>

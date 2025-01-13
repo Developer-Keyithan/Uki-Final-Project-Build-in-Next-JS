@@ -46,7 +46,7 @@ const sellerForm = () => {
     const [businessRegCerFront, setBusinessRegCerFront] = useState('');
     const [businessRegCerBack, setBusinessRegCerBack] = useState('');
 
-    const [isPlatformDelivery, setIsPlatformDelivery] = useState('');
+    const [isPlatformDelivery, setIsPlatformDelivery] = useState(true);
 
     const handleBusinessType = (i: ChangeEvent<HTMLInputElement>): void => {
         setIsIntivitual(i.target.value === 'intivitual')
@@ -55,6 +55,11 @@ const sellerForm = () => {
     const handleCitizenshipChange = (e: ChangeEvent<HTMLInputElement>): void => {
         setIsSriLankan(e.target.value === 'sriLankan');
     };
+
+    const handleIsPlatformDelivery = (j: ChangeEvent<HTMLInputElement>): void => {
+        setIsPlatformDelivery(j.target.value === 'platform-delivery');
+    };
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -139,10 +144,11 @@ const sellerForm = () => {
                                     <div className='mt-5'>
                                         <label>Your Business Type</label>
                                         <div className='flex gap-5 mt-1'>
-                                            <label htmlFor="business-type" className='flex gap-2 cursor-pointer'>
+                                            <label htmlFor="intivitual" className='flex gap-2 cursor-pointer'>
                                                 <input
                                                     type="radio"
                                                     name='business-type'
+                                                    id='intivitual'
                                                     value='intivitual'
                                                     checked={isIntivitual}
                                                     onChange={handleBusinessType}
@@ -150,10 +156,11 @@ const sellerForm = () => {
                                                 Intivitual
                                             </label>
 
-                                            <label htmlFor="business-type" className='flex gap-2 cursor-pointer'>
+                                            <label htmlFor='becomeBusiness' className='flex gap-2 cursor-pointer'>
                                                 <input
                                                     type="radio"
                                                     name='business-type'
+                                                    id='becomeBusiness'
                                                     value='become-business'
                                                     checked={!isIntivitual}
                                                     onChange={handleBusinessType}
@@ -306,13 +313,29 @@ const sellerForm = () => {
                                     <div>
                                         <p>You Refered Delivery Method</p>
                                         <div className='flex gap-5 mt-2'>
-                                            <label htmlFor="delivery-reference"
-                                                className='flex gap-2 cursor-pointer'
-                                            ><input type="radio" name='delivery' /> Platform Delivery</label>
+                                            <label htmlFor="platformDelivery" className='flex gap-2 cursor-pointer'>
+                                                <input
+                                                    type="radio"
+                                                    name='delivery'
+                                                    id='platformDelivery'
+                                                    value='platform-delivery'
+                                                    checked={isPlatformDelivery}
+                                                    onChange={handleIsPlatformDelivery}
+                                                />
+                                                Platform Delivery
+                                            </label>
 
-                                            <label htmlFor="delivery-reference"
-                                                className='flex gap-2 cursor-pointer'
-                                            ><input type="radio" name='delivery' /> Self Delivery</label>
+                                            <label htmlFor="selfDelivery" className='flex gap-2 cursor-pointer'>
+                                                <input
+                                                    type="radio"
+                                                    name='delivery'
+                                                    id='selfDelivery'
+                                                    value='self-delivery'
+                                                    checked={!isPlatformDelivery}
+                                                    onChange={handleIsPlatformDelivery}
+                                                />
+                                                Self Delivery
+                                            </label>
                                         </div>
                                     </div>
                                 </fieldset>

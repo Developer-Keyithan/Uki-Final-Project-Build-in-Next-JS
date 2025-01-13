@@ -53,7 +53,7 @@ const Products: React.FC<FilterProps> = ({ data }) => {
         <div className='filters'>
           <label htmlFor="filters">Some Filters For You</label>
           <div className='product-btn'>
-            <button type='button' onClick={() => handleFilterClick('District')}>District <i><RiArrowDropDownLine /></i></button>
+            <button type='button' /*onClick={() => handleFilterClick('District')}*/>District <i><RiArrowDropDownLine /></i></button>
             <button type='button' onClick={() => handleFilterClick('Vegetables')}>Vegetables</button>
             <button type='button' onClick={() => handleFilterClick('Fruits')}>Fruits</button>
             <button type='button' onClick={() => handleFilterClick('Grains')}>Grains</button>

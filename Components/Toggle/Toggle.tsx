@@ -9,7 +9,7 @@ interface ToggleProps {
 
 const Toggle: React.FC<ToggleProps> = ({ link, position, icon }) => {
     return (
-        <div>
+        <div className='toggle-cart'>
             {link ? (
                 <Link href={link}>
                     <button style={position} className='props-btn'>

@@ -2,7 +2,7 @@ import React from 'react';
 import './style.css';
 
 import Product from '../../../Components/Product/Product';
-import Sidebar from '../../../Components/Sidebar/Sidebar';
+import Navbar from '../../../Components/Navbar/Navbar';
 import Footer from '../../../Components/Footer/Footer';
 import Pagination from '../../../Components/Pagination/Pagination';
 import Toggle from '../../../Components/Toggle/Toggle';
@@ -14,17 +14,15 @@ import productData from '../../../Data/ProductData';
 const ProductPage = () => {
   return (
     <div>
-      <Sidebar />
-      <div className='bg'></div>
-      <div className="productPage-product-container">
-        <Product data={productData} />
-      </div>
-      <div className="pageNumber">
+      <Navbar />
+      <hr className='sticky top-16' />
+      <div className='mx-60'>
+        <div className="productPage-product-container">
+          <Product data={productData} />
+        </div>
         <Pagination />
       </div>
       <Footer />
-      <Toggle link='/' position={{ right: '55px' }} icon={<TiHome />} />
-      <Toggle position={{ right: '10px' }} icon={<RiMoonClearFill />} />
     </div>
   );
 };

@@ -10,6 +10,10 @@
     --bg-color: #ffffff;
 }
 
+.toggle-cart {
+    z-index: 0;
+}
+
 .props-btn {
     height: 40px;
     width: 40px;

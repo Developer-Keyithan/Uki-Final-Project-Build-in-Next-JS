@@ -12,7 +12,7 @@ const userSchema = new Schema(
             required: false,
             match: [/.+@.+\..+/, "Invalid email format"]
         },
-        mobileNumber: { type: Number, required: true, unique: true },
+        mobileNumber: { type: [Number], required: true, unique: true },
         password: { type: String, required: true },
         userType: { type: String, required: true, enum: ["consumer", "seller", "delivery-partner", "delivery-person", "admin", "super-admin"] },
         profileImage: { type: String, required: false },

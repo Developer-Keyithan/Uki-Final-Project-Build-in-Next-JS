@@ -18,20 +18,22 @@
 }
 
 .contact-container {
-    margin-left: 12vw;
     background: var(--primary-color);
-    padding: 60px;
+    padding: 20px 20px;
+    margin: 50px 240px;
+    border-radius: 15px;
 }
 
 .contact-content-container {
     background: var(--bg-color);
-    border-radius: 20px;
+    border-radius: 10px;
     text-align: center;
     padding: 40px 60px 60px 60px;
 }
 
 .contact-heading {
-    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-bottom: 30px;
 }
 
 .contact-content {

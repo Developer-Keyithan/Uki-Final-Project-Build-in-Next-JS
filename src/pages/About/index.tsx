@@ -1,12 +1,12 @@
 import React from 'react';
 import './About.css';
 import Image from 'next/image';
-import aboutImage from '../../Assets/About.png';
+import aboutImage from '../../../Assets/About.png';
 import { HiCheckBadge } from "react-icons/hi2";
 
 const About: React.FC = () => {
   return (
-    <div className='about-container mx-60 p-[20px] rounded-lg'id='about'>
+    <div className='about-container mx-40 p-[20px] rounded-lg' id='about'>
       <div className='bg-white rounded-md py-16'>
         <div><h1 className='about-heading font-semibold'>About Us</h1></div>
         <div className='about-content-container gap-20'>

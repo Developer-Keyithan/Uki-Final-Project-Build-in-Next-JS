@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     scroll-behavior: smooth;
+    scroll-padding-top: 100px;
     box-sizing: border-box;
   
     --primary-color: #007546;
@@ -20,11 +21,7 @@
     position: relative;
     bottom: 25vh;
     margin-bottom: 20px;
-    z-index: 1000;
-}
-
-.show-more  {
-    margin-left: 12vw;
+    z-index: 20;
 }
 
 .show-more button {
@@ -41,7 +38,7 @@
     font-weight: bold;
     font-size: 16px;
     transition: 0.3s ease-in-out;
-    margin-left: 60px;
+    margin-top: -40px;
 }
 
 .show-more button:hover {
@@ -51,6 +48,7 @@
 
 .About-container {
     margin-top: -25vh;
+    margin-bottom: 20px;
 }
 
 ::-webkit-scrollbar {

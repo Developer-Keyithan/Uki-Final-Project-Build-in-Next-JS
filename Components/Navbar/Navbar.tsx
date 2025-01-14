@@ -1,9 +1,27 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import './style.css'
 import { BiSearch, BiUser } from 'react-icons/bi'
 import { IoCartOutline } from 'react-icons/io5'
 import { RiMoonClearFill } from 'react-icons/ri'
+import React, { MouseEvent } from "react";
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
+    const router = useRouter();
+  
+    const handleAboutClick = (e: MouseEvent<HTMLAnchorElement>) => {
+      e.preventDefault();
+      router.push("/");
+
+      setTimeout(() => {
+        const aboutSection = document.getElementById("about");
+        if (aboutSection) {
+          aboutSection.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
+    };
+
     return (
         <div className='px-60 py-3 flex justify-between items-center sticky top-0 backdrop-blur-xl bg-white bg-opacity-40 border-green-800 z-50'>
             <div className='flex flex-row items-center gap-10'>
@@ -11,9 +29,8 @@ const Navbar = () => {
                 <div className='flex flex-row gap-2'>
                     <a className='px-5 cursor-pointer font-semibold hover:text-green-500 transition ease-in-out duration-300' href="/">Home</a>
                     <a className='px-5 cursor-pointer font-semibold hover:text-green-500 transition ease-in-out duration-300' href="/products">Shop Now</a>
-                    <a className='px-5 cursor-pointer font-semibold hover:text-green-500 transition ease-in-out duration-300' href="/about">About Us</a>
-                    <a className='px-5 cursor-pointer font-semibold hover:text-green-500 transition ease-in-out duration-300' href="/faqs">FAQs</a>
-                    <a className='px-5 cursor-pointer font-semibold hover:text-green-500 transition ease-in-out duration-300' href="/contact">Contact Us</a>
+                    <a className='px-5 cursor-pointer font-semibold hover:text-green-500 transition ease-in-out duration-300' href="#about" onClick={handleAboutClick}>About Us</a>
+                    <a className='px-5 cursor-pointer font-semibold hover:text-green-500 transition ease-in-out duration-300' href="/contactus">Contact Us</a>
                 </div>
             </div>
 

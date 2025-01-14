@@ -10,6 +10,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { BiUser } from 'react-icons/bi';
+import Navbar from '../../../Components/Navbar/Navbar';
+import Footer from '../../../Components/Footer/Footer';
 
 const Login: React.FC = () => {
     const router = useRouter();
@@ -95,29 +98,37 @@ const Login: React.FC = () => {
 
     return (
         <div className="login-container">
-            <div className="login-content-container">
-                <div className="login-content">
+            <Navbar />
+            <hr className='stick top-16' />
+            <div className="login-content-container mx-60 my-[20px] p-[20px] gap-[20px] rounded-xl">
+                <div className="flex flex-col items-center w-1/3 justify-center gap-12 h-[78vh] bg-gray-50 sticky cursor-pointer border-[1px] border-gray-300 p-10 rounded-md hover:bg-gray-100 hover:text-gray-500 transition ease-in-out duration-300 z-0">
+                    <BiUser className='text-[15vh] border-[10px] border-gray-700 text-gray-700 rounded-full' />
+                    <p className='font-semibold text-xl text-center'>Upload a profile image</p>
+                </div>
+                <div className="login-content bg-white rounded-md w-2/3">
                     <h1 className='font-semibold'>Login</h1>
-                    <form onSubmit={handleSubmit} method="POST" className="login-form">
-                        <div className="number">
+                    <form onSubmit={handleSubmit} method="POST" className="login-form w-full">
+                        <div className="number w-full">
                             <label htmlFor="email">E-mail or Mobile Number</label>
                             <input
                                 onChange={(e) => setEmailOrMobileNumber(e.target.value)}
                                 type="text"
                                 name="mobile-number"
                                 placeholder="Enter Your E-mail or Mobile Number"
+                                className='w-full'
                             />
                         </div>
 
-                        <div className="password">
+                        <div className="password w-full">
                             <label htmlFor="password">Password</label>
                             <input
                                 onChange={(e) => setPassword(e.target.value)}
                                 type={showPassword ? 'text' : 'password'}
                                 name="password"
                                 placeholder="Enter Your Password"
+                                className='w-full'
                             />
-                            <div className="password-options">
+                            <div className="password-options w-full">
                                 <div onClick={handleShowPassword} className='show-password'>
                                     <input checked={showPassword} type="checkbox" />
                                     <p>Show Passwords</p>
@@ -132,9 +143,9 @@ const Login: React.FC = () => {
 
                     </form>
 
-                    <div className="api-btn">
+                    <div className="api-btn w-full">
                         <p>or login with</p>
-                        <div className="login-api-btn">
+                        <div className="login-api-btn w-full">
                             <button className="login-api"><FaGoogle /></button>
                             <button className="login-api"><FaFacebook /></button>
                             <button className="login-api"><FaApple /></button>
@@ -144,10 +155,7 @@ const Login: React.FC = () => {
                     <p>Don't have an account? <Link href="/signup">Sign Up</Link></p>
                 </div>
             </div>
-
-            <Toggle link="/" position={{ left: '10px' }} icon={<TiHome />} />
-            <Toggle link="/products" position={{ left: '60px' }} icon={<HiMiniShoppingBag />} />
-            <Toggle position={{ left: '110px' }} icon={<RiMoonClearFill />} />
+            <Footer />
         </div>
     );
 };

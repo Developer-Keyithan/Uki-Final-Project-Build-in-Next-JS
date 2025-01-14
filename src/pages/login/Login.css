@@ -19,25 +19,15 @@
     font-family: 'Poppins', sans-serif;
 }
 
-.login-container {
-    background: url(../../../Assets/Login-Background16.jpg) no-repeat center / cover;
-}
-
 .login-content-container {
-    height: 100vh;
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 20px;
+    justify-content: space-between;
+    background: var(--primary-color);
 }
 
 .login-content {
     padding: 75px;
-    box-shadow: 0 0 10px;
-    z-index: 100;
-    background: #fff4;
-    border-radius: 10px;
-    backdrop-filter: blur(50px);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -68,7 +58,6 @@
 .password > input {
     height: 40px;
     padding: 15px;
-    width: 35rem;
     border-radius: 5px;
     border: 1px solid gray;
     outline: none;
@@ -76,14 +65,9 @@
     background: #fff7;
 }
 
-.number > input:focus,
-.password > input:focus {
-    border: 2px solid var(--primary-botton-color);
-}
-
 .password-options {
     display: flex;
-    gap: 281px;
+    justify-content: space-between;
     margin-top: 5px;
 }
 
@@ -124,15 +108,14 @@
 
 .login-api-btn {
     display: flex;
-    width: 35rem;
-    justify-content: space-around;
+    justify-content: space-between;
 }
 
 .login-api {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px 50px;
+    padding: 10px 80px;
     background: none;
     border-radius: 5px;
     border: 1px solid var(--primary-color);

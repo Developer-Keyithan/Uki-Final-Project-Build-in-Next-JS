@@ -23,24 +23,17 @@
     font-family: 'Poppins', sans-serif;
 }
 
-.signup-container {
-    background: url(../../../Assets/Login-Background16.jpg) no-repeat center / cover;
-}
-
 .signup-content-container {
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 20px;
+    background: var(--primary-color);
 }
 
 .signup-content {
     padding: 75px;
-    box-shadow: 0 0 10px #0009;
     z-index: 100;
-    background: #fff4;
-    border-radius: 10px;
-    backdrop-filter: blur(50px);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -67,7 +60,6 @@
 .signup-content .text-input {
     height: 40px;
     padding: 15px;
-    width: 35rem;
     border-radius: 5px;
     border: 1px solid gray;
     outline: none;
@@ -84,10 +76,6 @@
 .name-container .last-name {
     display: flex;
     flex-direction: column;
-}
-
-.signup-content .text-input.name {
-    width: 17rem;
 }
 
 .show-passwords {
@@ -126,8 +114,7 @@
 
 .signup-api-btn {
     display: flex;
-    width: 35rem;
-    justify-content: space-around;
+    justify-content: space-between;
     margin-top: 20px;
 }
 
@@ -135,7 +122,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px 50px;
+    padding: 10px 80px;
     background: none;
     border-radius: 5px;
     border: 1px solid var(--primary-color);

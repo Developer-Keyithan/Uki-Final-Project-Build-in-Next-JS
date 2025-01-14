@@ -12,6 +12,9 @@ import Toggle from '../../../Components/Toggle/Toggle';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
+import Navbar from '../../../Components/Navbar/Navbar';
+import { BiUser } from 'react-icons/bi';
+import Footer from '../../../Components/Footer/Footer';
 
 const SignUp = () => {
     const [firstName, setFirstName] = useState('');
@@ -77,7 +80,7 @@ const SignUp = () => {
                 .replace(/,([^,]*)$/, ' and$1');
             const plural = errors.length > 1 ? 'are' : 'is';
             const lastWord = errors.length > 1 ? 'them' : 'it'
-    
+
             toast.error(`${errorMessage} ${plural} most important to create an account, please fill ${lastWord}.`, {
                 style: {
                     width: '1000px',
@@ -128,38 +131,45 @@ const SignUp = () => {
 
     return (
         <div className='signup-container'>
-            <div className="signup-content-container">
-                <div className="signup-content">
+            <Navbar />
+            <hr className='sticky top-16' />
+            <div className="signup-content-container flex flex-row justify-between mx-60 my-5 rounded-xl gap-[20px]">
+                <div className="flex flex-col items-center w-1/3 justify-center gap-12 h-[107vh] bg-gray-50 sticky cursor-pointer border-[1px] border-gray-300 p-10 rounded-md hover:bg-gray-100 hover:text-gray-500 transition ease-in-out duration-300 z-0">
+                    <BiUser className='text-[15vh] border-[10px] border-gray-700 text-gray-700 rounded-full' />
+                    <p className='font-semibold text-xl text-center'>Upload a profile image</p>
+                </div>
+
+                <div className="signup-content z-0 bg-white rounded-md w-2/3">
                     <h1 className='font-semibold'>Create an Account</h1>
-                    <form onSubmit={handleSubmit} className="signup-form">
-                        <div className='name-container'>
-                            <div className="first-name">
+                    <form onSubmit={handleSubmit} className="signup-form w-full">
+                        <div className='name-container w-full'>
+                            <div className="first-name w-full">
                                 <label htmlFor="first-name">First Name</label>
                                 <input id="first-name" onChange={(e) => setFirstName(e.target.value)}
-                                    className='text-input name' type="text" placeholder='Enter Your First Name' />
+                                    className='text-input name w-full' type="text" placeholder='Enter Your First Name' />
                             </div>
-                            <div className="first-name">
+                            <div className="first-name w-full">
                                 <label htmlFor="last-name">Last Name</label>
                                 <input id="last-name" onChange={(e) => setLastName(e.target.value)}
-                                    className='text-input name' type="text" placeholder='Enter Your Last Name' />
+                                    className='text-input name w-full' type="text" placeholder='Enter Your Last Name' />
                             </div>
                         </div>
 
                         <label htmlFor="email">E-mail</label>
                         <input id="email" onChange={(e) => setEmail(e.target.value)}
-                            className='text-input' type="email" placeholder='Enter Your E-mail' />
+                            className='text-input w-full' type="email" placeholder='Enter Your E-mail' />
 
                         <label htmlFor="mobile-number">Mobile Number</label>
                         <input id="mobile-number" onChange={(e) => setMobileNumber(e.target.value)}
-                            className='text-input' type="number" placeholder='Enter Your Mobile Number' />
+                            className='text-input w-full' type="number" placeholder='Enter Your Mobile Number' />
 
                         <label htmlFor="password">Password</label>
                         <input id="password" onChange={(e) => setPassword(e.target.value)}
-                            className='text-input' type={showPassword ? 'text' : 'password'} placeholder='Enter Your Password' />
+                            className='text-input w-full' type={showPassword ? 'text' : 'password'} placeholder='Enter Your Password' />
 
                         <label htmlFor="confirm-password">Confirm Password</label>
                         <input id="confirm-password" onChange={(e) => setConfirmPassword(e.target.value)}
-                            className='text-input' type={showPassword ? 'text' : 'password'} placeholder='Re-enter Your Password' />
+                            className='text-input w-full' type={showPassword ? 'text' : 'password'} placeholder='Re-enter Your Password' />
 
                         <div onClick={handleShowPassword} className='show-passwords'>
                             <input checked={showPassword} type="checkbox" />
@@ -169,9 +179,9 @@ const SignUp = () => {
                         <button className='signup-btn' type='submit'>Create Account <MdOutlineAccountBalanceWallet /></button>
                     </form>
 
-                    <div className="api-btn">
+                    <div className="api-btn w-full">
                         <p>or signup with</p>
-                        <div className='signup-api-btn'>
+                        <div className='signup-api-btn w-full'>
                             <button className='signup-api'><FaGoogle /></button>
                             <button className='signup-api'><FaFacebook /></button>
                             <button className='signup-api'><FaApple /></button>
@@ -180,11 +190,8 @@ const SignUp = () => {
                     </div>
                     <p>Already have an account? <Link href="/login">Login</Link></p>
                 </div>
-
-                <Toggle link="/" position={{ left: '10px' }} icon={<TiHome />} />
-                <Toggle link="/products" position={{ left: '60px' }} icon={<HiMiniShoppingBag />} />
-                <Toggle position={{ left: '110px' }} icon={<RiMoonClearFill />} />
             </div>
+            <Footer />
         </div>
     );
 };

@@ -103,7 +103,7 @@ const Login: React.FC = () => {
             <div className="login-content-container mx-60 my-[20px] p-[20px] gap-[20px] rounded-xl">
                 <div className="flex flex-col items-center w-1/3 justify-center gap-12 h-[78vh] bg-gray-50 sticky cursor-pointer border-[1px] border-gray-300 p-10 rounded-md hover:bg-gray-100 hover:text-gray-500 transition ease-in-out duration-300 z-0">
                     <BiUser className='text-[15vh] border-[10px] border-gray-700 text-gray-700 rounded-full' />
-                    <p className='font-semibold text-xl text-center'>Upload a profile image</p>
+                    <p className='font-semibold text-xl text-center'>Our Logo</p>
                 </div>
                 <div className="login-content bg-white rounded-md w-2/3">
                     <h1 className='font-semibold'>Login</h1>

@@ -1,16 +1,16 @@
-import './AddOne.css';
-import { IoIosAdd } from 'react-icons/io';
+import './AddOne.css'
 
 interface AddOneProps {
-  textContent: string;
+    textContent: string;
+    onClick: () => void;
 }
 
-const AddOne: React.FC<AddOneProps> = (props) => {
-  return (
-    <div className='add-container'>
-      <IoIosAdd /> <p>{props.textContent}</p>
-    </div>
-  );
+const AddOne: React.FC<AddOneProps> = ({ textContent, onClick }) => {
+    return (
+        <button className="add-container" onClick={onClick}>
+            + {textContent}
+        </button>
+    );
 };
 
 export default AddOne;

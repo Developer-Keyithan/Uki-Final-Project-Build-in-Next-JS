@@ -173,9 +173,9 @@ const DeliveryAddressForm: React.FC<DeliveryAddressFormProps> = ({ handleClose }
                     <div>
                         <p>This Address is</p>
                         <div className='flex justify-between mt-2'>
-                            <label className='flex items-center gap-2 cursor-pointer' htmlFor="home-address"><input type="radio" name='delivery-place' id='home-address' className='cursor-pointer' />Home Address</label>
-                            <label className='flex items-center gap-2 cursor-pointer' htmlFor="work-place-address"><input type="radio" name='delivery-place' id='work-place-address' className='cursor-pointer' />Work Place Address</label>
-                            <label className='flex items-center gap-2 cursor-pointer' htmlFor="other-address"><input type="radio" name='delivery-place' id='other-address' className='cursor-pointer' />Other Address</label>
+                            <label className='flex items-center gap-2 cursor-pointer accent-green-800' htmlFor="home-address"><input type="radio" name='delivery-place' id='home-address' className='cursor-pointer' />Home Address</label>
+                            <label className='flex items-center gap-2 cursor-pointer accent-green-800' htmlFor="work-place-address"><input type="radio" name='delivery-place' id='work-place-address' className='cursor-pointer' />Work Place Address</label>
+                            <label className='flex items-center gap-2 cursor-pointer accent-green-800' htmlFor="other-address"><input type="radio" name='delivery-place' id='other-address' className='cursor-pointer' />Other Address</label>
                         </div>
                     </div>
                 </fieldset>

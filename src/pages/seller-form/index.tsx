@@ -48,6 +48,8 @@ const sellerForm = () => {
 
     const [isPlatformDelivery, setIsPlatformDelivery] = useState(true);
 
+    const [isAgree, setIsAgree] = useState(true);
+
     const handleBusinessType = (i: ChangeEvent<HTMLInputElement>): void => {
         setIsIntivitual(i.target.value === 'intivitual')
     }
@@ -58,6 +60,10 @@ const sellerForm = () => {
 
     const handleIsPlatformDelivery = (j: ChangeEvent<HTMLInputElement>): void => {
         setIsPlatformDelivery(j.target.value === 'platform-delivery');
+    };
+
+    const handleIsAgree = (h: ChangeEvent<HTMLInputElement>): void => {
+        setIsAgree(h.target.checked);
     };
 
 
@@ -152,6 +158,7 @@ const sellerForm = () => {
                                                     value='intivitual'
                                                     checked={isIntivitual}
                                                     onChange={handleBusinessType}
+                                                    className='accent-green-800 cursor-pointer'
                                                 />
                                                 Intivitual
                                             </label>
@@ -164,6 +171,7 @@ const sellerForm = () => {
                                                     value='become-business'
                                                     checked={!isIntivitual}
                                                     onChange={handleBusinessType}
+                                                    className='accent-green-800 cursor-pointer'
                                                 />
                                                 Become Industry
                                             </label>
@@ -230,6 +238,7 @@ const sellerForm = () => {
                                                     value="sriLankan"
                                                     checked={isSriLankan}
                                                     onChange={handleCitizenshipChange}
+                                                    className='accent-green-800 cursor-pointer'
                                                 />
                                                 Sri Lankan
                                             </label>
@@ -242,6 +251,7 @@ const sellerForm = () => {
                                                     value="foreigner"
                                                     checked={!isSriLankan}
                                                     onChange={handleCitizenshipChange}
+                                                    className='accent-green-800 cursor-pointer'
                                                 />
                                                 Foreigner
                                             </label>
@@ -321,6 +331,7 @@ const sellerForm = () => {
                                                     value='platform-delivery'
                                                     checked={isPlatformDelivery}
                                                     onChange={handleIsPlatformDelivery}
+                                                    className='accent-green-800 cursor-pointer'
                                                 />
                                                 Platform Delivery
                                             </label>
@@ -333,12 +344,35 @@ const sellerForm = () => {
                                                     value='self-delivery'
                                                     checked={!isPlatformDelivery}
                                                     onChange={handleIsPlatformDelivery}
+                                                    className='accent-green-800 cursor-pointer'
                                                 />
                                                 Self Delivery
                                             </label>
                                         </div>
                                     </div>
                                 </fieldset>
+
+                                <div className='mt-5'>
+                                    <label htmlFor="terms-and-conditions"
+                                        className='flex gap-3 text-xl items-center cursor-pointer'
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            id="terms-and-conditions"
+                                            className='h-4 w-4 accent-green-800 cursor-pointer'
+                                            checked={isAgree}
+                                            onChange={handleIsAgree}
+                                        />
+                                        <p>
+                                            <a href="/terms" className='underline'>Terms</a> and <a href="/conditions" className='underline'>Conditions</a> Agreement
+                                        </p>
+                                    </label>
+                                    <label htmlFor="terms-and-conditions">
+                                        <p className='cursor-pointer mt-3'>
+                                            I hereby confirm that I have read, understood, and agree to abide by the platform's terms and conditions, privacy policy, and guidelines for selling. I acknowledge that any violation of these terms may result in the suspension or termination of my seller account.
+                                        </p>
+                                    </label>
+                                </div>
 
                                 <button type='submit'
                                     className='bg-green-900 text-white w-full h-10 rounded-sm mt-3 cursor-pointer hover:bg-green-700 transition ease-in-out duration-300'

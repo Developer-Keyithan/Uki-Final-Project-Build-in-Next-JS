@@ -128,4 +128,4 @@ export const DELETE = async (req: NextRequest) => {
     } catch (error: any) {
         return NextResponse.json({message: "Can't delete delivery address", error: error.message}, {status: 500})
     }
-}
+};

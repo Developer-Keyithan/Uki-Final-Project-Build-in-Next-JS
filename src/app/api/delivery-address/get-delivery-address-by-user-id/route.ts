@@ -26,7 +26,7 @@ export const POST = async (req: NextRequest) => {
 
         return NextResponse.json({
             message: "Delivery addresses retrieved successfully",
-            products: userDeliveryAddress
+            userDeliveryAddress
         }, { status: 200 });
 
     } catch (error: any) {

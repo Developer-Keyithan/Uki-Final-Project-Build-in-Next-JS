@@ -8,7 +8,6 @@ export const POST = async (req: NextResponse) => {
     try {
         const body = await req.json();
         const {
-            userId,
             place,
             no,
             street,
@@ -17,6 +16,8 @@ export const POST = async (req: NextResponse) => {
             district,
             contactNumber
         } = body;
+
+        console.log(contactNumber)
 
         if (!town) return NextResponse.json({ error: "Town is required" }, { status: 400 });
         if (!division) return NextResponse.json({ error: "Division is required" }, { status: 400 });
@@ -28,7 +29,7 @@ export const POST = async (req: NextResponse) => {
         await DBconnect();
 
         const newDeliveryAddress = new DeliveryAddress({
-            userId: new Types.ObjectId(userId),
+            
             place,
             no,
             street,

@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import './style.css';
 import { IoClose } from "react-icons/io5";
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 interface FormState {
     no: string;
@@ -8,7 +10,7 @@ interface FormState {
     town: string;
     division: string;
     district: string;
-    contactNumbers: string[];
+    contactNumbers: number[];
 }
 
 interface DeliveryAddressFormProps {
@@ -16,10 +18,11 @@ interface DeliveryAddressFormProps {
 }
 
 const DeliveryAddressForm: React.FC<DeliveryAddressFormProps> = ({ handleClose }) => {
-    const [isDropdownOpen, setDropdownOpen] = useState(false);
+    const [isDropdownOpen, setDropdownOpen] = useState(true);
     const [selectedDistrict, setSelectedDistrict] = useState('');
     const [isAddNumberDisabled, setAddNumberDisabled] = useState(false);
     const [isAddContactClicked, setAddContactClicked] = useState(false);
+    const [selectedAddress, setSelectedAddress] = useState('');
 
     const toggleDropdown = () => {
         setDropdownOpen(!isDropdownOpen);
@@ -36,7 +39,7 @@ const DeliveryAddressForm: React.FC<DeliveryAddressFormProps> = ({ handleClose }
         town: '',
         division: '',
         district: '',
-        contactNumbers: [''],
+        contactNumbers: [],
     });
 
     const [errors, setErrors] = useState<Record<string, string>>({});
@@ -49,7 +52,7 @@ const DeliveryAddressForm: React.FC<DeliveryAddressFormProps> = ({ handleClose }
     };
 
     const handleContactNumberChange = (index: number, value: string) => {
-        const updatedNumbers = [...formState.contactNumbers];
+        const updatedNumbers: number[] = [...formState.contactNumbers];
         updatedNumbers[index] = value;
         setFormState({ ...formState, contactNumbers: updatedNumbers });
     };
@@ -71,6 +74,10 @@ const DeliveryAddressForm: React.FC<DeliveryAddressFormProps> = ({ handleClose }
         setAddContactClicked(false);
     };
 
+    const handleAddressChange = (e: any) => {
+        setSelectedAddress(e.target.value);
+    };
+
     const validateForm = () => {
         const newErrors: Record<string, string> = {};
 
@@ -85,12 +92,54 @@ const DeliveryAddressForm: React.FC<DeliveryAddressFormProps> = ({ handleClose }
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (event: React.FormEvent) => {
+    const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         if (validateForm()) {
-            console.log('Form Submitted:', formState);
-        } else {
-            console.log('Validation Errors:', errors);
+
+
+            try {
+                const place = selectedAddress;
+                const no = formState.no;
+                const street = formState.street;
+                const town = formState.town;
+                const division = formState.division;
+                const district = selectedDistrict;
+                const contactNumber = formState.contactNumbers;
+                console.log(contactNumber)
+
+                const response = await axios.post('/api/delivery-address', {
+                    no, place, street, town, division, district, contactNumber
+                });
+
+                if (response.status === 200) {
+                    toast.success(response.data.message, {
+                        style: {
+                            width: '400px',
+                            height: '60px',
+                            display: 'flex',
+                            justifyContent: 'center'
+                        }
+                    });
+                } else {
+                    toast.error(response.data.error, {
+                        style: {
+                            width: '400px',
+                            height: '60px',
+                            display: 'flex',
+                            justifyContent: 'center'
+                        }
+                    });
+                }
+            } catch (error: any) {
+                toast.error(error.response?.data?.error || "Something went wrong.", {
+                    style: {
+                        width: '400px',
+                        height: '60px',
+                        display: 'flex',
+                        justifyContent: 'center'
+                    }
+                });
+            }
         }
     };
 
@@ -173,9 +222,50 @@ const DeliveryAddressForm: React.FC<DeliveryAddressFormProps> = ({ handleClose }
                     <div>
                         <p>This Address is</p>
                         <div className='flex justify-between mt-2'>
-                            <label className='flex items-center gap-2 cursor-pointer accent-green-800' htmlFor="home-address"><input type="radio" name='delivery-place' id='home-address' className='cursor-pointer' />Home Address</label>
-                            <label className='flex items-center gap-2 cursor-pointer accent-green-800' htmlFor="work-place-address"><input type="radio" name='delivery-place' id='work-place-address' className='cursor-pointer' />Work Place Address</label>
-                            <label className='flex items-center gap-2 cursor-pointer accent-green-800' htmlFor="other-address"><input type="radio" name='delivery-place' id='other-address' className='cursor-pointer' />Other Address</label>
+                            <label
+                                className='flex items-center gap-2 cursor-pointer accent-green-800'
+                                htmlFor="home-address"
+                            >
+                                <input
+                                    type="radio"
+                                    name='delivery-place'
+                                    id='home-address'
+                                    value="Home"
+                                    className='cursor-pointer'
+                                    onChange={handleAddressChange}
+                                />
+                                Home Address
+                            </label>
+
+                            <label
+                                className='flex items-center gap-2 cursor-pointer accent-green-800'
+                                htmlFor="work-place-address"
+                            >
+                                <input
+                                    type="radio"
+                                    name='delivery-place'
+                                    id='work-place-address'
+                                    value="Work Place"
+                                    className='cursor-pointer'
+                                    onChange={handleAddressChange}
+                                />
+                                Work Place Address
+                            </label>
+
+                            <label
+                                className='flex items-center gap-2 cursor-pointer accent-green-800'
+                                htmlFor="other-address"
+                            >
+                                <input
+                                    type="radio"
+                                    name='delivery-place'
+                                    id='other-address'
+                                    value='Undifined'
+                                    className='cursor-pointer'
+                                    onChange={handleAddressChange}
+                                />
+                                Other Address
+                            </label>
                         </div>
                     </div>
                 </fieldset>

@@ -12,7 +12,7 @@ const transactionSchema = new Schema(
             }
         ],
         totalTransactionAmount: { type: Number, required: true, min: 1 },
-        status: { type: String, default: "Pending", enum: ["Pending", "Completed", "Cancelled"] }
+        status: { type: String, enum: ["Pending", "Completed", "Cancelled"] }
     },
     { timestamps: true }
 );

@@ -1,59 +1,78 @@
 import { NextRequest, NextResponse } from 'next/server';
 import DBconnect from '../../../../lib/db';
 import User from '../../../../lib/Models/User';
-import { Types } from 'mongoose';
 import bcrypt from 'bcrypt';
-import JWT from '../../auth'
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
+import { Types } from 'mongoose';
+import cookie from 'cookie';
 
 const JWT_SECRET = process.env.SECRET_KEY;
 
-const generateToken = (user: any): any => {
-    return jwt.sign({ id: user._id, email: user.email, userType: user.userType }, JWT_SECRET!, { expiresIn: '1h' });
+const generateToken = (user: any): string => {
+    return jwt.sign(
+        { id: user._id, email: user.email, userType: user.userType },
+        JWT_SECRET!,
+        { expiresIn: process.env.JWT_EXPIRY }
+    );
 };
 
-export const POST = async (req: Request) => {
+export const POST = async (req: NextRequest) => {
     try {
         await DBconnect();
 
         const { firstName, lastName, mobileNumber, email, confirmPassword, userType } = await req.json();
 
-        const password = confirmPassword;
+        if (!email || !confirmPassword || !userType) {
+            return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
+        }
 
-        const newUser = { firstName, lastName, mobileNumber, email, password, userType };
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return NextResponse.json({ error: "Invalid email address." }, { status: 400 });
+        }
 
         const existingUser = await User.findOne({ $or: [{ email }, { mobileNumber }] });
 
         if (existingUser) {
             return NextResponse.json(
-                { error: "Account already exist! Please login." },
+                { error: "Account already exists! Please login." },
                 { status: 401 }
             );
         }
 
+        const password = confirmPassword;
+
+        const newUser = { firstName, lastName, mobileNumber, email, password, userType };
         const user = await User.create(newUser);
+
         const token = generateToken(user);
 
-        const response = NextResponse.json({
-            message: "User account successfully created!",
-            user: { id: user._id, email: user.email, userType: user.userType },
-        },{ status: 200 });
+        const response = NextResponse.json(
+            {
+                message: "User account successfully created!",
+                user: { id: user._id, email: user.email, userType: user.userType },
+            },
+            { status: 200 }
+        );
 
         response.cookies.set("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             maxAge: 3600,
+            sameSite: "strict",
             path: "/",
         });
 
         return response;
     } catch (error: any) {
+        console.error(error);
         return NextResponse.json(
             { message: "Sorry! Failed to create user account." },
             { status: 500 }
         );
     }
 };
+
 
 export const PUT = async (req: NextRequest) => {
     try {

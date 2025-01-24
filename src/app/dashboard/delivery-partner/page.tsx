@@ -6,11 +6,9 @@ import Navbar from "../../../../Components/Navbar/Navbar";
 const userDashboard = () => {
   return (
     <div>
-      <Navbar />
       <div>
-        <h1>Admin Dashboard</h1>
+        <h1>Delivery Partner Dashboard</h1>
       </div>
-      <Footer />
     </div>
   )
 }

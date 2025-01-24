@@ -4,7 +4,7 @@ export const POST = async (req: NextRequest) => {
     try {
         const response = NextResponse.json({ message: 'Logout successful' });
 
-        // response.cookies.set('authToken', '', {
+        // response.cookies.set('token', '', {
         //     httpOnly: true,
         //     secure: true,
         //     sameSite: 'strict',

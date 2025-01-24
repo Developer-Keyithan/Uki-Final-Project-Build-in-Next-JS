@@ -63,8 +63,8 @@ const Login: React.FC = () => {
             });
 
             if (response.status === 200) {
-                const token = response.data.token; // Get the token from the response
-                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`; // Set token globally
+                const token = response.data.token;
+                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
                 toast.success(response.data.message, {
                     style: {
@@ -73,7 +73,7 @@ const Login: React.FC = () => {
                         justifyContent: 'center'
                     },
                 });
-                router.push('/products'); // Redirect to the desired page
+                router.push('/dashboard');
             } else {
                 toast.error(response.data.error, {
                     style: {

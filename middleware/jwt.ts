@@ -20,7 +20,7 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/protected-route/:path*"], // Update with your protected routes
+  matcher: ["/protected-route/:path*"],
 };
 
 
@@ -38,7 +38,7 @@ export async function getServerSideProps(context: any) {
 
   try {
     jwt.verify(token, process.env.SECRET_KEY!);
-    return { props: {} }; // Add props if needed
+    return { props: {} };
   } catch (error) {
     return {
       redirect: {

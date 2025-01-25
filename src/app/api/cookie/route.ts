@@ -17,7 +17,7 @@ export async function GET() {
     const  { value } = token;
     const SECRET_KEY = process.env.SECRET_KEY;
 
-    console.log(value);
+    // console.log(value);
 
     try {
         verify(value, SECRET_KEY!);

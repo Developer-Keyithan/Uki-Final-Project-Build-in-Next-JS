@@ -54,8 +54,10 @@ export default function dashboardLayout({
     }
     return (
         <main>
-            <Navbar />
-            <hr className="sticky top-16" />
+            <div className="sticky top-0 z-50">
+                <Navbar />
+                <hr />
+            </div>
             {children}
             <Footer />
         </main>

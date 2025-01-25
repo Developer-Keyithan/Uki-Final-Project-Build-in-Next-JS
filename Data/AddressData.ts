@@ -1,4 +1,5 @@
 interface Address {
+  id: string,
   no?: number;
   street?: string;
   town: string;
@@ -10,6 +11,7 @@ interface Address {
 
 const addressData: Address[] = [
   {
+    id: 'AD0001',
     no: 91,
     town: 'Arasadikkulam',
     division: 'Cheddikulam',
@@ -18,6 +20,7 @@ const addressData: Address[] = [
     type: 'home',
   },
   {
+    id: 'AD0002',
     no: 57,
     street: '2nd Cross Street',
     town: 'Vavuniya',
@@ -26,6 +29,7 @@ const addressData: Address[] = [
     type: 'work-place',
   },
   {
+    id: 'AD0003',
     town: 'Nochchimottai',
     division: 'Omanthai',
     contact: '77 1234 567',
@@ -33,6 +37,7 @@ const addressData: Address[] = [
     type: 'other-location',
   },
   {
+    id: 'AD0004',
     town: 'Pampaimadu',
     division: 'Vavuniya',
     district: 'Vavuniya',

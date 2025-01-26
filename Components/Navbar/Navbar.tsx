@@ -1,7 +1,7 @@
-"use client";
+'use client'
 
 import { useRouter } from "next/navigation";
-import './style.css'
+import './style.css';
 import React, { MouseEvent } from "react";
 import SearchBar from "./SearchBar";
 import NavBarIcons from "./NavBarIcons";
@@ -69,19 +69,8 @@ const Navbar: React.FC = () => {
                     </div>
                 </div>
             </div>
-
-            {/* <div className='flex flex-row items-center gap-10'>
-                <div className=''><p className='text-green-600 text-4xl font-semibold'>F<span className='text-green-500'>shop</span></p></div>
-                <div className='flex flex-row gap-2'>
-                    <a className='px-5 cursor-pointer font-semibold hover:text-green-500 transition ease-in-out duration-300' href="/">Home</a>
-                    <a className='px-5 cursor-pointer font-semibold hover:text-green-500 transition ease-in-out duration-300' href="/products">Shop Now</a>
-                    <a className='px-5 cursor-pointer font-semibold hover:text-green-500 transition ease-in-out duration-300' href="#about" onClick={handleAboutClick}>About Us</a>
-                    <a className='px-5 cursor-pointer font-semibold hover:text-green-500 transition ease-in-out duration-300' href="/contactus">Contact Us</a>
-                </div>
-            </div> */}
-
         </div>
     )
 }
 
-export default Navbar
+export default Navbar;

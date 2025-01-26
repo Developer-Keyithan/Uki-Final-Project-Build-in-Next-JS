@@ -25,6 +25,4 @@ const Toggle: React.FC<ToggleProps> = ({ link, position, icon }) => {
     );
 }
 
-
-
 export default Toggle;

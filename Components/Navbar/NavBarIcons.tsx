@@ -1,14 +1,14 @@
 'use client'
 
-import Link from "next/link"
-import { useRouter } from "next/router"
-import { useState } from "react"
-import { BiUser } from "react-icons/bi"
-import { IoCartOutline } from "react-icons/io5"
-import { LuFileHeart } from "react-icons/lu"
-import { RiMoonClearFill } from "react-icons/ri"
-import CartModel from "../CartModel/CartModel"
-import WishListModel from "../WishListModel/WishListModel"
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { BiUser } from "react-icons/bi";
+import { IoCartOutline } from "react-icons/io5";
+import { LuFileHeart } from "react-icons/lu";
+import { RiMoonClearFill } from "react-icons/ri";
+import CartModel from "../CartModel/CartModel";
+import WishListModel from "../WishListModel/WishListModel";
+import Link from "next/link";
 
 const NavBarIcons = () => {
     const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -17,8 +17,7 @@ const NavBarIcons = () => {
 
     const router = useRouter();
 
-    // TEMPORARY
-    const isLoggedIn = false
+    const isLoggedIn = false;
 
     const handleProfile = () => {
         if (!isLoggedIn) {
@@ -71,4 +70,4 @@ const NavBarIcons = () => {
     )
 }
 
-export default NavBarIcons
+export default NavBarIcons;

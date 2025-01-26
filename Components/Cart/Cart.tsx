@@ -1,22 +1,24 @@
 'use client'
 
-import { useRouter} from 'next/navigation'
+import { useRouter } from 'next/navigation';
 import { StaticImageData } from "next/image";
 import './Cart.css';
 import RatingCart from '../Rating Cart/RatingCart';
-import Toggle from '../Toggle/Toggle';
 import { FaRegHeart } from "react-icons/fa";
-
 import Image from 'next/image';
-
 
 interface ProductData {
   id: string;
   image: string | StaticImageData;
   name: string;
+  productName: string;
   deliveryType: string;
-  newPrice: string;
-  oldPrice: string;
+  price: {
+    newPrice: string;
+    oldPrice: string;
+  };
+  rating: string;
+  productImages: string[] | StaticImageData[];
 }
 
 interface CartProps {
@@ -24,33 +26,34 @@ interface CartProps {
 }
 
 const Cart: React.FC<CartProps> = ({ data }) => {
-  const router = useRouter()
+  const router = useRouter();
+  console.log(data);
+  const handleAddToCart = () => {
+    // Code to add item to cart
+  }
 
-  const handleNavigate = () => {
-    router.push(`/overview/${data.id}`);
-  };
-
+  const image =  data.productImages[0]
+  
 
   return (
-    <div className="cart" onClick={handleNavigate} style={{ cursor: 'pointer' }}>
-      <div className="image">
-        <Image className='img' src={data.image} alt={data.name+'image'} />
+    <div className="cart-container">
+      <div className="cart-image">
+        <Image src={image} alt={data.productName} width={200} height={200} />
       </div>
-      <div className="cart-content">
-        <div className="cart-name">
-          <h3>{data.name}</h3>
-          <p>{data.deliveryType}</p>
+      <div className="cart-details">
+        <h2>{data.productName}</h2>
+        <div className="cart-rating">
+          <RatingCart rating={data.rating} />
         </div>
-        <p>
-          <b className="new-price">Rs. {data.newPrice}</b>
-          <span className="old-price"> {data.oldPrice}</span>
-        </p>
-        <RatingCart />
+        <div className="cart-price">
+          <span className="new-price">Rs. {data.price.newPrice}</span>
+          <span className="old-price">Rs. {data.price.oldPrice}</span>
+        </div>
+        <div className="cart-actions">
+          <button onClick={handleAddToCart}>Add to Cart</button>
+          <FaRegHeart className="heart-icon" />
+        </div>
       </div>
-      <button className='add-to-cart'>Add to Cart</button>
-      <i className='fav-icon'>
-        <Toggle icon={<FaRegHeart />} position={{ right: '10px' }} />
-      </i>
     </div>
   );
 };

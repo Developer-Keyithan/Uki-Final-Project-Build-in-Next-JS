@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BiUser } from "react-icons/bi";
 import { IoCartOutline } from "react-icons/io5";
 import { LuFileHeart } from "react-icons/lu";
@@ -16,59 +16,62 @@ interface NavBarIconsProps {
 }
 
 const NavBarIcons: React.FC<NavBarIconsProps> = ({ userData }) => {
-    
     const [isProfileOpen, setIsProfileOpen] = useState(false);
-    const [user, setUser] = useState(userData);
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [isWishListOpen, setIsWishListOpen] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    const router = useRouter();
-
-    const isLoggedIn = false;
-
-    const handleProfile = () => {
-        setIsProfileOpen((prev) => !prev)
-    }
+    const handleProfile = () => setIsProfileOpen((prev) => !prev);
+    const toggleDarkMode = () => document.body.classList.toggle('dark-mode');
+    const nameLogo = `${userData?.firstName?.[0]}${userData?.lastName?.[0]}`;
+    console.log(nameLogo);
 
     return (
         <div className="flex gap-4 relative">
-
-            <div className='text-2xl bg-green flex justify-center items-center'>
-                <BiUser
-                    onClick={handleProfile}
-                />
+            {/* Profile */}
+            <div className="text-2xl flex justify-center items-center cursor-pointer">
+                {isLoggedIn ? (
+                    <BiUser onClick={handleProfile} />
+                ) : (
+                    userData?.profileImage ? (
+                        <img
+                        src={userData.profileImage}
+                        alt="Profile"
+                        className="w-8 h-8 rounded-full object-cover"
+                        onClick={handleProfile}
+                        />
+                    ) : (
+                        <h3 className="flex items-center justify-center font-semibold h-9 w-9 text-[16px] bg-primaryColor text-white rounded-full" onClick={handleProfile}>{nameLogo}</h3>
+                    )
+                )}
             </div>
-            {isProfileOpen && (<Profile />)}
+            {isProfileOpen && <Profile />}
 
-            <div
-                className=' relative text-2xl bg-green flex justify-center items-center cursor-pointer'
-            >
-                <IoCartOutline
-                    onClick={() => setIsCartOpen((prev) => !prev)}
-                />
-                <div className="absolute -top-2 -right-2 py-[1px] px-2 bg-bgRed rounded-full text-white text-xs items-center justify-center">
+            {/* Cart */}
+            <div className="relative text-2xl flex justify-center items-center cursor-pointer">
+                <IoCartOutline onClick={() => setIsCartOpen((prev) => !prev)} />
+                <div className="absolute -top-2 -right-2 py-[1px] px-2 bg-bgRed rounded-full text-white text-xs">
                     2
                 </div>
             </div>
-            {isCartOpen && (<CartModel />)}
+            {isCartOpen && <CartModel />}
 
-            <div
-                className=' relative text-2xl bg-green flex justify-center items-center cursor-pointer'
-            >
-                <LuFileHeart
-                    onClick={() => setIsWishListOpen((prev) => !prev)}
-                />
-                <div className="absolute -top-2 -right-2 py-[1px] px-2 bg-bgRed rounded-full text-white text-xs items-center justify-center">
+            {/* Wishlist */}
+            <div className="relative text-2xl flex justify-center items-center cursor-pointer">
+                <LuFileHeart onClick={() => setIsWishListOpen((prev) => !prev)} />
+                <div className="absolute -top-2 -right-2 py-[1px] px-2 bg-bgRed rounded-full text-white text-xs">
                     2
                 </div>
             </div>
-            {isWishListOpen && (<WishListModel />)}
+            {isWishListOpen && <WishListModel />}
 
-            <div className='text-2xl bg-green flex justify-center items-center cursor-pointer' >
+            {/* Dark Mode */}
+            <div className="text-2xl flex justify-center items-center cursor-pointer" onClick={toggleDarkMode}>
                 <RiMoonClearFill />
             </div>
         </div>
-    )
-}
+    );
+};
+
 
 export default NavBarIcons;

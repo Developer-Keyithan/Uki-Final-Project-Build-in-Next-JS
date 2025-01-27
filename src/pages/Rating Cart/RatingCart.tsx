@@ -17,7 +17,7 @@ const RatingCart: React.FC<RatingCartProps> = ({ rating }) => {
     }
   });
 
-  return <div className="text-secondaryButtonColor flex">{stars}</div>;
+  return <div className="rating text-secondaryButtonColor">{stars}</div>;
 };
 
 export default RatingCart;

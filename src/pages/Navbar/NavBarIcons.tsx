@@ -1,71 +1,82 @@
 'use client'
 
-import Link from "next/link"
-import { useRouter } from "next/router"
-import { useState } from "react"
-import { BiUser } from "react-icons/bi"
-import { IoCartOutline } from "react-icons/io5"
-import { LuFileHeart } from "react-icons/lu"
-import { RiMoonClearFill } from "react-icons/ri"
-import CartModel from "../CartModel/CartModel"
-import WishListModel from "../WishListModel/WishListModel"
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { BiUser } from "react-icons/bi";
+import { IoCartOutline } from "react-icons/io5";
+import { LuFileHeart } from "react-icons/lu";
+import { RiMoonClearFill } from "react-icons/ri";
+import CartModel from "../CartModel/CartModel";
+import WishListModel from "../WishListModel/WishListModel";
+import Link from "next/link";
+import Profile from "../Profile/Profile";
 
-const NavBarIcons = () => {
+interface NavBarIconsProps {
+    userData: any;
+}
+
+const NavBarIcons: React.FC<NavBarIconsProps> = ({ userData }) => {
     const [isProfileOpen, setIsProfileOpen] = useState(false);
+    const [user, setUser] = useState(userData);
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [isWishListOpen, setIsWishListOpen] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    const router = useRouter();
+    useEffect(() => {
+        setIsLoggedIn(!!user);
+    }, [user]);
 
-    // TEMPORARY
-    const isLoggedIn = false
+    const handleProfile = () => setIsProfileOpen((prev) => !prev);
+    const toggleDarkMode = () => document.body.classList.toggle('dark-mode');
 
-    const handleProfile = () => {
-        if (!isLoggedIn) {
-            router.push('/login');
-        }
-        setIsProfileOpen((prev) => !prev)
-    }
+    const nameLogo = `${user?.firstName?.[0] || ''}${user?.lastName?.[0] || ''}`;
 
     return (
         <div className="flex gap-4 relative">
+            {/* Profile */}
+            <div className="text-2xl flex justify-center items-center cursor-pointer">
+                {isLoggedIn ? (
+                    user?.profileImage ? (
+                        <img
+                            src={user.profileImage}
+                            alt="Profile"
+                            className="w-8 h-8 rounded-full object-cover"
+                            onClick={handleProfile}
+                        />
+                    ) : (
+                        <h3 className="font-semibold h-9 w-9 text-[16px] bg-primaryColor text-white rounded-full p-1" onClick={handleProfile}>{nameLogo}</h3>
+                    )
+                ) : (
+                    <BiUser onClick={handleProfile} />
+                )}
+            </div>
+            {isProfileOpen && <Profile />}
 
-            <BiUser className='text-2xl bg-green flex justify-center items-center'
-                onClick={handleProfile}
-            />
-            {isProfileOpen && <div className="absolute p-4 rounded-md top-16 left-0 text-md shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white z-50">
-                <Link href='/'>Profile</Link>
-                <div className="mt-2 cursor-pointer">LogOut</div>
-            </div>}
-
-            <div
-                className=' relative text-2xl bg-green flex justify-center items-center cursor-pointer'
-            >
-                <IoCartOutline
-                    onClick={() => setIsCartOpen((prev) => !prev)}
-                />
-                <div className="absolute -top-2 -right-2 py-[1px] px-2 bg-bgRed rounded-full text-white text-xs items-center justify-center">
+            {/* Cart */}
+            <div className="relative text-2xl flex justify-center items-center cursor-pointer">
+                <IoCartOutline onClick={() => setIsCartOpen((prev) => !prev)} />
+                <div className="absolute -top-2 -right-2 py-[1px] px-2 bg-bgRed rounded-full text-white text-xs">
                     2
                 </div>
             </div>
-            {isCartOpen && (<CartModel />)}
+            {isCartOpen && <CartModel />}
 
-            <div
-                className=' relative text-2xl bg-green flex justify-center items-center cursor-pointer'
-            >
-                <LuFileHeart
-                    onClick={() => setIsWishListOpen((prev) => !prev)}
-                />
-                <div className="absolute -top-2 -right-2 py-[1px] px-2 bg-bgRed rounded-full text-white text-xs items-center justify-center">
+            {/* Wishlist */}
+            <div className="relative text-2xl flex justify-center items-center cursor-pointer">
+                <LuFileHeart onClick={() => setIsWishListOpen((prev) => !prev)} />
+                <div className="absolute -top-2 -right-2 py-[1px] px-2 bg-bgRed rounded-full text-white text-xs">
                     2
                 </div>
             </div>
-            {isWishListOpen && (<WishListModel />)}
+            {isWishListOpen && <WishListModel />}
 
-            <RiMoonClearFill className='text-2xl bg-green flex justify-center items-center' />
-
+            {/* Dark Mode */}
+            <div className="text-2xl flex justify-center items-center cursor-pointer" onClick={toggleDarkMode}>
+                <RiMoonClearFill />
+            </div>
         </div>
-    )
-}
+    );
+};
 
-export default NavBarIcons
+
+export default NavBarIcons;

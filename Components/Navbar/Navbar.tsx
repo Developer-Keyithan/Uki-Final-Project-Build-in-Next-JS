@@ -1,18 +1,18 @@
 'use client'
 
 import { useRouter } from "next/navigation";
-import './style.css';
+import { useState, useEffect } from 'react';
 import React, { MouseEvent } from "react";
 import SearchBar from "./SearchBar";
 import NavBarIcons from "./NavBarIcons";
 import Link from "next/link";
 import Menu from "./Menu";
+import axios, { AxiosError } from 'axios';
 
-interface NavbarProps {
-    userData: any;
-}
+const Navbar: React.FC = () => {
+    const [user, setUser] = useState(null);
+    const [error, setError] = useState<string | null>(null);
 
-const Navbar: React.FC<NavbarProps> = ({ userData }) => {
     const router = useRouter();
 
     const handleAboutClick = (e: MouseEvent<HTMLAnchorElement>) => {
@@ -26,6 +26,23 @@ const Navbar: React.FC<NavbarProps> = ({ userData }) => {
             }
         }, 100);
     };
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const { data } = await axios.get('/api/cookie');
+                const response = await axios.post('/api/user/get-user', { userId: data.user.id });
+                setUser(response.data.user);
+                setError(null);
+            } catch (error) {
+                const axiosError = error as AxiosError;
+                setError(axiosError.message || 'Failed to fetch user data');
+                setUser(null);
+            }
+        };
+
+        fetchUser();
+    }, []);
 
     return (
         <div className='px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-60 py-3 flex justify-between items-center w-full sticky top-0 backdrop-blur-xl bg-white bg-opacity-40 border-primaryColor z-50'>
@@ -68,7 +85,7 @@ const Navbar: React.FC<NavbarProps> = ({ userData }) => {
                     <div className="">
                         <div className='flex flex-row gap-2'>
                             <SearchBar />
-                            <NavBarIcons userData={userData} />
+                            <NavBarIcons userData={user} />
                         </div>
                     </div>
                 </div>

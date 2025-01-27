@@ -9,7 +9,6 @@ import { BiCart } from 'react-icons/bi';
 import { IoCartOutline } from 'react-icons/io5';
 import { useState } from 'react';
 import { GoHeart, GoHeartFill } from 'react-icons/go';
-import productImage from '../../Assets/Hero.jpg'
 
 interface ProductData {
   id: string;
@@ -44,13 +43,13 @@ const Cart: React.FC<CartProps> = ({ data }) => {
     setIsHover(false);
   }
 
-  const image = data.productImages?.[0]
+  const image = data.productImages[0]
 
 
   return (
     <div className="ring-1 ring-gray-500 rounded-md overflow-hidden relative w-[calc((100%-100px)/6)]">
       <div className="">
-        <Image src={image || productImage} alt={data.productName || 'Product Image'} width={200} height={200} />
+        <Image src={image} alt={data.productName || 'Product Image'} width={200} height={200} />
       </div>
       <div className="p-4">
         <div className="flex justify-between">

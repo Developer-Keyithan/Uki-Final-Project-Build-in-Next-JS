@@ -9,14 +9,18 @@ import Footer from '../../Components/Footer/Footer';
 import { FaArrowRightLong } from "react-icons/fa6";
 import Hero from '../../Components/Hero/Hero';
 import axios, { AxiosError } from 'axios';
+import { useRouter } from 'next/navigation';
 
 const LandingPage: React.FC = () => {
 
   const [user, setUser] = useState(null); // For storing user data
   const [error, setError] = useState<string | null>(null);
   const [products, setProducts] = useState([]);
-  const [visibleProducts, setVisibleProducts] = useState(20);  // Show 20 products initially
+  const [visibleProducts, setVisibleProducts] = useState(12);  // Show 12 products initially
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [visibleShowMoreBtn, setVisibleShowMoreBtn] = useState(true)
+
+  const router = useRouter();
 
   useEffect(() => {
     // Fetch real product data from API using Axios
@@ -45,21 +49,26 @@ const LandingPage: React.FC = () => {
         setUser(null);
       }
     };
-  
+
     fetchUser();
   }, []);
-  
+
   const loadMoreProducts = () => {
-    setVisibleProducts(visibleProducts + 20);  // Load 20 more products when clicking "Show More"
+    setVisibleProducts(visibleProducts + 12);  // Load 12 more products when clicking "Show More"
+    setVisibleShowMoreBtn(false)
   };
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
   };
 
+  const handleViewAll = () => {
+    router.push('/products')
+  }
+
   return (
     <div className={isDarkMode ? "dark" : "light"}>
-      <Navbar userData={user} />
+      <Navbar />
       <hr className='sticky top-16' />
       <div>
         <div className="Hero-container">
@@ -67,11 +76,15 @@ const LandingPage: React.FC = () => {
         </div>
         <div className='Products-container mx-60'>
           <Product data={products.slice(0, visibleProducts)} />
-          <div className="show-more">
-            <button onClick={loadMoreProducts}>
-              Show More <FaArrowRightLong />
-            </button>
-          </div>
+          {visibleShowMoreBtn ? (
+            <div className="show-more">
+              <button onClick={loadMoreProducts}>Show More <FaArrowRightLong /></button>
+            </div>
+          ): (
+            <div className="show-more">
+              <button onClick={handleViewAll}>View All<FaArrowRightLong /></button>
+            </div>
+          )}
         </div>
         <div className="About-container">
           <About />

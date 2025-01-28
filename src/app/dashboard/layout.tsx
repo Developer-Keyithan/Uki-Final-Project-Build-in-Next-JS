@@ -5,6 +5,7 @@ import axios, { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 import Navbar from '../../../Components/Navbar/Navbar';
 import Footer from '../../../Components/Footer/Footer';
+import Loader from '../../../Components/Loader/Loader';
 
 interface UserResponse {
     id: string | null;
@@ -141,7 +142,7 @@ export default function DashboardLayout({
     }, [router]);
 
     if (!isSuccess) {
-        return <p className="mx-auto my-auto">Loading...</p>;
+        return <Loader />;
     }
 
     return (

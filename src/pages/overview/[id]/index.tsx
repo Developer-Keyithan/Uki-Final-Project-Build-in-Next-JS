@@ -7,8 +7,11 @@ import Navbar from '../../../../Components/Navbar/Navbar';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { LuLoaderCircle } from 'react-icons/lu';
+import Loader from '../../../../Components/Loader/Loader';
 
 interface Product {
+  _id: string;
   id: string;
   image: string;
   name: string;
@@ -27,51 +30,39 @@ interface Product {
 }
 
 function ProductOverviewPage() {
-  const [product, setProduct] = useState<Product[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | undefined>();
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const { id } = router.query;
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const response = await axios.post('/api/product/get-product', {
-          productId: id
-        });
-        setProduct(response.data.product);
-        const product = response.data.product
-        setSelectedProduct(product)
-        setIsLoading(false);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-        setIsLoading(false);
-      }
-    };
-
-    fetchProduct();
-  }, []);
-  console.log(selectedProduct)
-
-  useEffect(() => {
-    // Fetch real product data from API using Axios
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('/api/product'); // Replace with your real API endpoint
-        setProducts(response.data); // Assuming the response returns an array of products
+        const response = await axios.get('/api/product');
+        setProducts(response.data);
       } catch (error) {
         console.error('Error fetching products:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchProducts();
   }, []);
+
+  useEffect(() => {
+    if (id && products.length > 0) {
+      const product = products.find((p) => p._id === id);
+      setSelectedProduct(product);
+    }
+  }, [id, products]);
+
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
-  if (!product) {
+  if (!selectedProduct) {
     return <div>Product not found</div>;
   }
 

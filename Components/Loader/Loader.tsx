@@ -1,12 +1,13 @@
+import { LuLoaderCircle } from 'react-icons/lu';
 import './style.css'
 
-const Spinner = () => {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full w-16 h-16 animate-spin"></div>
-      </div>
-    );
-  };
-  
-  export default Spinner;
-  
+const Loader = () => {
+  return (
+    <div className='w-full h-[100vh] flex justify-center items-center gap-12'>
+      <LuLoaderCircle className='text-5xl animate-spin' />
+      <p className='text-4xl'>Loading...</p>
+    </div>
+  );
+};
+
+export default Loader;

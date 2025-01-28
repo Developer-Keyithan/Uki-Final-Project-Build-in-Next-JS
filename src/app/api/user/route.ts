@@ -90,6 +90,7 @@ export const PUT = async (req: NextRequest) => {
             newFavReview
         } = body;
 
+
         if (!userId || !Types.ObjectId.isValid(userId)) {
             return NextResponse.json({ error: 'Valid User ID is required' }, { status: 400 });
         }
@@ -124,6 +125,8 @@ export const PUT = async (req: NextRequest) => {
             { $set: data },
             { new: true }
         );
+
+        console.log(updatedUser)
 
         if (!updatedUser) {
             return NextResponse.json({ error: 'User not found' }, { status: 404 });

@@ -1,5 +1,4 @@
-import React from 'react'
-import './Pagination.css'
+import './Pagination.css';
 
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { FaArrowRightLong } from "react-icons/fa6";
@@ -19,7 +18,7 @@ const Pagination: React.FC = () => {
             <button className='number'>10</button>
             <button>Next <FaArrowRightLong /></button>
         </div>
-    )
-}
+    );
+};
 
-export default Pagination
+export default Pagination;

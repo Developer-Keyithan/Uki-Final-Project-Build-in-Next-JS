@@ -32,8 +32,8 @@ async function getUser(): Promise<UserResponse> {
     try {
         const { data } = await axios.get('/api/cookie');
         return {
-            id: data.id,
-            userType: data.userType,
+            id: data.user.id,
+            userType: data.user.userType,
             error: null,
         };
     } catch (e) {
@@ -94,41 +94,46 @@ export default function DashboardLayout({
         (async () => {
             const { id, userType, error } = await getUser();
 
-            if (error || !id || !userType) {
-                router.push('/');
-                return;
-            }
+            // if (error || !id || !userType) {
+            //     router.push('/');
+            //     return;
+            // }
 
             if (userType === 'seller') {
                 // Fetching all seller-specific data in parallel
-                const [userDataRes, productsRes, sellerInfoRes] = await Promise.all([
-                    getUserData(id),
-                    getSellerProducts(id),
-                    getSellerInfo(id),
-                ]);
+                // const [userDataRes, productsRes, sellerInfoRes] = await Promise.all([
+                //     getUserData(id),
+                //     getSellerProducts(id),
+                //     getSellerInfo(id),
+                // ]);
 
                 // Handle errors if any
-                if (userDataRes.error || productsRes.error || sellerInfoRes.error) {
-                    router.push('/');
-                    return;
-                }
+                // if (userDataRes.error || productsRes.error || sellerInfoRes.error) {
+                //     router.push('/');
+                //     return;
+                // }
 
                 // Set the fetched data into the state
-                setUserData(userDataRes.user);
-                setSellerProducts(productsRes.products);
-                setSellerInfo(sellerInfoRes.sellerInfo);
+                // setUserData(userDataRes.user);
+                // setSellerProducts(productsRes.products);
+                // setSellerInfo(sellerInfoRes.sellerInfo);
 
                 // Navigate to the seller dashboard
-                router.push('/dashboard/seller');
-            } else {
-                // Fetch user data for non-sellers
-                const { user, error: userError } = await getUserData(id);
-                if (userError) {
-                    router.push('/');
-                    return;
-                }
-                setUserData(user);
-                router.push('/');
+                router.push('/dashboard');
+            } 
+            // else {
+            //     // Fetch user data for non-sellers
+            //     const { user, error: userError } = await getUserData(id);
+            //     if (userError) {
+            //         router.push('/');
+            //         return;
+            //     }
+            //     setUserData(user);
+            //     router.push('/');
+            // }
+
+            if (userType === 'consumer') {
+                router.push('/dashboard')
             }
 
             setIsSuccess(true);
@@ -142,7 +147,7 @@ export default function DashboardLayout({
     return (
         <main>
             <div className="sticky top-0 z-50">
-                <Navbar userData={userData} />
+                <Navbar />
                 <hr />
             </div>
             {children}

@@ -13,6 +13,7 @@ import productImage from '../../Assets/Hero.jpg'
 
 interface ProductData {
   id: string;
+  _id?: string;
   image: string | StaticImageData;
   name: string;
   productName: string;
@@ -46,9 +47,14 @@ const Cart: React.FC<CartProps> = ({ data }) => {
 
   const image = data.productImages?.[0]
 
+  const handleProduct = () => {
+    const id = data._id
+    console.log(id)
+    router.push(`/overview/${id}`)
+  }
 
   return (
-    <div className="ring-1 ring-gray-500 rounded-md overflow-hidden relative w-[calc((100%-100px)/6)]">
+    <div className="ring-1 ring-gray-500 rounded-md overflow-hidden relative w-[calc((100%-100px)/6)] cursor-pointer" onClick={handleProduct}>
       <div className="">
         <Image src={image || productImage} alt={data.productName || 'Product Image'} width={200} height={200} />
       </div>

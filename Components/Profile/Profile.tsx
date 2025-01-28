@@ -18,6 +18,7 @@ interface User {
 
 const Profile: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [id, setId] = useState<string>('')
   const [error, setError] = useState<string | null>(null);
   const [close, setClose] = useState(false);
   const [isLogoutVisible, setIsLogoutVisible] = useState(true);
@@ -26,7 +27,6 @@ const Profile: React.FC = () => {
   const [isEmailEdit, setIsEmailEdit] = useState(false);
   const [isMobileNumberEdit, setIsMobileNumberEdit] = useState(false);
 
-  // New states to track changes in email and mobile number
   const [editedEmail, setEditedEmail] = useState('');
   const [editedMobileNumber, setEditedMobileNumber] = useState('');
 
@@ -34,7 +34,10 @@ const Profile: React.FC = () => {
 
   const handleLogin = () => router.push('/login');
   const handleSignup = () => router.push('/signup');
-  const handleLogout = () => setIsVisibleConfirm(true);
+  const handleLogout = () => {
+    setIsVisibleConfirm(true)
+    setIsLogoutVisible(false)
+  };
 
   const handleYes = async () => {
     try {
@@ -52,7 +55,10 @@ const Profile: React.FC = () => {
     }
   };
 
-  const handleNo = () => setIsVisibleConfirm(false);
+  const handleNo = () => {
+    setIsVisibleConfirm(false)
+    setIsLogoutVisible(true)
+  };
   const handleClose = () => setClose(true);
 
   useEffect(() => {
@@ -60,6 +66,7 @@ const Profile: React.FC = () => {
     const fetchUser = async () => {
       try {
         const { data } = await axios.get('/api/cookie');
+        setId(data?.user?.id)
         if (isMounted) {
           const response = await axios.post('/api/user/get-user', { userId: data.user.id, newEmail: editedEmail });
           const fetchedUser = response.data.user;
@@ -87,14 +94,11 @@ const Profile: React.FC = () => {
 
   const handleSaveEditedEmail = async () => {
     try {
-      if (!user) {
-        toast.error('User not found.');
-        return;
-      }
-      const response = await axios.patch('/api/user', { userId: user.id, newEmail: editedEmail });
+      const response = await axios.put('/api/user', { userId: id, newEmail: editedEmail });
       if (response.status === 200 && user) {
-        toast.success('E-mail updated.');
         setUser({ ...user, email: editedEmail });
+        toast.success('Email updated.');
+        setIsEmailEdit(false);
       } else {
         toast.error('Failed to update.');
       }
@@ -107,10 +111,11 @@ const Profile: React.FC = () => {
 
   const handleSaveEditedMobileNumber = async () => {
     try {
-      const response = await axios.patch('/api/user', { newMobileNumber: editedMobileNumber.split(', ') });
+      const response = await axios.put('/api/user', { userId: id, newMobileNumber: editedMobileNumber.split(', ') });
       if (response.status === 200 && user) {
         setUser({ ...user, mobileNumber: editedMobileNumber.split(', ') });
         toast.success('Mobile number updated.');
+        setIsMobileNumberEdit(false);
       } else {
         toast.error('Failed to update.');
       }
@@ -149,6 +154,8 @@ const Profile: React.FC = () => {
   const nameLogo = `${user.firstName[0]}${user.lastName[0]}`;
   const profileImage = user.profileImage;
   const name = `${user.firstName} ${user.lastName}`;
+  const email = user.email;
+  const phone = user.mobileNumber;
 
   return (
     <div className="w-max absolute rounded-md shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white top-12 right-0 flex flex-col gap-6 z-20 overflow-hidden">
@@ -156,7 +163,7 @@ const Profile: React.FC = () => {
         <div className="flex flex-col items-center gap-5 mt-7">
           <div className="relative">
             {isImage ? (
-              <div className="flex items-center justify-center border-[1px] bg-primaryColor rounded-full p-8 w-fit cursor-pointer">
+              <div className="flex items-center justify-center border-[1px] bg-primaryColor rounded-full p-8 cursor-pointer h-40 w-40">
                 <p className="font-semibold mt-1 text-[60px] text-white">{nameLogo}</p>
               </div>
             ) : (
@@ -182,11 +189,12 @@ const Profile: React.FC = () => {
             <div className="flex gap-1">
               <p className="font-semibold">E-mail:</p>
               {!isEmailEdit ? (
-                <p>{editedEmail}</p>
+                <p>{email}</p>
               ) : (
                 <input
+                  className='ring-1 ring-primaryColor w-60'
                   type="email"
-                  value={editedEmail}
+                  placeholder={editedEmail}
                   onChange={(e) => setEditedEmail(e.target.value)}
                 />
               )}
@@ -204,11 +212,12 @@ const Profile: React.FC = () => {
             <div className="flex gap-1">
               <p className="font-semibold">Mobile Number:</p>
               {!isMobileNumberEdit ? (
-                <p>+94 {editedMobileNumber}</p>
+                <p>+94 {phone}</p>
               ) : (
                 <input
+                  className='ring-1 ring-primaryColor w-60'
                   type="text"
-                  value={editedMobileNumber}
+                  placeholder={editedMobileNumber}
                   onChange={(e) => setEditedMobileNumber(e.target.value)}
                 />
               )}
@@ -224,7 +233,7 @@ const Profile: React.FC = () => {
 
           {isLogoutVisible && (
             <button
-              className="bg-red-800 text-white rounded-sm px-2 py-1 mt-2"
+              className="bg-red-700 hover:bg-red-800 text-white rounded-sm px-2 py-1 mt-2 transition ease-in-out duration-500"
               onClick={handleLogout}
             >
               Logout
@@ -233,15 +242,15 @@ const Profile: React.FC = () => {
           {isVisibleConfirm && (
             <div className="bg-gray-100 p-4 border rounded-sm">
               <p>Are you sure you want to log out?</p>
-              <div className="flex gap-2 mt-2">
+              <div className="flex gap-4 mt-2 justify-between">
                 <button
-                  className="bg-red-800 text-white rounded-sm px-2 py-1"
+                  className="bg-red-700 text-white hover:bg-red-800 rounded-sm w-full py-1 transition ease-in-out duration-500"
                   onClick={handleYes}
                 >
                   Yes
                 </button>
                 <button
-                  className="bg-gray-300 text-black rounded-sm px-2 py-1"
+                  className="bg-primaryColor text-white hover:bg-primaryButtonColor rounded-sm w-full py-1 transition ease-in-out duration-500"
                   onClick={handleNo}
                 >
                   No

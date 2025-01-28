@@ -10,31 +10,40 @@ import Link from 'next/link';
 import { StaticImageData } from 'next/image';
 import Image from 'next/image';
 
-interface ProductCartProps {
-  image: string | StaticImageData;
-  relatedImages: (string | StaticImageData)[];
-  name: string;
-  description: string;
-  rating: string;
-  district: string;
-  freshness: string;
-  agricationMethod: string;
-  newPrice: string;
-  oldPrice: string;
+interface productProps {
+  product: any
 }
 
-const ProductCart = ({
-  image,
-  relatedImages,
-  name,
-  description,
-  rating,
-  district,
-  freshness,
-  agricationMethod,
-  newPrice,
-  oldPrice
-}: ProductCartProps) => {
+const ProductCart: React.FC<productProps> = ({ product }) => {
+  console.log(product)
+  const {
+    productImages,
+    productName,
+    productDescription,
+    harvestingDate,
+    agricationMethod,
+    price,
+    categories } = product
+
+  const newPrice = price.newPrice;
+  const oldPrice = price.oldPrice;
+  // agricationMethod: "organic"
+  // categories: Array(2)
+  //    0: "chilli"
+  //    1: "organic"
+  // createdAt: "2025-01-12T06:24:04.566Z"
+  // freeDelivery: true
+  // harvestingDate: "2024-12-21T00:00:00.000Z"
+  // price: newPrice: 400
+  //        oldPrice: 300
+  // productDescription: "Pure Organic Potato"
+  // productImages: Array(2)
+  // 0: {imageUrl: 'https://pixabay.com/get/g38fff90b5ae0baae292f8020f…e8991d6876b4f6464efa1bcbbee069598d7b1a05c2dd6.jpg', _id: '67836004d374d6d8fbfaac48'}
+  // 1: {imageUrl: 'https://pixabay.com/get/g677fe63a41620b7eb0acecd9c…87a8a5ee47af0a1ce85a884b23a7d087a1cd876a85263.jpg', _id: '67836004d374d6d8fbfaac49'}
+  // productName: "Potato"
+  // updatedAt: "2025-01-12T06:57:02.028Z"
+  // userId: "678352a1fd88793f6e190449"
+  // _id: "679732e2f0d12ff2c856ab31"
 
   const [quantity, setQuantity] = useState<number>(100);
   const [unit, setUnit] = useState<'grams' | 'kilograms'>('grams');
@@ -67,27 +76,28 @@ const ProductCart = ({
   return (
     <div className='productcart-container border-[1px] border-gray-800 mt-5 rounded-[5px]'>
       <div className="product-images">
-        <div className="main-image">
-          <Image src={image} className='img' alt="Main product image" />
-        </div>
+        {/* <div className="main-image">
+          <Image src={productDescription[0]} className='img' alt="Main product image" />
+        </div> */}
         <div className="related-images">
           <button><IoIosArrowBack /></button>
-          {relatedImages.map((img, index) => (
+          {/* {productImages.map((img: string | StaticImageData, index: number) => (
             <div className="related-image" key={index}>
               <Image className='related-img' src={img as string} alt={`Related image ${index + 1}`} />
             </div>
-          ))}
+          ))} */}
           <button><IoIosArrowForward /></button>
         </div>
 
       </div>
 
       <div className="product-overview-content">
-        <h1 className='text-4xl font-semibold'>{name}</h1>
-        <p>{description}</p>
+        <h1 className='text-4xl font-semibold'>{productName}</h1>
+        <p>{productDescription}</p>
 
         <div className='product-content-icons'>
-          <i><RatingCart /></i>
+          {/* <i><RatingCart rating={rating || 3.5} /></i> */}
+          <i><RatingCart rating={3.5} /></i>
           <div className="extra-icons">
             <i><IoShareSocialSharp /></i>
             <i><FaRegHeart /></i>
@@ -95,14 +105,15 @@ const ProductCart = ({
         </div>
 
         <div className="extra-product-info">
-          <p>From: {district}</p>
-          <p>Freshness: {freshness}</p>
+          {/* <p>From: {district || 'Vavuniya'}</p> */}
+          <p>From: {'Vavuniya'}</p>
+          <p>Freshness: {harvestingDate}</p>
           <p>Agriculture Method: {agricationMethod}</p>
         </div>
 
         <div className="price">
           <h1>Rs. {newPrice}</h1>
-          <p><span>Rs. {oldPrice}</span><b> -{discount}%</b></p>
+          <p><span>Rs. {oldPrice}</span><b> {discount}%</b></p>
         </div>
 
         <div className="quantity">

@@ -7,6 +7,7 @@ export const POST = async (req: NextRequest) => {
     try {
       const body = await req.json();
       const { userId } = body;
+      console.log(userId)
   
       if (!userId || !Types.ObjectId.isValid(userId)) {
         return NextResponse.json({ error: 'Valid account ID is required' }, { status: 400 });

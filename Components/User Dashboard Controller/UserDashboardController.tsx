@@ -1,42 +1,25 @@
-import { useState } from "react";
 import { BiCamera, BiUser } from "react-icons/bi";
 import "./style.css";
 import PannelSelector from "../../Components/Pannel Selector/PannelSelector";
 
 interface UserDataType {
-  number: number;
+  mobileNumber: number[];
+  firstName: string;
+  lastName: string;
   email: string;
-  name: string;
   updatedAt: string;
 }
 
-interface AddressDataType {
-  no: string;
-  street: string;
-  town: string;
-  division: string;
-  district: string;
-}
-
-const UserDashboard: React.FC<{
-  User: UserDataType;
-  Address: AddressDataType;
+const UserDashboard: React.FC<{ 
+  User: UserDataType, 
+  activePanel: string;
   onPanelClick: (panel: string) => void;
-}> = ({ User, Address, onPanelClick }) => {
-  const name = User?.name || "Guest";
+  panels: string[]; 
+}> = ({ User, activePanel, onPanelClick, panels }) => {
+  const name = `${User.firstName} ${User.lastName}`;
   const email = User?.email || "N/A";
-  const number = User?.number || "N/A";
-  const updatedAt = User?.updatedAt || "2014 Dec 21";
-  const address = [
-    Address?.no || "",
-    Address?.street || "",
-    Address?.town || "",
-    Address?.division || "",
-  ]
-    .filter(Boolean)
-    .join(", ");
-
-  const panels = ["Delivered", "Tracking", "Reviews", "Messages", "Cancelled", "Saved Data"];
+  const number = User?.mobileNumber || "N/A";
+  const updatedAt = User?.updatedAt || "N/A";
 
   return (
     <div className="w-full border-[1px] mt-10 pt-10 rounded-sm relative">
@@ -69,7 +52,7 @@ const UserDashboard: React.FC<{
             </p>
             <p className="mt-1">
               <strong>Address: </strong>
-              {address || "No Address Available"}
+              As an admin, you don't have a unique address
             </p>
           </div>
         </div>
@@ -81,10 +64,20 @@ const UserDashboard: React.FC<{
             key={panel}
             textContent={panel}
             onClick={() => onPanelClick(panel)}
-            isActive={false}
+            isActive={activePanel === panel}
           />
         ))}
       </div>
+
+      <div className="mt-10 border p-5">
+        {activePanel === "Delivered" && <p>Delivered Orders Data...</p>}
+        {activePanel === "Tracking" && <p>Tracking Information...</p>}
+        {activePanel === "Reviews" && <p>User Reviews...</p>}
+        {activePanel === "Messages" && <p>Messages Section...</p>}
+        {activePanel === "Cancelled" && <p>Cancelled Orders Data...</p>}
+        {activePanel === "Saved Data" && <p>Saved Data Information...</p>}
+      </div>
+
       <div className="absolute -top-8 right-0 flex gap-5">
         <p className="font-semibold cursor-pointer text-orange-600 hover:text-orange-800 transition ease-in-out duration-300">Log out from this device</p>
         <p className="font-semibold cursor-pointer text-red-600 hover:text-red-800 transition ease-in-out duration-300">Delete my account</p>

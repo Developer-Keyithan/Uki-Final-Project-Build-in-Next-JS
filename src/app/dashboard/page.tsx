@@ -9,17 +9,13 @@ import Cancelled from "../../../Components/Cancelled/Cancelled";
 import Loader from "../../../Components/Loader/Loader";
 
 const DashboardPage = () => {
-  const [activePanel, setActivePanel] = useState<string>("Delivered"); 
+  const [activePanel, setActivePanel] = useState<string>("Delivered");
   const [loading, setLoading] = useState<boolean>(true);
 
   const panelComponents: { [key: string]: JSX.Element } = {
     Delivered: <Delivered />,
     Cancelled: <Cancelled />,
     // You can add more panels here as your app grows
-  };
-
-  const handlePanelClick = (panel: string) => {
-    setActivePanel(panel);
   };
 
   useEffect(() => {
@@ -30,13 +26,18 @@ const DashboardPage = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  const panels = ["Delivered", "Tracking", "Reviews", "Messages", "Cancelled", "Saved Data"];
+
+  const handlePanelClick = (panel: string) => {
+    setActivePanel(panel);
+  }
   return (
     <div className="mx-60">
       {loading ? (
         <Loader />
       ) : (
         <>
-          <UserDashboard User={UserData[0]} Address={AddressData[0]} onPanelClick={handlePanelClick} />
+          {UserData && <UserDashboard User={UserData} activePanel={activePanel} onPanelClick={handlePanelClick} panels={panels} />}
           {panelComponents[activePanel]}
         </>
       )}

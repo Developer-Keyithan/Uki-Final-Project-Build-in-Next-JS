@@ -126,8 +126,6 @@ export const PUT = async (req: NextRequest) => {
             { new: true }
         );
 
-        console.log(updatedUser)
-
         if (!updatedUser) {
             return NextResponse.json({ error: 'User not found' }, { status: 404 });
         }

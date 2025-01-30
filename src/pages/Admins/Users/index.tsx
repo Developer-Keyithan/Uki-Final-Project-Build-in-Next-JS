@@ -35,10 +35,10 @@ function Users() {
                     <p><strong className="font-semibold">Role: </strong>{user.role}</p>
                     <div className={`absolute top-0 right-0 p-2 ${visibleId === user.id ? 'opacity-100' : 'opacity-0'} transition ease-in-out duration-500`}>
                         {visibleId === user.id && (
-                            <div className="flex gap-1">
-                                {editId === user.id ? <MdSave  onClick={() => setEditId(null)} className="hover:bg-primaryColor hover:text-white h-6 w-6 p-1 transition ease-in-out duration-500" /> : <MdEdit onClick={() => setEditId(user.id)} className="hover:bg-primaryColor hover:text-white h-6 w-6 p-1 transition ease-in-out duration-500" />}
-                                <MdDelete className="hover:bg-red-700 hover:text-white h-6 w-6 p-1 transition ease-in-out duration-500" />
-                                <MdUpdate className="hover:bg-primaryColor hover:text-white h-6 w-6 p-1 transition ease-in-out duration-500" />
+                            <div className="flex gap-2">
+                                {editId === user.id ? <MdSave onClick={() => setEditId(null)} /> : <MdEdit onClick={() => setEditId(user.id)} />}
+                                <MdDelete className="bg-black h-6 w-6" />
+                                <MdUpdate />
                             </div>
                         )}
                     </div>

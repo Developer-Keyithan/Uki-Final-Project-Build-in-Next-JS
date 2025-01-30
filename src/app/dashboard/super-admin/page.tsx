@@ -25,12 +25,7 @@ type UserDataType = {
 
 const adminDashboard = () => {
   const [UserData, setUserData] = useState<UserDataType | null>(null);
-  const [activePanel, setActivePanel] = useState<string>("Delivered");
-
-  // const panelComponents: { [key: string]: JSX.Element } = {
-  //   Delivered: <Delivered />,
-  //   Deliveries: <Deliveries />,
-  // };
+  const [activePanel, setActivePanel] = useState<string>("Users");
 
 
   const router = useRouter();
@@ -55,6 +50,8 @@ const adminDashboard = () => {
     findUser()
   }, [])
 
+  const panels = ["Users", "Products", "Orders", "Payments", "Deliveries", "Offers"];
+
   const panelComponents: { [key: string]: JSX.Element } = {
     Users: <Users />,
     Products: <Products />,
@@ -64,15 +61,23 @@ const adminDashboard = () => {
     Offers: <Offers />
   };
 
-  const panels = ["Users", "Products", "Orders", "Payments", "Deliveries", "Offers"];
-
   const handlePanelClick = (panel: string) => {
     setActivePanel(panel);
   }
 
   return (
     <div className="mx-60">
-      {UserData && <UserDashboard User={UserData} activePanel={activePanel} onPanelClick={handlePanelClick} panels={panels} />}
+      <div className="flex justify-between mt-10 gap-[1px]">
+        {panels.map((panel) => (
+          <button
+            key={panel}
+            onClick={() => handlePanelClick(panel)}
+            className={`px-4 w-full py-2 border rounded-sm ${activePanel === panel ? 'text-white bg-primaryButtonHoverColor' : 'text-primaryColor'} transition ease-in-out duration-500`}
+          >
+            {panel}
+          </button>
+        ))}
+      </div>
       {panelComponents[activePanel]}
     </div>
   )

@@ -1,6 +1,5 @@
 import { BiCamera, BiUser } from "react-icons/bi";
 import "./style.css";
-import PannelSelector from "../../Components/Pannel Selector/PannelSelector";
 
 interface UserDataType {
   mobileNumber: number[];
@@ -10,8 +9,6 @@ interface UserDataType {
   updatedAt: string;
 }
 
-
-
 const UserDashboard: React.FC<{ 
   User: UserDataType,
   activePanel: string;
@@ -20,7 +17,7 @@ const UserDashboard: React.FC<{
 }> = ({ User, activePanel, onPanelClick, panels }) => {
   const name = `${User.firstName} ${User.lastName}`;
   const email = User?.email || "N/A";
-  const number = User?.mobileNumber || "N/A";
+  const number = User?.mobileNumber.length > 0 ? User.mobileNumber.join(", ") : "N/A";
   const updatedAt = User?.updatedAt || "N/A";
 
   return (
@@ -54,26 +51,31 @@ const UserDashboard: React.FC<{
             </p>
             <p className="mt-1">
               <strong>Address: </strong>
-              As an admin, you don't have an unique address
+              As an admin, you don't have a unique address
             </p>
           </div>
         </div>
       </div>
 
-      <div className="flex justify-between mt-10 gap-1">
+      <div className="flex justify-between mt-10 gap-[1px]">
         {panels.map((panel) => (
-          <PannelSelector
+          <button
             key={panel}
-            textContent={panel}
             onClick={() => onPanelClick(panel)}
-            isActive={activePanel === panel}
-          />
+            className={`px-4 w-full py-2 border rounded-sm ${activePanel === panel ? 'text-white bg-primaryButtonHoverColor' : 'text-primaryColor'} transition ease-in-out duration-500`}
+          >
+            {panel}
+          </button>
         ))}
       </div>
 
       <div className="absolute -top-8 right-0 flex gap-5">
-        <p className="font-semibold cursor-pointer text-orange-600 hover:text-orange-800 transition ease-in-out duration-300">Log out from this device</p>
-        <p className="font-semibold cursor-pointer text-red-600 hover:text-red-800 transition ease-in-out duration-300">Delete my account</p>
+        <p className="font-semibold cursor-pointer text-orange-600 hover:text-orange-800 transition ease-in-out duration-300">
+          Log out from this device
+        </p>
+        <p className="font-semibold cursor-pointer text-red-600 hover:text-red-800 transition ease-in-out duration-300">
+          Delete my account
+        </p>
       </div>
     </div>
   );

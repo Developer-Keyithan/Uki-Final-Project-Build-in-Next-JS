@@ -7,7 +7,7 @@ import jwt, { sign } from 'jsonwebtoken';
 const JWT_SECRET = process.env.SECRET_KEY;
 
 const generateToken = (user: any) => {
-  return jwt.sign({ id: user._id, email: user.email, userType: user.userType }, JWT_SECRET!, { expiresIn: '1h' });
+  return jwt.sign({ id: user._id, email: user.email, userType: user.userType }, JWT_SECRET!, { expiresIn: 15552000 });
 };
 
 export const POST = async (req: NextRequest) => {
@@ -47,7 +47,7 @@ export const POST = async (req: NextRequest) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 3600,
+      maxAge: 15552000,
       path: "/",
     });
 

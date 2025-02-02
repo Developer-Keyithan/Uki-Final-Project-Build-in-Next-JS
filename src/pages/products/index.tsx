@@ -1,49 +1,59 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './style.css';
+import axios from 'axios';
 
 import Product from '../../../Components/Product/Product';
 import Navbar from '../../../Components/Navbar/Navbar';
 import Footer from '../../../Components/Footer/Footer';
 import Pagination from '../../../Components/Pagination/Pagination';
-import Toggle from '../../../Components/Toggle/Toggle';
-
-import { RiMoonClearFill } from "react-icons/ri";
-import { TiHome } from 'react-icons/ti';
-// import productData from '../../../Data/ProductData';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
 
 const ProductPage = () => {
   const [products, setProducts] = useState([]);
-  const [visibleProducts, setVisibleProducts] = useState(40);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 42;
 
   useEffect(() => {
-    // Fetch real product data from API using Axios
     const fetchProducts = async () => {
       try {
         const response = await axios.get('/api/product'); // Replace with your real API endpoint
-        setProducts(response.data); // Assuming the response returns an array of products
-      } catch (error) {
+        setProducts(response.data);
+      } catch (error: any) {
         console.error('Error fetching products:', error);
+        setError(error.message || 'Failed to fetch products');
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchProducts();
   }, []);
 
-  const loadMoreProducts = () => {
-    setVisibleProducts(visibleProducts + 40);
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
   };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
 
   return (
     <div>
       <Navbar />
       <hr className='sticky top-16' />
-      <div className='mx-60'>
+      <div className='mx-4 md:mx-60'>
         <div className="productPage-product-container">
-          <Product data={products} />
+          <Product data={currentProducts} />
         </div>
-        <Pagination />
+        <Pagination
+          currentPage={currentPage}
+          totalPages={Math.ceil(products.length / productsPerPage)}
+          onPageChange={handlePageChange}
+        />
       </div>
       <Footer />
     </div>

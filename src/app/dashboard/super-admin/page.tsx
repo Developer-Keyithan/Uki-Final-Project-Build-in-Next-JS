@@ -71,7 +71,7 @@ const adminDashboard = () => {
           <button
             key={panel}
             onClick={() => handlePanelClick(panel)}
-            className={`px-4 w-full py-2 border rounded-sm ${activePanel === panel ? 'text-white bg-primaryButtonHoverColor' : 'text-primaryColor'} transition ease-in-out duration-500`}
+            className={`px-4 w-full py-2 border rounded-sm ${activePanel === panel ? 'text-white bg-primaryColor' : 'text-primaryColor'} transition ease-in-out duration-500`}
           >
             {panel}
           </button>

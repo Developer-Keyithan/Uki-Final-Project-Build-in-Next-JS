@@ -19,7 +19,8 @@ const userSchema = new Schema(
         favourites: {
             favProducts: [{ type: Schema.Types.ObjectId, ref: "Product" }],
             favReviews: [{ type: Schema.Types.ObjectId, ref: "Review" }]
-        }
+        },
+        isBlocked: {type: Boolean, required: true, default: false}
     },
     { timestamps: true }
 );

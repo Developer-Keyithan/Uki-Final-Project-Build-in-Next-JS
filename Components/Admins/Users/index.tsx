@@ -264,7 +264,7 @@ function Users() {
                             onMouseLeave={() => setVisibleId(null)}
                             className="ring-1 ring-gray-300 rounded-sm p-4 relative w-full"
                         >
-                            <p><strong className="font-semibold">Id: </strong>{user._id}</p>
+                            <p className="text-primaryColor"><strong className="font-semibold">Id: </strong>{user._id}</p>
                             <p><strong className="font-semibold">Name: </strong> {`${user.firstName} ${user.lastName}`}</p>
                             <p><strong className="font-semibold">E-mail: </strong>{user.email || "<E-mail not added>"}</p>
                             <p><strong className="font-semibold">Mobile Numbers: </strong>{user.mobileNumber.join(", ")}</p>

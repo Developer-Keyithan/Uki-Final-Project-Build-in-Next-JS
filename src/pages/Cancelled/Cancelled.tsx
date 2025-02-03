@@ -4,10 +4,9 @@ import { useState } from 'react';
 import Image from 'next/image';
 import './style.css';
 import RatingCart from '../Rating Cart/RatingCart';
-import OrderData from '../../Data/OrderData';
-import ProductData from '../../Data/ProductData';
-import CardData from '../../Data/CardData';
-import Toggle from '../Toggle/Toggle';
+import OrderData from '../../../Data/OrderData';
+import ProductData from '../../../Data/ProductData';
+import CardData from '../../../Data/CardData';
 
 import { FaRegHeart } from "react-icons/fa";
 import { IoStar } from "react-icons/io5";

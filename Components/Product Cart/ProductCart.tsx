@@ -9,13 +9,13 @@ import { FaRegHeart } from "react-icons/fa";
 import Link from 'next/link';
 import { StaticImageData } from 'next/image';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 interface productProps {
   product: any
 }
 
 const ProductCart: React.FC<productProps> = ({ product }) => {
-  console.log(product)
   const {
     productImages,
     productName,
@@ -72,6 +72,15 @@ const ProductCart: React.FC<productProps> = ({ product }) => {
   const handleSelectUnit = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUnit(event.target.value as 'grams' | 'kilograms');
   };
+
+  const router = useRouter();
+
+  const handleOrder = () => {
+    router.push({
+      pathname: '/order',
+      query: { id: product._id }
+    })
+  }
 
   return (
     <div className='productcart-container border-[1px] border-gray-800 mt-5 rounded-[5px]'>
@@ -146,9 +155,7 @@ const ProductCart: React.FC<productProps> = ({ product }) => {
         <div className="product-buying-options">
           <h2>Total Price: Rs. {totalPrice.toFixed(2)}</h2>
           <div className="buy-btns">
-            <Link href="/order">
-              <Button textContent="Buy Now" style={{ background: '#007546' }} />
-            </Link>
+            <button onClick={handleOrder} >Buy now</button>
             <Button textContent="Add to Cart" style={{ background: '#FF8000' }} />
           </div>
         </div>

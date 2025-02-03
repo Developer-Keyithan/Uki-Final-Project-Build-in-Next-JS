@@ -5,8 +5,22 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'insanelygoodrecipes.com'
+        hostname: 'insanelygoodrecipes.com',
       },
-    ]
-  }
+      {
+        protocol: 'https',
+        hostname: 'pixabay.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'another-domain.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.pixabay.com',
+      }
+    ],
+  },
 };
+
+export default nextConfig;

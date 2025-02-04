@@ -7,9 +7,10 @@ import RatingCart from '../Rating Cart/RatingCart';
 import Image from 'next/image';
 import { BiCart } from 'react-icons/bi';
 import { IoCartOutline } from 'react-icons/io5';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GoHeart, GoHeartFill } from 'react-icons/go';
 import productImage from '../../Assets/Hero.jpg'
+import axios from 'axios';
 
 interface ProductData {
   id: string;
@@ -32,9 +33,28 @@ interface CartProps {
 
 const Cart: React.FC<CartProps> = ({ data }) => {
   const [isHover, setIsHover] = useState(false);
+  const [userId, setUserId] = useState<string>('')
   const router = useRouter();
-  const handleAddToCart = () => {
-    // Code to add item to cart
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const user = await axios.get('api/cookie')
+      setUserId(user.data.user.id)
+    }
+
+    fetchUser();
+  }, [])
+
+
+  const handleAddToCart = async () => {
+    const id = data._id
+    try {
+      const response = await axios.post('/api/cart', {
+        userId, productId: id, value: 1, unit: 'kg'
+      })
+    } catch (error) {
+
+    }
   }
 
   const handleHover = () => {
@@ -49,29 +69,30 @@ const Cart: React.FC<CartProps> = ({ data }) => {
 
   const handleProduct = () => {
     const id = data._id
-    console.log(id)
     router.push(`/overview/${id}`)
   }
 
   return (
-    <div className="ring-1 ring-gray-500 rounded-md overflow-hidden relative w-[calc((100%-100px)/6)] cursor-pointer" onClick={handleProduct}>
-      <div className="">
-        <Image src={image || productImage} alt={data.productName || 'Product Image'} width={200} height={200} />
-      </div>
-      <div className="p-4">
-        <div className="flex justify-between">
-          <h2>{data.productName}</h2>
-          <div className="flex flex-col justify-start text-end h-12">
-            <span className="font-semibold text-lg">Rs. {data.price.newPrice}</span>
-            <span className="text-sm line-through">{data.price.oldPrice}</span>
+    <div className="ring-1 ring-gray-500 rounded-md overflow-hidden relative w-[calc((100%-100px)/6)] cursor-pointer">
+      <div onClick={handleProduct}>
+        <div className="">
+          <Image src={image || productImage} alt={data.productName || 'Product Image'} width={200} height={200} />
+        </div>
+        <div className="px-4">
+          <div className="flex justify-between">
+            <h2>{data.productName}</h2>
+            <div className="flex flex-col justify-start text-end h-12">
+              <span className="font-semibold text-lg">Rs. {data.price.newPrice}</span>
+              <span className="text-sm line-through">{data.price.oldPrice}</span>
+            </div>
+          </div>
+          <div className="">
+            <RatingCart rating={data.rating || 3.5} />
           </div>
         </div>
-        <div className="">
-          <RatingCart rating={data.rating || 3.5} />
-        </div>
-        <div className="cart-actions">
-          <button className='flex  items-center gap-2 bg-primaryColor text-white hover:bg-secondaryButtonColor rounded-full py-1 px-4 mt-4 transition ease-in-out duration-500' onClick={handleAddToCart}>Add to Cart <IoCartOutline /></button>
-        </div>
+      </div>
+      <div className="cart-actions px-4 mb-4">
+        <button onClick={handleAddToCart} className='flex  items-center gap-2 bg-primaryColor text-white hover:bg-secondaryButtonColor rounded-full py-1 px-4 mt-4 transition ease-in-out duration-500'>Add to Cart <IoCartOutline /></button>
       </div>
       <div>
         {isHover ? (

@@ -7,6 +7,7 @@ import { BsCartX } from 'react-icons/bs';
 import Footer from '../../../Components/Footer/Footer';
 import { RiUnpinFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/router';
 
 interface CartItem {
     price: { newPrice: number };
@@ -26,23 +27,31 @@ interface CartItem {
 
 function CartPage() {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
     const [id, setId] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
+    const router = useRouter();
 
     useEffect(() => {
         const fetchProduct = async () => {
             setLoading(true);
             try {
                 const fetchUser = await axios.get('/api/cookie');
-                const userId = fetchUser.data?.user?.id;
-                if (!userId) return;
 
-                setId(userId);
+                if (fetchUser.status === 401 || fetchUser.status === 400 || fetchUser.status === 500) {
+                    setIsLoggedIn(false)
+                }
+                if (fetchUser.status === 200) {
+                    const userId = fetchUser.data?.user?.id;
+                    if (!userId) return;
+                    if (userId) setIsLoggedIn(true)
 
-                const cartData = await axios.post('/api/cart/get-cart-by-userId', { userId });
-                setCartItems(cartData.data);
-                console.log(cartData.data)
+                    setId(userId);
+
+                    const cartData = await axios.post('/api/cart/get-cart-by-userId', { userId });
+                    setCartItems(cartData.data);
+                }
             } catch (error) {
                 console.error("Error fetching cart data:", error);
             } finally {
@@ -150,6 +159,35 @@ function CartPage() {
             toast.error("Failed to remove item");
             console.error("Error removing item from cart:", error);
         }
+    };
+
+    useEffect(() => {
+        const storedCart = localStorage.getItem('cart');
+        if (storedCart) {
+            setCartItems(JSON.parse(storedCart));
+        }
+    }, []);
+
+    const handleCheckout = () => {
+
+        if (!isLoggedIn) {
+            router.push('/login')
+            return
+        }
+
+        const selectedItemsData = [...selectedItems].map((selectedItemId) => {
+            const selectedItem = cartItems.find(item => item._id === selectedItemId);
+            return selectedItem ? {
+                id: selectedItem._id,
+                name: selectedItem.productName,
+                finalQuantity: selectedItem.quantity.value,
+                unit: selectedItem.quantity.unit,
+                pricePerKg: selectedItem.price.newPrice,
+            } : null;
+        }).filter(item => item !== null);
+
+        localStorage.setItem('checkoutItems', JSON.stringify(selectedItemsData));
+        console.log('Checkout Data Stored:', selectedItemsData);
     };
 
     return (
@@ -306,7 +344,12 @@ function CartPage() {
                             <p className='font-semibold text-xl'>Total: {calculateCartTotal()} LKR</p>
                         </div>
                         <p className='w-full text-center text-gray-600 mb-4'>Shipping and taxes calculated at checkout.</p>
-                        <button className='bg-primaryColor text-white w-full px-8 py-2 rounded'>Checkout</button>
+                        <button
+                            onClick={handleCheckout}
+                            className='bg-primaryColor text-white w-full px-8 py-2 rounded'
+                        >
+                            Checkout
+                        </button>
                     </div>
                 </div>
             </div>

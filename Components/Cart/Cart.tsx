@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import { GoHeart, GoHeartFill } from 'react-icons/go';
 import productImage from '../../Assets/Hero.jpg'
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 interface ProductData {
   id: string;
@@ -52,8 +53,12 @@ const Cart: React.FC<CartProps> = ({ data }) => {
       const response = await axios.post('/api/cart', {
         userId, productId: id, value: 1, unit: 'kg'
       })
-    } catch (error) {
 
+      if (response.status === 200) {
+        toast.success("Item added to cart");
+      }
+    } catch (error) {
+      toast.error("Unable to add cart item");
     }
   }
 

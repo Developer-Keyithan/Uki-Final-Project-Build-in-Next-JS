@@ -27,21 +27,31 @@ export const POST = async (req: NextRequest) => {
     }
 };
 
+
 export const DELETE = async (req: NextRequest) => {
     try {
         const body = await req.json();
         const { cartId } = body;
 
-        if (!cartId) return NextResponse.json({ message: "Cart id is required" }, { status: 400 });
+        if (!cartId) {
+            return NextResponse.json({ message: "Cart id is required" }, { status: 400 });
+        }
 
         await connectDb();
+
+        const cart = await Cart.findById(cartId);
+        if (!cart) {
+            return NextResponse.json({ message: "Cart not found" }, { status: 404 });
+        }
+
         await Cart.findByIdAndDelete(cartId);
 
         return NextResponse.json({ message: "Cart deleted successfully" }, { status: 200 });
     } catch (error: any) {
-        return NextResponse.json({ message: "Failed to delete cart ", error: error.message }, { status: 500 });
+        return NextResponse.json({ message: "Failed to delete cart", error: error.message }, { status: 500 });
     }
 };
+
 
 export const PUT = async (req: NextRequest) => {
     try {

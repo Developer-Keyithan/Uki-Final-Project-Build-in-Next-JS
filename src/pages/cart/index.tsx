@@ -6,6 +6,7 @@ import axios from 'axios';
 import { BsCartX } from 'react-icons/bs';
 import Footer from '../../../Components/Footer/Footer';
 import { RiUnpinFill } from 'react-icons/ri';
+import { toast } from 'react-toastify';
 
 interface CartItem {
     price: { newPrice: number };
@@ -135,19 +136,35 @@ function CartPage() {
                 }, 0);
     };
 
+    const handleRemoveCart = async (cartId: string) => {
+        try {
+            const response = await axios.delete('/api/cart', {
+                data: { cartId }
+            });
+
+            if (response.status === 200) {
+                toast.success("Item removed");
+            }
+            setCartItems((prevCartItems) => prevCartItems.filter(item => item._id !== cartId));
+        } catch (error) {
+            toast.error("Failed to remove item");
+            console.error("Error removing item from cart:", error);
+        }
+    };
+
     return (
         <div>
             <div className='sticky top-0 z-50'>
                 <Navbar />
                 <hr />
             </div>
-            <div className='flex mx-60 my-10 gap-5'>
-                <div className='flex flex-wrap gap-5 w-3/5 ring-1 ring-gray-300 p-4 rounded-md h-[84vh] overflow-y-auto no-scrollbar'>
+            <div className='flex mx-60 my-10 gap-20'>
+                <div className='flex flex-col gap-5 w-3/5 ring-1 ring-gray-300 p-4 rounded-md h-[84vh] overflow-y-auto no-scrollbar'>
                     {cartItems.length === 0 ? (
                         <p>Your cart is empty.</p>
                     ) : (
                         cartItems.map((cartItem) => (
-                            <div key={cartItem._id} className='flex gap-5 w-full'>
+                            <div key={cartItem._id} className='flex gap-5 w-full h-max'>
                                 <input
                                     type="checkbox"
                                     className='accent-primaryColor h-5 w-5'
@@ -224,7 +241,12 @@ function CartPage() {
                                                 <strong className='font-semibold text-lg'>Subtotal:</strong> {calculateProductSubtotal(cartItem)} LKR
                                             </p>
 
-                                            <button className='flex gap-2 items-center bg-red-700 hover:bg-red-800 text-white px-4 py-1 rounded transition ease-in-out duration-300'> Remove from cart <BsCartX /></button>
+                                            <button
+                                                onClick={() => handleRemoveCart(cartItem._id)}
+                                                className='flex gap-2 items-center bg-red-700 hover:bg-red-800 text-white px-4 py-1 rounded transition ease-in-out duration-300'
+                                            >
+                                                Remove from cart <BsCartX />
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -283,6 +305,7 @@ function CartPage() {
                             <p className='font-semibold'>{selectedItems.size} Items Selected</p>
                             <p className='font-semibold text-xl'>Total: {calculateCartTotal()} LKR</p>
                         </div>
+                        <p className='w-full text-center text-gray-600 mb-4'>Shipping and taxes calculated at checkout.</p>
                         <button className='bg-primaryColor text-white w-full px-8 py-2 rounded'>Checkout</button>
                     </div>
                 </div>

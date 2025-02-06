@@ -16,7 +16,6 @@ export const POST = async (req: NextRequest) => {
     try {
         await DBconnect();
         const userDeliveryAddress = await DeliveryAddress.find({ userId });
-
         if (userDeliveryAddress.length === 0) {
             return NextResponse.json(
                 { message: "No delivery address found for this user" },

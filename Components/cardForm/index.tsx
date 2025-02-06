@@ -1,52 +1,100 @@
 import { useState } from 'react';
 import './style.css';
 import { IoClose } from "react-icons/io5";
-import visaCard from "../../Assets/visa-card.png"
-import masterCard from "../../Assets/master-card.png"
+import visaCard from "../../Assets/visa-card.png";
+import masterCard from "../../Assets/master-card.png";
 import Image from 'next/image';
 
-import BOCBank from '../../Assets/BOC-bank.png'
-import ComBank from '../../Assets/Commercial-bank.png'
-import DFCCBank from '../../Assets/DFCC-bank.jpg'
-import HNBBank from '../../Assets/HNB-bank.jpg'
-import NDBBank from '../../Assets/NDB Bank.jpg'
-import NSBBank from '../../Assets/NSB-bank.png'
-import peoplesBank from "../../Assets/People's-bank.png"
-import sampathBank from '../../Assets/Sampath-bank.jpg'
-import seylanBank from '../../Assets/Seylan-bank.png'
-
-
+import BOCBank from '../../Assets/BOC-bank.png';
+import ComBank from '../../Assets/Commercial-bank.png';
+import DFCCBank from '../../Assets/DFCC-bank.jpg';
+import HNBBank from '../../Assets/HNB-bank.jpg';
+import NDBBank from '../../Assets/NDB Bank.jpg';
+import NSBBank from '../../Assets/NSB-bank.png';
+import peoplesBank from "../../Assets/People's-bank.png";
+import sampathBank from '../../Assets/Sampath-bank.jpg';
+import seylanBank from '../../Assets/Seylan-bank.png';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 interface FormState {
+    userId: string;
     bankName: string;
     branch: string;
-    cardNumber: string;
-    cvv: string;
-    date: string;
-    month: string;
+    cardNumber: number;
+    cvv: number;
+    year: number;
+    month: number;
     cardType: string;
 }
 
 interface CardFormProps {
+    id: string;
     handleClose: () => void;
+    onAddNewCard: (newCard: any) => void;
 }
 
-const CardForm: React.FC<CardFormProps> = ({ handleClose }) => {
-
+const CardForm: React.FC<CardFormProps> = ({ handleClose, id, onAddNewCard }) => {
     const [cardNumber, setCardNumber] = useState('');
     const [cvv, setCVV] = useState('');
-    const [date, setDate] = useState('');
     const [month, setMonth] = useState('');
+    const [year, setYear] = useState('');
 
     const [formState, setFormState] = useState<FormState>({
+        userId: id,
         bankName: '',
         branch: '',
-        cardNumber: '',
-        cvv: '',
-        date: '',
-        month: '',
+        cardNumber: Number(cardNumber),
+        cvv: Number(cvv),
+        month: Number(month),
+        year: Number(year),
         cardType: ''
     });
+
+    const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+        if (value.length <= 16) {
+            const formattedValue = value.replace(/(\d{4})(?=\d)/g, '$1 '); // Add space every 4 digits
+            setCardNumber(formattedValue);
+            setFormState((prevState) => ({
+                ...prevState,
+                cardNumber: Number(value),
+            }));
+        }
+    };
+
+    const handleCVVChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+        if (value.length <= 3) {
+            setCVV(value);
+            setFormState((prevState) => ({
+                ...prevState,
+                cvv: Number(value),
+            }));
+        }
+    };
+
+    const handleMonthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+        if (value === '' || (Number(value) >= 1 && Number(value) <= 12)) {
+            setMonth(value);
+            setFormState((prevState) => ({
+                ...prevState,
+                month: Number(value),
+            }));
+        }
+    };
+
+    const handleYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+        if (value.length <= 2) {
+            setYear(value);
+            setFormState((prevState) => ({
+                ...prevState,
+                year: Number(value),
+            }));
+        }
+    };
 
     const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -59,24 +107,32 @@ const CardForm: React.FC<CardFormProps> = ({ handleClose }) => {
         if (!formState.cvv || !/^\d{3}$/.test(formState.cvv.toString())) {
             newErrors.cvv = 'CVV must be 3 digits';
         }
-        if (!formState.date || !/^\d{2}$/.test(formState.date.toString())) {
-            newErrors.date = 'Date must be 2 digits';
+        if (!formState.month || !/^\d{2}$/.test(formState.month.toString()) || Number(formState.month) < 1 || Number(formState.month) > 12) {
+            newErrors.month = 'Month must be between 01 and 12';
         }
-        if (!formState.month || !/^\d{2}$/.test(formState.month.toString())) {
-            newErrors.month = 'Month must be 2 digits';
-        }
-        if (!formState.date || !formState.month) {
-            newErrors.expireDate = 'Expiration date is required';
+        if (!formState.year || !/^\d{2}$/.test(formState.year.toString())) {
+            newErrors.year = 'Year must be 2 digits';
         }
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (event: React.FormEvent) => {
+    const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         if (validateForm()) {
-            console.log('Form Submitted:', formState);
+            try {
+                const response = await axios.post('/api/card', formState);
+                if (response.status === 200 && response.data) {
+                    toast.success('Your card details saved successfully!');
+                    onAddNewCard(response.data.newCard); // Call the callback with the new card
+                    handleClose(); // Close the form
+                } else {
+                    toast.error('Failed to save your card.');
+                }
+            } catch (error) {
+                toast.error('Failed to save your card.');
+            }
         } else {
             console.log('Validation Errors:', errors);
         }
@@ -98,7 +154,7 @@ const CardForm: React.FC<CardFormProps> = ({ handleClose }) => {
                 <fieldset className='flex flex-col gap-3 transition-all ease-in-out duration-300'>
 
                     <div>
-                        <p>Who is your card peovider?</p>
+                        <p>Who is your card provider?</p>
                         <div className='grid grid-cols-5 gap-2 mt-2'>
                             <div
                                 onClick={() => handleBankSelect('BOC Bank')}
@@ -132,7 +188,7 @@ const CardForm: React.FC<CardFormProps> = ({ handleClose }) => {
                                     className="h-full w-full object-contain rounded-md"
                                 />
                             </div>
-                            
+
                             <div
                                 onClick={() => handleBankSelect('HNB Bank')}
                                 className={`relative h-[100px] w-full rounded-md px-2 border-[1px] border-green-900 cursor-pointer hover:scale-110 transition ease-in-out duration-300 ${formState.bankName === 'HNB Bank' ? 'after:content-[""] after:absolute after:top-0 after:left-0 after:w-full after:h-full after:bg-green-900 after:opacity-70' : ''} overflow-hidden`}
@@ -206,20 +262,24 @@ const CardForm: React.FC<CardFormProps> = ({ handleClose }) => {
                         <div className='w-3/5 flex gap-2'>
                             <div className='w-2/3'>
                                 <input
-                                    type="number"
+                                    type="text"
                                     placeholder="Card Number"
-                                    onChange={(e) => setCardNumber(e.target.value)}
-                                    className={`border-[1px] ${errors.cardNumber ? 'border-red-500' : 'border-gray-300'} rounded-sm py-1 px-3 focus:outline-green-900 w-full`}
+                                    value={cardNumber}
+                                    onChange={handleCardNumberChange}
+                                    maxLength={19} // 16 digits + 3 spaces
+                                    className={`border-[1px] ${errors.cardNumber ? 'border-red-500' : 'border-gray-300'} rounded-sm py-1 px-3 focus:outline-green-900 w-full no-spinner`}
                                 />
                                 {errors.cardNumber && <p style={{ color: 'red' }}>{errors.cardNumber}</p>}
                             </div>
 
                             <div className='w-1/3'>
                                 <input
-                                    type="number"
+                                    type="text"
                                     placeholder="CVV"
-                                    onChange={(e) => setCVV(e.target.value)}
-                                    className={`border-[1px] ${errors.cvv ? 'border-red-500' : 'border-gray-300'} rounded-sm py-1 px-3 focus:outline-green-900 w-full`}
+                                    value={cvv}
+                                    onChange={handleCVVChange}
+                                    maxLength={3}
+                                    className={`border-[1px] ${errors.cvv ? 'border-red-500' : 'border-gray-300'} rounded-sm py-1 px-3 focus:outline-green-900 w-full no-spinner`}
                                 />
                                 {errors.cvv && <p style={{ color: 'red' }}>{errors.cvv}</p>}
                             </div>
@@ -227,28 +287,33 @@ const CardForm: React.FC<CardFormProps> = ({ handleClose }) => {
                         <div className='w-2/5'>
                             <div className='flex gap-1 items-center'>
                                 <input
-                                    type="number"
-                                    placeholder="DD"
-                                    onChange={(e) => setDate(e.target.value)}
-                                    className={`border-[1px] ${errors.date ? 'border-red-500' : 'border-gray-300'} rounded-sm py-1 px-3 focus:outline-green-900 w-full`}
+                                    type="text"
+                                    placeholder="MM"
+                                    value={month}
+                                    onChange={handleMonthChange}
+                                    maxLength={2}
+                                    className={`text-center border-[1px] ${errors.month ? 'border-red-500' : 'border-gray-300'} rounded-sm py-1 px-3 focus:outline-green-900 w-full no-spinner`}
                                 />
                                 <p>/</p>
                                 <input
-                                    type="number"
-                                    placeholder="MM"
-                                    onChange={(e) => setMonth(e.target.value)}
-                                    className={`border-[1px] ${errors.month ? 'border-red-500' : 'border-gray-300'} rounded-sm py-1 px-3 focus:outline-green-900 w-full`}
+                                    type="text"
+                                    placeholder="YY"
+                                    value={year}
+                                    onChange={handleYearChange}
+                                    maxLength={2}
+                                    className={`text-center border-[1px] ${errors.year ? 'border-red-500' : 'border-gray-300'} rounded-sm py-1 px-3 focus:outline-green-900 w-full no-spinner`}
                                 />
                             </div>
-                            {errors.expireDate && <p style={{ color: 'red' }}>{errors.expireDate}</p>}
+                            {errors.month && <p style={{ color: 'red' }}>{errors.month}</p>}
+                            {errors.year && <p style={{ color: 'red' }}>{errors.year}</p>}
                         </div>
                     </div>
 
                     <div className='mt-5'>
                         <p>This Card is a</p>
                         <div className='flex gap-5 mt-2'>
-                            <Image src={visaCard} alt="Visa Card" onClick={() => handleCardTypeSelect('Visa Card')} className={`w-[150px] h-[100px] object-cover border-[1px] border-green-900 rounded-md hover:scale-110 ${formState.cardType === 'Visa Card' ? 'bg-green-500 border-green-500': ''}      transition ease-in-out duration-300 cursor-pointer`}></Image>
-                            <Image src={masterCard} alt="Master Card" onClick={() => handleCardTypeSelect('Master Card')} className={`w-[150px] h-[100px] object-cover border-[1px] border-green-900 rounded-md hover:scale-110 ${formState.cardType === 'Master Card' ? 'bg-green-500 border-green-500': ''}      transition ease-in-out duration-300 cursor-pointer`}></Image>
+                            <Image src={visaCard} alt="Visa Card" onClick={() => handleCardTypeSelect('Visa Card')} className={`w-[150px] h-[100px] object-cover border-[1px] border-green-900 rounded-md hover:scale-110 ${formState.cardType === 'Visa Card' ? 'bg-green-500 border-green-500' : ''}      transition ease-in-out duration-300 cursor-pointer`}></Image>
+                            <Image src={masterCard} alt="Master Card" onClick={() => handleCardTypeSelect('Master Card')} className={`w-[150px] h-[100px] object-cover border-[1px] border-green-900 rounded-md hover:scale-110 ${formState.cardType === 'Master Card' ? 'bg-green-500 border-green-500' : ''}      transition ease-in-out duration-300 cursor-pointer`}></Image>
                         </div>
                     </div>
                 </fieldset>
@@ -256,6 +321,7 @@ const CardForm: React.FC<CardFormProps> = ({ handleClose }) => {
                 <button
                     className='w-full rounded-sm py-2 cursor-pointer bg-green-900 text-white hover:bg-green-800 transition ease-in-out duration-300 mt-5'
                     type="submit"
+                    onClick={handleSubmit}
                 >
                     Save Card
                 </button>

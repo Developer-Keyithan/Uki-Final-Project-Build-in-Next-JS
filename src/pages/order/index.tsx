@@ -31,7 +31,13 @@ function OrderPage() {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [userId, setUserId] = useState<string>('');
+    const [addresses, setAddresses] = useState<any[]>([]);
+    const [selectedAddress, setSelectedAddress] = useState<any>({});
+    const [cards, setCards] = useState([]);
+    const [selectedCard, setSelectedCard] = useState(null);
     const [unitSelection, setUnitSelection] = useState<{ [key: number]: string }>({});
+    const [paymentMethod, setPaymentMethod] = useState<'card' | 'cash'>('card');
 
     const router = useRouter();
     const { id } = router.query;
@@ -58,10 +64,39 @@ function OrderPage() {
         fetchProduct();
     }, [id]);
 
+    useEffect(() => {
+        const fetchAddresses = async () => {
+            const user = await axios.get('/api/cookie');
+            setUserId(user.data.user.id);
+
+            const addresses = await axios.post('/api/delivery-address/get-by-userid', {
+                userId: user.data.user.id,
+            });
+            const cards = await axios.post('/api/card/get-by-userid', {
+                userId: user.data.user.id,
+            });
+
+            setAddresses(addresses.data.userDeliveryAddress);
+            setCards(cards.data.cards);
+        };
+
+        fetchAddresses();
+    }, []);
+
+    // Function to add a new address to the addresses state
+    // const handleAddNewAddress = (newAddress: any) => {
+    //     setAddresses((prevAddresses) => [...prevAddresses, newAddress]);
+    // };
+
     const handleQuantityChange = (index: number, change: number) => {
         setProducts((prevProducts) =>
             prevProducts.map((product, i) =>
-                i === index ? { ...product, finalQuantity: Math.max(1, product.finalQuantity + change) } : product
+                i === index
+                    ? {
+                        ...product,
+                        finalQuantity: Math.max(1, product.finalQuantity + (product.unit === "gram" ? change * 50 : change)),
+                    }
+                    : product
             )
         );
     };
@@ -81,9 +116,17 @@ function OrderPage() {
     const calculateSubtotal = (product: Product) => {
         const price = product.price?.newPrice || product.pricePerKg;
         const quantity = product.finalQuantity;
-        const unit = product.unit; // Get updated unit directly from product
+        const unit = product.unit;
 
-        return unit === "kg" ? price * quantity : (price / 1000) * quantity; // If grams, divide by 1000
+        return unit === "kg" ? price * quantity : (price / 1000) * quantity;
+    };
+
+    const handleAddressSelection = (address: any) => {
+        setSelectedAddress(address);
+    };
+
+    const handleCartSelection = (card: any) => {
+        setSelectedCard(card);
     };
 
     if (loading) return <div>Loading...</div>;
@@ -96,9 +139,9 @@ function OrderPage() {
                 <hr />
             </div>
 
-            <div className="mx-60 mb-5 rounded-b-[20px] overflow-hidden">
+            <div className="mx-60 pb-5 rounded-b-[20px] overflow-hidden">
                 <div className="flex flex-col md:flex-row justify-between gap-5 mt-5 px-[1px]">
-                    <div className="flex flex-col gap-5 w-full md:w-[56.9%]">
+                    <div className="flex flex-col gap-5 w-3/5 md:w-[56.9%]">
                         <div className="flex gap-5">
                             <AddOne textContent="Add New Delivery Address" onClick={() => setShowDeliveryForm(true)} />
                             <AddOne textContent="Add New Card" onClick={() => setShowCardForm(true)} />
@@ -107,15 +150,25 @@ function OrderPage() {
                         <div className="w-full mt-5">
                             <h2 className="text-xl font-semibold">Payment Method</h2>
                             <div className="flex justify-around gap-5 mt-5">
-                                <button className="button-primary w-full h-10 text-base">Cash on Delivery</button>
-                                <button className="button-primary w-full h-10 text-base">Card Payment</button>
+                                <button
+                                    className={`button-primary w-full h-10 ring-1 ring-primaryColor rounded text-base hover:bg-primaryColor hover:text-white transition ease-in-out duration-500 ${paymentMethod === 'cash' ? 'bg-primaryColor text-white' : ''}`}
+                                    onClick={() => setPaymentMethod('cash')}
+                                >
+                                    Cash on Delivery
+                                </button>
+                                <button
+                                    className={`button-primary w-full h-10 ring-1 ring-primaryColor rounded text-base hover:bg-primaryColor hover:text-white transition ease-in-out duration-500 ${paymentMethod === 'card' ? 'bg-primaryColor text-white' : ''}`}
+                                    onClick={() => setPaymentMethod('card')}
+                                >
+                                    Card Payment
+                                </button>
                             </div>
                         </div>
 
-                        <div className="flex flex-col gap-4 ring-1 ring-gray-500 p-4 rounded-md">
+                        <div className="flex flex-col ring-1 ring-gray-300 p-4 rounded-md">
                             {products.length > 0 ? (
                                 products.map((product, index) => (
-                                    <div key={index} className="ring-1 ring-gray-500 p-4 rounded">
+                                    <div key={index} className="border-b-[1px] p-4 rounded hover:bg-gray-100">
                                         <div className="w-full h-max flex gap-4 overflow-hidden">
                                             <div className='h-full w-1/4 overflow-hidden'>
                                                 <Image
@@ -157,7 +210,6 @@ function OrderPage() {
                                                             className='cursor-pointer accent-primaryColor'
                                                         /> kg
                                                     </label>
-
                                                 </div>
                                                 <div className='flex justify-between items-center mt-5'>
                                                     <p><span className='font-semibold'>Sub Total: </span>{calculateSubtotal(product, index).toFixed(2)}</p>
@@ -178,32 +230,35 @@ function OrderPage() {
                         </div>
                     </div>
 
-                    <div className="flex flex-col gap-5">
-                        <AddressCart />
-                        <CardsCart />
-                        <Coupon />
+                    <div className="w-2/5 flex flex-col gap-5">
+                        <AddressCart data={addresses} onSelectAddress={handleAddressSelection} />
+                        {paymentMethod === 'card' && <CardsCart data={cards} onSelectCard={handleCartSelection} />}
+                        {/* <Coupon /> */}
                     </div>
                 </div>
 
-                <div className="bottom-container mt-5">
-                    <OrderOverview />
-                </div>
-
                 {showDeliveryForm && (
-                    <div className="fixed inset-0 flex justify-center items-center px-[30vw] backdrop-blur-lg">
+                    <div className="fixed inset-0 flex justify-center items-center px-[30vw] backdrop-blur-lg z-[1000]">
                         <div className="relative bg-white rounded-lg">
-                            <DeliveryAddressForm handleClose={() => setShowDeliveryForm(false)} />
+                            <DeliveryAddressForm
+                                handleClose={() => setShowDeliveryForm(false)}
+                                id={userId}
+                                // onAddNewAddress={handleAddNewAddress} // Pass the callback function
+                            />
                         </div>
                     </div>
                 )}
 
                 {showCardForm && (
-                    <div className="fixed inset-0 flex justify-center items-center px-[30vw] backdrop-blur-lg">
+                    <div className="fixed inset-0 flex justify-center items-center px-[30vw] backdrop-blur-lg z-[100]">
                         <div className="relative bg-white rounded-lg">
-                            <CardForm handleClose={() => setShowCardForm(false)} />
+                            <CardForm handleClose={() => setShowCardForm(false)} id={userId} />
                         </div>
                     </div>
                 )}
+            </div>
+            <div className="bottom-container mt-5 sticky bottom-0 z-40">
+                <OrderOverview products={products} userId={userId} address={selectedAddress} card={paymentMethod === 'card' ? selectedCard : null} paymentMethod={paymentMethod} />
             </div>
             <Footer />
         </div>

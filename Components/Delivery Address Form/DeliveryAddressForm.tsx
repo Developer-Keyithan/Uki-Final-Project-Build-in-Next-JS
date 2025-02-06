@@ -5,6 +5,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 interface FormState {
+    userId: string;
     no: string;
     street: string;
     town: string;
@@ -14,10 +15,11 @@ interface FormState {
 }
 
 interface DeliveryAddressFormProps {
+    id: string;
     handleClose: () => void;
 }
 
-const DeliveryAddressForm: React.FC<DeliveryAddressFormProps> = ({ handleClose }) => {
+const DeliveryAddressForm: React.FC<DeliveryAddressFormProps> = ({ handleClose, id }) => {
     const [isDropdownOpen, setDropdownOpen] = useState(true);
     const [selectedDistrict, setSelectedDistrict] = useState('');
     const [isAddNumberDisabled, setAddNumberDisabled] = useState(false);
@@ -34,6 +36,7 @@ const DeliveryAddressForm: React.FC<DeliveryAddressFormProps> = ({ handleClose }
     };
 
     const [formState, setFormState] = useState<FormState>({
+        userId: id,
         no: '',
         street: '',
         town: '',
@@ -52,9 +55,20 @@ const DeliveryAddressForm: React.FC<DeliveryAddressFormProps> = ({ handleClose }
     };
 
     const handleContactNumberChange = (index: number, value: string) => {
-        const updatedNumbers = [...formState.contactNumbers];
-        updatedNumbers[index] = value;
-        setFormState({ ...formState, contactNumbers: updatedNumbers });
+        // Remove all non-digit characters
+        const cleanedValue = value.replace(/\D/g, '');
+
+        // Ensure the input is exactly 9 digits
+        if (cleanedValue.length <= 9) {
+            // Format the number as "12 345 7896"
+            const formattedValue = cleanedValue
+                .replace(/(\d{2})(\d{3})(\d{4})/, '$1 $2 $3') // Add spaces after 2 and 5 digits
+                .trim(); // Remove any trailing spaces
+
+            const updatedNumbers = [...formState.contactNumbers];
+            updatedNumbers[index] = formattedValue;
+            setFormState({ ...formState, contactNumbers: updatedNumbers });
+        }
     };
 
     const handleAddNewMobileNumber = () => {
@@ -85,7 +99,9 @@ const DeliveryAddressForm: React.FC<DeliveryAddressFormProps> = ({ handleClose }
         if (!formState.division) newErrors.division = 'Division is required';
         if (!selectedDistrict) newErrors.district = 'District is required';
         formState.contactNumbers.forEach((number, index) => {
-            if (!number) newErrors[`contactNumbers.${index}`] = 'Contact number is required';
+            if (!number || number.replace(/\D/g, '').length !== 9) {
+                newErrors[`contactNumbers.${index}`] = 'Contact number must be 9 digits';
+            }
         });
 
         setErrors(newErrors);
@@ -95,9 +111,8 @@ const DeliveryAddressForm: React.FC<DeliveryAddressFormProps> = ({ handleClose }
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         if (validateForm()) {
-
-
             try {
+                const userId = id;
                 const place = selectedAddress;
                 const no = formState.no;
                 const street = formState.street;
@@ -105,10 +120,9 @@ const DeliveryAddressForm: React.FC<DeliveryAddressFormProps> = ({ handleClose }
                 const division = formState.division;
                 const district = selectedDistrict;
                 const contactNumber = formState.contactNumbers;
-                console.log(contactNumber)
 
                 const response = await axios.post('/api/delivery-address', {
-                    no, place, street, town, division, district, contactNumber
+                    userId, no, place, street, town, division, district, contactNumber
                 });
 
                 if (response.status === 200) {
@@ -280,11 +294,12 @@ const DeliveryAddressForm: React.FC<DeliveryAddressFormProps> = ({ handleClose }
                     {formState.contactNumbers.map((number, index) => (
                         <div key={index}>
                             <input
-                                type="number"
+                                type="text"
                                 placeholder="Contact Number"
                                 value={number}
                                 onChange={(e) => handleContactNumberChange(index, e.target.value)}
-                                className={`border-[1px] ${errors[`contactNumbers.${index}`] ? 'border-red-500' : 'border-gray-300'} rounded-sm py-1 px-3 focus:outline-green-900 w-full h-9 `}
+                                maxLength={11} // 9 digits + 2 spaces
+                                className={`border-[1px] ${errors[`contactNumbers.${index}`] ? 'border-red-500' : 'border-gray-300'} rounded-sm py-1 px-3 focus:outline-green-900 w-full h-9`}
                             />
                             {errors[`contactNumbers.${index}`] && (
                                 <p style={{ color: 'red' }}>{errors[`contactNumbers.${index}`]}</p>

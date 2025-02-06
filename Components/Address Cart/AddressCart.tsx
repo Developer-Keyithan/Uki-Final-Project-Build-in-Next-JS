@@ -1,18 +1,19 @@
 import './AddressCart.css';
-import sampleData from '../../Data/AddressData';
 import { useEffect, useState } from 'react';
 import { TiHome } from "react-icons/ti";
 import { MdWork } from "react-icons/md";
 import { FaLocationDot } from "react-icons/fa6";
+import axios from 'axios';
 
 interface AddressData {
+  _id: string;
   no?: string | number;
   street?: string;
   town: string;
   division?: string;
   district: string;
-  contact: string;
-  type: 'home' | 'work-place' | 'other-location';
+  contactNumber: string;
+  place: 'Home' | 'Work Place' | 'Undifined';
 }
 
 interface AddressCardItemProps {
@@ -25,10 +26,10 @@ function AddressCardItem({ data, isSelected, onClick }: AddressCardItemProps) {
   let icon: React.ReactNode;
   let name = '';
 
-  if (data.type === 'home') {
+  if (data.place === 'Home') {
     icon = <TiHome />;
     name = 'Home';
-  } else if (data.type === 'work-place') {
+  } else if (data.place === 'Work Place') {
     icon = <MdWork />;
     name = 'Work Place';
   } else {
@@ -45,7 +46,7 @@ function AddressCardItem({ data, isSelected, onClick }: AddressCardItemProps) {
 
   return (
     <div
-      className={`address-item select ${isSelected ? 'selected' : ''}`}
+      className={`address-item ${isSelected ? 'selected' : ''}`}
       onClick={onClick}
     >
       <div className='address-name'>
@@ -55,41 +56,49 @@ function AddressCardItem({ data, isSelected, onClick }: AddressCardItemProps) {
       <div className="address-data">
         <p><span className='font-semibold'>Address:</span> {formattedAddress}</p>
         <p><span className='font-semibold'>District:</span> {data.district}</p>
-        <p><span className='font-semibold'>Contact No:</span> +94 {data.contact}</p>
+        <p>
+          <span className='font-semibold'>Contact No: </span>
+          {Array.isArray(data.contactNumber)
+            ? data.contactNumber.map(num => `+94 ${num.toString().replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3')}`).join(', ')
+            : `+94 ${data.contactNumber.toString().replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3')}`}
+        </p>
       </div>
     </div>
   );
 }
 
-function AddressCard() {
+function AddressCard({ data, onSelectAddress }: { data: AddressData[], onSelectAddress: (address: AddressData) => void }) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   useEffect(() => {
-    const defaultIndex = sampleData.findIndex((item) => item.type === 'home');
+    const defaultIndex = data.findIndex((item) => item.place === 'Home');
     if (defaultIndex !== -1) {
       setSelectedIndex(defaultIndex);
+      onSelectAddress(data[defaultIndex]);  // Send default address on load
     }
   }, []);
 
-  const handleClick = (index: number) => {
+  const handleClick = (index: number, item: AddressData) => {
     setSelectedIndex(index);
+    onSelectAddress(item); // Send selected address to parent
   };
 
   return (
     <div className='address-card-container'>
       <h2 className='font-semibold'>Saved Delivery Addresses</h2>
       <div className='address-card'>
-        {sampleData.map((item, index) => (
+        {data.map((item, index) => (
           <AddressCardItem
             key={index}
             data={item}
             isSelected={index === selectedIndex}
-            onClick={() => handleClick(index)}
+            onClick={() => handleClick(index, item)}
           />
         ))}
       </div>
     </div>
   );
 }
+
 
 export default AddressCard;

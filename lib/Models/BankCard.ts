@@ -4,14 +4,14 @@ const bankCardSchema = new Schema(
     {
         userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
         bankName: { type: String, required: true },
-        branch: { type: String, required: true },
+        branch: { type: String, required: false },
         cardNumber: { type: Number, required: true },
         cvv: { type: Number, required: true },
         expireDate: {
-            date: { type: Number, required: true },
             month: { type: Number, required: true },
+            year: { type: Number, required: true },
         },
-        cardType: { type: String, required: true, enum: ['visa', 'master'] },
+        cardType: { type: String, required: true, enum: ['Visa Card', 'Master Card'] },
     },
     { timestamps: true }
 );

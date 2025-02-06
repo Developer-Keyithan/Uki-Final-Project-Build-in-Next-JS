@@ -5,12 +5,13 @@ import BankCard from '../../../../lib/Models/BankCard';
 export const POST = async (req: NextRequest) => {
     try {
         const body = await req.json();
-        const { userId, bankName, cardNumber, cvv, date, month, cardType } = body;
+        console.log(body)
+        const { userId, branch, bankName, cardNumber, cvv, year, month, cardType } = body;
 
         if (!bankName) return NextResponse.json({ error: "Select your card provided bank" }, { status: 400 });
         if (!cardNumber) return NextResponse.json({ error: "Card number is required" }, { status: 400 });
         if (!cvv) return NextResponse.json({ error: "CVV number is required" }, { status: 400 });
-        if (!date) return NextResponse.json({ error: "Expiration date is required" }, { status: 400 });
+        if (!year) return NextResponse.json({ error: "Expiration date is required" }, { status: 400 });
         if (!month) return NextResponse.json({ error: "Expiration date is required" }, { status: 400 });
         if (!cardType) return NextResponse.json({ error: "Select your card type" }, { status: 400 });
 
@@ -21,9 +22,12 @@ export const POST = async (req: NextRequest) => {
             bankName,
             cardNumber,
             cvv,
-            expireDate: { date, month },
+            branch,
+            expireDate: { month, year },
             cardType
         });
+
+        console.log(newBankCard)
 
         await newBankCard.save();
 
@@ -32,6 +36,7 @@ export const POST = async (req: NextRequest) => {
             newBankCard
         }, { status: 200 })
     } catch (error: any) {
+        console.log(error)
         return NextResponse.json({
             message: "Error add new bank card",
             error: error.message

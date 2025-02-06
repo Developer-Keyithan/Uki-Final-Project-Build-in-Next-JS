@@ -22,7 +22,7 @@
     justify-content: space-between;
     padding: 20px;
     gap: 20px;
-    /* background: linear-gradient(90deg, var(--primary-color), var(--secondary-color)); */
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
 }
 
 .left-section {
@@ -37,13 +37,8 @@
 .chosen-card,
 .chosen-address {
     border: 1px solid var(--bg-color);
-    border-radius: 5px;
-}
-
-.chosen-coupon,
-.promo-code,
-.chosen-address {
     padding: 20px;
+    border-radius: 5px;
 }
 
 .promo-code {
@@ -88,5 +83,5 @@
 }
 
 .order-btn:hover {
-    background: var(--primary-button-hover-color);
+    background: var(--primary-button-color);
 }

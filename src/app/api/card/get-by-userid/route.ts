@@ -26,7 +26,7 @@ export const POST = async (req: NextRequest) => {
 
         return NextResponse.json({
             message: "Bank cards retrieved successfully",
-            userBankCards
+            cards: userBankCards
         }, { status: 200 });
 
     } catch (error: any) {

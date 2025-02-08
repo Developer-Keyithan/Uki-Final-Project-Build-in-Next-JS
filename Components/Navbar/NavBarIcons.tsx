@@ -1,4 +1,3 @@
-import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { BiUser } from "react-icons/bi";
 import { IoCartOutline } from "react-icons/io5";
@@ -6,14 +5,14 @@ import { LuFileHeart } from "react-icons/lu";
 import { RiMoonClearFill } from "react-icons/ri";
 import CartModel from "../CartModel/CartModel";
 import WishListModel from "../WishListModel/WishListModel";
-import Link from "next/link";
 import Profile from "../Profile/Profile";
 
 interface NavBarIconsProps {
     userData: any;
+    length: number;
 }
 
-const NavBarIcons: React.FC<NavBarIconsProps> = ({ userData }) => {
+const NavBarIcons: React.FC<NavBarIconsProps> = ({ userData, length }) => {
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [isWishListOpen, setIsWishListOpen] = useState(false);
@@ -53,7 +52,7 @@ const NavBarIcons: React.FC<NavBarIconsProps> = ({ userData }) => {
             <div className="relative text-2xl flex justify-center items-center cursor-pointer">
                 <IoCartOutline onClick={() => setIsCartOpen((prev) => !prev)} />
                 <div className="absolute -top-2 -right-2 py-[1px] px-2 bg-bgRed rounded-full text-white text-xs">
-                    2
+                    {length}
                 </div>
             </div>
             {isCartOpen && <CartModel />}

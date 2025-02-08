@@ -27,7 +27,7 @@ export const POST = async (req: NextRequest) => {
             return {
                 ...cartItem,
                 productName: product?.productName || "Unknown Product",
-                productImage: product?.productImage || "",
+                productImage: product?.productImages[0].imageUrl || "",
                 productDescription: product?.productDescription || "No description available",
                 agricationMethod: product?.agricationMethod,
                 price: product?.price || 0

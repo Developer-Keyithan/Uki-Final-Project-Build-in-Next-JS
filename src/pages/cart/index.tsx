@@ -14,7 +14,7 @@ interface CartItem {
     agricationMethod: string;
     productDescription: string;
     productName: string;
-    productImages: { imageUrl: string }[];
+    productImage: string;
     id: string;
     _id: string;
     productId: string;
@@ -217,22 +217,14 @@ function CartPage() {
                                     checked={selectedItems.has(cartItem._id)}
                                     aria-label={`Select ${cartItem.productName}`}
                                 />
-                                <div className="flex w-full ring-1 ring-gray-300 rounded-sm px-4 py-3">
-                                    <div className='w-1/5'>
-                                        {cartItem.productImages && cartItem.productImages.length > 0 && (
-                                            // <Image
-                                            //     src={cartItem.productImages[0].imageUrl}
-                                            //     alt={cartItem.productName}
-                                            //     width={200}
-                                            //     height={200}
-                                            //     objectFit="cover"
-                                            //     className="h-full w-full object-cover"
-                                            // />
-                                            <img src={cartItem.productImages[0].imageUrl} />
+                                <div className="flex w-full ring-1 ring-gray-300 rounded-sm px-4 py-3 gap-8">
+                                    <div className='w-1/4'>
+                                        {cartItem.productImage && cartItem.productImage.length > 0 && (
+                                            <img src={cartItem.productImage} className='h-40 w-full object-cover rounded-sm' />
                                         )}
                                         
                                     </div>
-                                    <div className='w-4/5'>
+                                    <div className='w-3/4'>
                                         <div>
                                             <h1 className='font-semibold text-2xl'>{cartItem.productName}</h1>
                                             <p className='text-lg'>{cartItem.productDescription}</p>
@@ -310,18 +302,11 @@ function CartPage() {
                             [...selectedItems].map((selectedItemId) => {
                                 const selectedItem = cartItems.find(item => item._id === selectedItemId);
                                 return selectedItem ? (
-                                    <div key={selectedItem._id} className='flex p-4 border-b-[1px] hover:bg-gray-100 transition ease-in-out duration-300'>
-                                        <div className='w-1/3 h-full'>
-                                            {/* <Image
-                                                src={selectedItem.productImages[0].imageUrl}
-                                                alt={selectedItem.productName}
-                                                width={100}
-                                                height={100}
-                                                objectFit="cover"
-                                                className="h-full w-full object-cover"
-                                            /> */}
+                                    <div key={selectedItem._id} className='flex gap-8 p-4 border-b-[1px] hover:bg-gray-100 transition ease-in-out duration-300'>
+                                        <div className='w-1/4 h-24'>
+                                            <img src={selectedItem.productImage} alt={selectedItem.productName} className='object-cover h-full w-full' />
                                         </div>
-                                        <div className='w-2/3'>
+                                        <div className='w-3/4'>
                                             <div className='flex justify-between items-start w-full'>
                                                 <h3 className='font-semibold'>{selectedItem.productName}</h3>
                                                 <p className='w-max px-4 py-1 bg-gray-200 text-center rounded'>

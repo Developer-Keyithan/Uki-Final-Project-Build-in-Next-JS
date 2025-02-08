@@ -12,6 +12,7 @@ import axios, { AxiosError } from 'axios';
 const Navbar: React.FC = () => {
     const [user, setUser] = useState(null);
     const [error, setError] = useState<string | null>(null);
+    const [length, setLength] = useState<string | null>(null);
 
     const router = useRouter();
 
@@ -32,7 +33,9 @@ const Navbar: React.FC = () => {
             try {
                 const { data } = await axios.get('/api/cookie');
                 const response = await axios.post('/api/user/get-user', { userId: data.user.id });
+                const cartCount = await axios.post('/api/cart/cart-size', { userId: data.user.id });
                 setUser(response.data.user);
+                setLength(cartCount.data.length)
                 setError(null);
             } catch (error) {
                 const axiosError = error as AxiosError;
@@ -75,7 +78,7 @@ const Navbar: React.FC = () => {
                     <div className="">
                         <div className='flex flex-row gap-2'>
                             <SearchBar />
-                            <NavBarIcons userData={user} />
+                            <NavBarIcons userData={user} length={length} />
                         </div>
                     </div>
                 </div>

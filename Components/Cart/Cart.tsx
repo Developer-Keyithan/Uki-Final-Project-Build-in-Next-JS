@@ -5,11 +5,9 @@ import { StaticImageData } from "next/image";
 // import './Cart.css';
 import RatingCart from '../Rating Cart/RatingCart';
 import Image from 'next/image';
-import { BiCart } from 'react-icons/bi';
 import { IoCartOutline } from 'react-icons/io5';
 import { useEffect, useState } from 'react';
 import { GoHeart, GoHeartFill } from 'react-icons/go';
-import productImage from '../../Assets/Hero.jpg'
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
@@ -33,7 +31,6 @@ interface CartProps {
 }
 
 const Cart: React.FC<CartProps> = ({ data }) => {
-  console.log(data)
   const [isHover, setIsHover] = useState(false);
   const [userId, setUserId] = useState<string>('')
   const router = useRouter();
@@ -72,7 +69,6 @@ const Cart: React.FC<CartProps> = ({ data }) => {
   }
 
   const image = typeof data.productImages[0].imageUrl === 'string' ? data.productImages[0].imageUrl : data.productImages[0].imageUrl.src;
-  console.log(image)
 
   const handleProduct = () => {
     const id = data._id

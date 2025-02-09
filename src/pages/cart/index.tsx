@@ -203,99 +203,103 @@ function CartPage() {
                 <hr />
             </div>
             <div className='flex mx-60 my-10 gap-20'>
-                <div className='flex flex-col gap-5 w-3/5 ring-1 ring-gray-300 p-4 rounded-md h-[84vh] overflow-y-auto no-scrollbar'>
+                <div className='w-3/5 h-[84vh]'>
                     {cartItems.length === 0 ? (
                         <p>Your cart is empty.</p>
                     ) : (
-                        cartItems.map((cartItem) => (
-                            
-                            <div key={cartItem._id} className='flex gap-5 w-full h-max'>
-                                <input
-                                    type="checkbox"
-                                    className='accent-primaryColor h-5 w-5'
-                                    onChange={() => handleCheckboxChange(cartItem._id)}
-                                    checked={selectedItems.has(cartItem._id)}
-                                    aria-label={`Select ${cartItem.productName}`}
-                                />
-                                <div className="flex w-full ring-1 ring-gray-300 rounded-sm px-4 py-3 gap-8">
-                                    <div className='w-1/4'>
-                                        {cartItem.productImage && cartItem.productImage.length > 0 && (
-                                            <img src={cartItem.productImage} className='h-40 w-full object-cover rounded-sm' />
-                                        )}
-                                        
-                                    </div>
-                                    <div className='w-3/4'>
-                                        <div>
-                                            <h1 className='font-semibold text-2xl'>{cartItem.productName}</h1>
-                                            <p className='text-lg'>{cartItem.productDescription}</p>
-                                            <div className="flex justify-between">
-                                                <p><strong className='font-semibold'>Agrication Method:</strong> {cartItem.agricationMethod}</p>
-                                                <p><strong className='font-semibold'>Price Per kg:</strong> {cartItem.price.newPrice}</p>
-                                            </div>
-                                            <div className='flex gap-4 my-2'>
-                                                <div className='gap-2'>
-                                                    <button
-                                                        className='ring-1 ring-gray-300 px-2 py-[2px] rounded hover:ring-primaryColor hover:bg-primaryColor hover:text-white transition ease-in-out duration-500 cursor-pointer'
-                                                        onClick={() => handleQuantityChange(cartItem._id, cartItem.quantity.value - (cartItem.quantity.unit === 'kg' ? 1 : 50))}>-</button>
-                                                    <input
-                                                        type="number"
-                                                        value={cartItem.quantity.value}
-                                                        onChange={(e) =>
-                                                            handleQuantityChange(cartItem._id, Number(e.target.value))
-                                                        }
-                                                        className='text-center mx-1 outline-none h-full focus:ring-1 ring-gray-300 transition ease-in-out duration-300 rounded w-20 no-spinner'
-                                                        min={1}
-                                                    />
-                                                    <button
-                                                        className='ring-1 ring-gray-300 px-2 py-[2px] rounded hover:ring-primaryColor hover:bg-primaryColor hover:text-white transition ease-in-out duration-500 cursor-pointer'
-                                                        onClick={() => handleQuantityChange(cartItem._id, cartItem.quantity.value + (cartItem.quantity.unit === 'kg' ? 1 : 50))}>+</button>
-                                                </div>
-                                                <label htmlFor={`kg-${cartItem._id}`} className='flex items-center gap-2'>
-                                                    <input
-                                                        type="radio"
-                                                        id={`kg-${cartItem._id}`}
-                                                        name={`unit-${cartItem._id}`}
-                                                        checked={cartItem.quantity.unit === 'kg'}
-                                                        onChange={() => handleUnitChange(cartItem._id, 'kg')}
-                                                        aria-label="Kilograms"
-                                                        className='accent-primaryColor'
-                                                    /> kg
-                                                </label>
-                                                <label htmlFor={`gram-${cartItem._id}`} className='flex items-center gap-2'>
-                                                    <input
-                                                        type="radio"
-                                                        id={`gram-${cartItem._id}`}
-                                                        name={`unit-${cartItem._id}`}
-                                                        checked={cartItem.quantity.unit === 'g'}
-                                                        onChange={() => handleUnitChange(cartItem._id, 'g')}
-                                                        aria-label="Grams"
-                                                        className='accent-primaryColor'
-                                                    /> gram
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div className='flex justify-between items-center'>
-                                            {/* Displaying the subtotal for each product */}
-                                            <p className='text-base'>
-                                                <strong className='font-semibold text-lg'>Subtotal:</strong> {calculateProductSubtotal(cartItem)} LKR
-                                            </p>
+                        <div className='w-full h-full'>
+                            <h2 className='font-semibold text-2xl mb-5'>Your cart Items</h2>
+                            <div className='flex flex-col gap-5 p-1 h-[calc(100%-52px)] overflow-y-auto no-scrollbar'>
+                                {cartItems.map((cartItem) => (
+                                    <div key={cartItem._id} className='flex gap-5 w-full h-max'>
+                                        <input
+                                            type="checkbox"
+                                            className='accent-primaryColor h-5 w-5 cursor-pointer'
+                                            onChange={() => handleCheckboxChange(cartItem._id)}
+                                            checked={selectedItems.has(cartItem._id)}
+                                            aria-label={`Select ${cartItem.productName}`}
+                                        />
+                                        <div className="flex w-full ring-1 ring-gray-300 rounded-sm p-3 gap-8">
+                                            <div className='w-1/5'>
+                                                {cartItem.productImage && cartItem.productImage.length > 0 && (
+                                                    <img src={cartItem.productImage} className='h-[8.2rem] w-full object-cover rounded-sm' />
+                                                )}
 
-                                            <button
-                                                onClick={() => handleRemoveCart(cartItem._id)}
-                                                className='flex gap-2 items-center bg-red-700 hover:bg-red-800 text-white px-4 py-1 rounded transition ease-in-out duration-300'
-                                            >
-                                                Remove from cart <BsCartX />
-                                            </button>
+                                            </div>
+                                            <div className='w-4/5'>
+                                                <div className=''>
+                                                    <h1 className='font-semibold text-2xl'>{cartItem.productName}</h1>
+                                                    {/* <p className='text-lg'>{cartItem.productDescription}</p> */}
+                                                    <div className="flex justify-between">
+                                                        <p><strong className='font-semibold'>Agrication Method:</strong> {cartItem.agricationMethod}</p>
+                                                        <p><strong className='font-semibold'>Price Per kg:</strong> {cartItem.price.newPrice}</p>
+                                                    </div>
+                                                    <div className='flex gap-4 my-2'>
+                                                        <div className='gap-2'>
+                                                            <button
+                                                                className='ring-1 ring-gray-300 px-2 py-[2px] rounded hover:ring-primaryColor hover:bg-primaryColor hover:text-white transition ease-in-out duration-500 cursor-pointer'
+                                                                onClick={() => handleQuantityChange(cartItem._id, cartItem.quantity.value - (cartItem.quantity.unit === 'kg' ? 1 : 50))}>-</button>
+                                                            <input
+                                                                type="number"
+                                                                value={cartItem.quantity.value}
+                                                                onChange={(e) =>
+                                                                    handleQuantityChange(cartItem._id, Number(e.target.value))
+                                                                }
+                                                                className='text-center mx-1 outline-none h-full focus:ring-1 ring-gray-300 transition ease-in-out duration-300 rounded w-20 no-spinner'
+                                                                min={1}
+                                                            />
+                                                            <button
+                                                                className='ring-1 ring-gray-300 px-2 py-[2px] rounded hover:ring-primaryColor hover:bg-primaryColor hover:text-white transition ease-in-out duration-500 cursor-pointer'
+                                                                onClick={() => handleQuantityChange(cartItem._id, cartItem.quantity.value + (cartItem.quantity.unit === 'kg' ? 1 : 50))}>+</button>
+                                                        </div>
+                                                        <label htmlFor={`kg-${cartItem._id}`} className='flex items-center gap-2'>
+                                                            <input
+                                                                type="radio"
+                                                                id={`kg-${cartItem._id}`}
+                                                                name={`unit-${cartItem._id}`}
+                                                                checked={cartItem.quantity.unit === 'kg'}
+                                                                onChange={() => handleUnitChange(cartItem._id, 'kg')}
+                                                                aria-label="Kilograms"
+                                                                className='accent-primaryColor'
+                                                            /> kg
+                                                        </label>
+                                                        <label htmlFor={`gram-${cartItem._id}`} className='flex items-center gap-2'>
+                                                            <input
+                                                                type="radio"
+                                                                id={`gram-${cartItem._id}`}
+                                                                name={`unit-${cartItem._id}`}
+                                                                checked={cartItem.quantity.unit === 'g'}
+                                                                onChange={() => handleUnitChange(cartItem._id, 'g')}
+                                                                aria-label="Grams"
+                                                                className='accent-primaryColor'
+                                                            /> gram
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div className='flex justify-between items-center'>
+                                                    {/* Displaying the subtotal for each product */}
+                                                    <p className='text-base'>
+                                                        <strong className='font-semibold text-lg'>Subtotal:</strong> {calculateProductSubtotal(cartItem)} LKR
+                                                    </p>
+
+                                                    <button
+                                                        onClick={() => handleRemoveCart(cartItem._id)}
+                                                        className='flex gap-2 items-center bg-red-700 hover:bg-red-800 text-white px-4 py-1 rounded transition ease-in-out duration-300'
+                                                    >
+                                                        Remove from cart <BsCartX />
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                ))}
                             </div>
-                        ))
+                        </div>
                     )}
                 </div>
                 <div className="relative w-2/5 h-[84vh] z-0">
                     <h2 className='font-semibold text-2xl mb-5'>Order Summary</h2>
-                    <div className="h-[80%] overflow-y-auto no-scrollbar">
+                    <div className="h-[75%] overflow-y-auto no-scrollbar">
                         {selectedItems.size === 0 ? (
                             <p className="flex items-center justify-center text-gray-500 py-4 w-full h-full">You didn't select an item for order</p>
                         ) : (

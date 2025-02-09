@@ -13,19 +13,8 @@ import Offers from "../../../../Components/Admins/Offers";
 import Navbar from "../../../../Components/Navbar/Navbar";
 import Footer from "../../../../Components/Footer/Footer";
 
-type UserDataType = {
-  id: string;
-  name: string;
-  email: string;
-  userType: string;
-  mobileNumber: number[];
-  firstName: string;
-  lastName: string;
-  updatedAt: string;
-};
 
 const adminDashboard = () => {
-  const [UserData, setUserData] = useState<UserDataType | null>(null);
   const [activePanel, setActivePanel] = useState<string>("Users");
 
 
@@ -43,8 +32,6 @@ const adminDashboard = () => {
         const superAdmin = await axios.post('/api/user/get-user', {
           userId: id
         });
-
-        setUserData(superAdmin.data.user);
       }
     }
 
@@ -67,18 +54,18 @@ const adminDashboard = () => {
   }
 
   return (
-    <div>
+    <div className="min-h-[100vh] relative">
       <div className="sticky top-0 z-50">
         <Navbar />
         <hr />
       </div>
       <div className="mx-60">
-        <div className="flex justify-between mt-10 gap-[1px]">
+        <div className="flex justify-between mt-10">
           {panels.map((panel) => (
             <button
               key={panel}
               onClick={() => handlePanelClick(panel)}
-              className={`px-4 w-full py-2 border rounded-sm ${activePanel === panel ? 'text-white bg-primaryColor' : 'text-primaryColor'} transition ease-in-out duration-500`}
+              className={`px-4 w-full py-2 rounded-sm border-[1px] ${activePanel === panel ? 'text-white bg-primaryColor hover:bg-primaryColor border-primaryColor' : 'text-primaryColor border-gray-200'} hover:bg-gray-200 transition ease-in-out duration-300`}
             >
               {panel}
             </button>

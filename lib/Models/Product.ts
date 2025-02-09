@@ -17,8 +17,9 @@ const productSchema = new Schema(
         agricationMethod: { type: String, required: true },
         stock: {
             value: { type: Number, required: true, min: 1 },
-            unit: {  type: String, required: true, enum: ['kg', 'gram'] }
+            unit: { type: String, required: true, enum: ['kg', 'gram'] }
         },
+        isItAllowedToBeRecommend: { type: Boolean, required: true },
         freeDelivery: { type: Boolean, required: true }
     },
     { timestamps: true }

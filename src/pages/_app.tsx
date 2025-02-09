@@ -4,7 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export default function MyApp({ Component, pageProps }: AppProps) {
     return (
-        <>
+        <div className="">
             <ToastContainer
                 position="top-center"
                 autoClose={3000}
@@ -17,6 +17,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
                 pauseOnHover
             />
             <Component {...pageProps} />
-        </>
+        </div>
     );
 }

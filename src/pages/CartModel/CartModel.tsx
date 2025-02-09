@@ -3,10 +3,8 @@
 import Image from "next/image"
 import cartImage from '../../Assets/Hero.jpg'
 import orangeImage from '../../Assets/Orange.jpg'
-import { useRouter } from "next/navigation"
 
 const CartModel = () => {
-    const router = useRouter();
 
     const cartProducts = [
         {
@@ -24,13 +22,9 @@ const CartModel = () => {
         }
     ]
 
-    const handleViewCart = () => {
-        router.push('/cart')
-    }
-
     const cartItems = true
     return (
-        <div className="w-max absolute p-4 rounded-md shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white top-[52px] right-0 flex flex-col gap-6 z-20">
+        <div className="w-max absolute p-4 rounded-md shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white top-[52px] -right-60 flex flex-col gap-6 z-20">
             {!cartItems ? (
                 <div className="">Cart is Empty</div>
             ) : (
@@ -73,7 +67,7 @@ const CartModel = () => {
                             </div>
                         ))}
                         {/* ITEM */}
-                        {/* <div className="flex gap-4">
+                        <div className="flex gap-4">
                             <Image
                                 src={orangeImage}
                                 alt=""
@@ -81,26 +75,26 @@ const CartModel = () => {
                                 height={72}
                                 className="object-cover rounded-md"
                             />
-                            <div className="flex flex-col justify-between w-full"> */}
-                                {/* TOP */}
-                                {/* <div className=""> */}
-                                    {/* TITLE */}
-                                    {/* <div className="flex items-center justify-between gap-8">
+                            <div className="flex flex-col justify-between w-full">
+                        {/* TOP */}
+                        <div className="">
+                        {/* TITLE */}
+                        <div className="flex items-center justify-between gap-8">
                                         <h3 className="font-semibold">Orange</h3>
                                         <div className="p-1 bg-gray-50 rounded-sm">80.00 LKR</div>
-                                    </div> */}
-                                    {/* DEC */}
-                                    {/* <div className="text-sm text-gray-500">
+                                    </div>
+                        {/* DEC */}
+                        <div className="text-sm text-gray-500">
                                         In Stock
                                     </div>
-                                </div> */}
-                                {/* BOTTOM */}
-                                {/* <div className="flex justify-between text-sm mt">
+                                </div>
+                        {/* BOTTOM */}
+                        <div className="flex justify-between text-sm mt">
                                     <span className="text-gray-500">Qty. 2</span>
                                     <span className="text-bgRed cursor-pointer"> Remove</span>
                                 </div>
                             </div>
-                        </div> */}
+                        </div>
                     </div>
                     {/* BOTTOM */}
                     <div className="">
@@ -110,7 +104,7 @@ const CartModel = () => {
                         </div>
                         <p className="text-gray-500 text-sm mt-2 mb-4">Shipping and taxes calculated at checkout.</p>
                         <div className="flex justify-between text-sm">
-                            <button onClick={handleViewCart} className="rounded-sm py-3 px-8 ring-1 ring-primaryColor hover:bg-primaryButtonHoverColor hover:text-white transition ease-in-out duration-300">View Cart</button>
+                            <button className="rounded-sm py-3 px-8 ring-1 ring-primaryColor hover:bg-primaryButtonHoverColor hover:text-white transition ease-in-out duration-300">View Cart</button>
                             <button className="rounded-sm py-3 px-8 bg-primaryColor hover:bg-primaryButtonHoverColor transition ease-in-out duration-300 text-white">Checkout</button>
                         </div>
                     </div>

@@ -58,7 +58,7 @@ const DashboardPage = () => {
     // You can add more panels here as your app grows
   };
 
-  const panels = ["Delivered", "Tracking", "Reviews", "Messages", "Cancelled", "Saved Data"];
+  const panels = ["Delivered", "Tracking", "Reviews", "Wish List", "Messages", "Cancelled", "Saved Data"];
 
   const handlePanelClick = (panel: string) => {
     setActivePanel(panel);

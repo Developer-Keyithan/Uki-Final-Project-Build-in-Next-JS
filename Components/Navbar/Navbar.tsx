@@ -1,5 +1,4 @@
-'use client'
-
+// Navbar.tsx
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from 'react';
 import React, { MouseEvent } from "react";
@@ -12,7 +11,7 @@ import axios, { AxiosError } from 'axios';
 const Navbar: React.FC = () => {
     const [user, setUser] = useState(null);
     const [error, setError] = useState<string | null>(null);
-    const [length, setLength] = useState<string | null>(null);
+    const [cartCount, setCartCount] = useState<number>(0); // State for cart count
 
     const router = useRouter();
 
@@ -28,14 +27,23 @@ const Navbar: React.FC = () => {
         }, 100);
     };
 
+    const updateCartCount = async () => {
+        try {
+            const { data } = await axios.get('/api/cookie');
+            const cartCountResponse = await axios.post('/api/cart/cart-size', { userId: data.user.id });
+            setCartCount(cartCountResponse.data.length);
+        } catch (error) {
+            console.error('Error updating cart count:', error);
+        }
+    };
+
     useEffect(() => {
         const fetchUser = async () => {
             try {
                 const { data } = await axios.get('/api/cookie');
                 const response = await axios.post('/api/user/get-user', { userId: data.user.id });
-                const cartCount = await axios.post('/api/cart/cart-size', { userId: data.user.id });
                 setUser(response.data.user);
-                setLength(cartCount.data.length)
+                await updateCartCount(); // Fetch initial cart count
                 setError(null);
             } catch (error) {
                 const axiosError = error as AxiosError;
@@ -50,7 +58,6 @@ const Navbar: React.FC = () => {
     return (
         <div className='px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-60 py-3 flex justify-between items-center w-full sticky top-0 backdrop-blur-xl bg-white bg-opacity-40 border-primaryColor z-50'>
             <div className="relative w-full">
-
                 {/* MOBILE */}
                 <div className="h-full flex items-center justify-between xl:hidden">
                     <Link href='/'>
@@ -78,7 +85,7 @@ const Navbar: React.FC = () => {
                     <div className="">
                         <div className='flex flex-row gap-2'>
                             <SearchBar />
-                            <NavBarIcons userData={user} length={length} />
+                            <NavBarIcons userData={user} cartCount={cartCount} updateCartCount={updateCartCount} />
                         </div>
                     </div>
                 </div>

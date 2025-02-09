@@ -32,7 +32,7 @@ export const POST = async (req: NextRequest) => {
             userId: new Types.ObjectId(userId),
             productImages: [
                 { imageUrl: ProductImage }
-            ], // Store image URLs
+            ],
             productName,
             productDescription,
             price: {
@@ -45,6 +45,7 @@ export const POST = async (req: NextRequest) => {
                 value: stockValue,
                 unit: unit
             },
+            isItAllowedToBeRecommend: true,
             freeDelivery: false
         });
 
@@ -79,7 +80,7 @@ export const GET = async () => {
 
 export const PATCH = async (req: NextRequest) => {
     try {
-        const { productId, price, productName, productDescription, categories, harvestingDate, agricationMethod, freeDelivery } = await req.json();
+        const { productId, price, productName, productDescription, categories, harvestingDate, agricationMethod, isItAllowedToBeRecommend, freeDelivery } = await req.json();
         await DBconnect();
 
         const product = await Product.findById(productId);
@@ -98,9 +99,12 @@ export const PATCH = async (req: NextRequest) => {
         if (categories) product.categories = categories;
         if (harvestingDate) product.harvestingDate = harvestingDate;
         if (agricationMethod) product.agricationMethod = agricationMethod;
+        if (isItAllowedToBeRecommend === false) product.isItAllowedToBeRecommend = false;
+        if (isItAllowedToBeRecommend === true) product.isItAllowedToBeRecommend = true;
         if (freeDelivery !== undefined) product.freeDelivery = freeDelivery;
 
         await product.save();
+
 
         return NextResponse.json({
             message: "Product updated successfully",
@@ -108,6 +112,7 @@ export const PATCH = async (req: NextRequest) => {
         }, { status: 200 });
 
     } catch (error: any) {
+        console.log(error)
         return NextResponse.json({ message: "Error updating product", error: error.message }, { status: 500 });
     }
 };

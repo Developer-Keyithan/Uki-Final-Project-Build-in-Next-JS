@@ -1,44 +1,66 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import { BiSearch } from 'react-icons/bi';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import { BiCategoryAlt, BiSearch } from 'react-icons/bi';
+import { IoPricetagsOutline } from 'react-icons/io5';
 import { LuFilter } from 'react-icons/lu';
-import { MdClose, MdShortText } from 'react-icons/md';
+import { MdClose } from 'react-icons/md';
 import { RiArrowDropDownLine } from 'react-icons/ri';
+import { toast, ToastContainer } from 'react-toastify';
+
+interface ProductImage {
+    imageUrl: string;
+}
+
+interface Product {
+    createdAt: Date;
+    _id: string;
+    productImages: ProductImage[];
+    productName: string;
+    productDescription: string;
+    price: {
+        newPrice: number;
+        oldPrice: number;
+    };
+    categories: string[];
+    harvestingDate: Date;
+    agricationMethod: string;
+    isItAllowedToBeRecommend: boolean;
+    freeDelivery: boolean;
+}
+
+interface Filters {
+    categories: string[];
+    methods: string[];
+    priceRanges: string[];
+}
+
+const priceRangeOptions = [
+    { label: "Under LKR 100", value: "0-100" },
+    { label: "LKR 100 - LKR 200", value: "100-200" },
+    { label: "LKR 200 - LKR 500", value: "200-500" },
+    { label: "LKR 500 - LKR 1000", value: "500-1000" },
+    { label: "Over LKR 1000", value: "1000+" },
+];
 
 function Products() {
-    const [editId, setEditId] = useState<string | null>(null);
-    const [visibleId, setVisibleId] = useState<string | null>(null);
-    const [hoveredButton, setHoveredButton] = useState<string | null>(null);
-    const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
-    const [isFilterDropDownOpen, setIsFilterDropDownOpen] = useState<boolean>(false);
-    const [selectedShort, setSelectedShort] = useState<string | null>(null);
-    const [isShortDropDownOpen, setIsShortDropDownOpen] = useState<boolean>(false);
+    const [products, setProducts] = useState<Product[]>([]);
+    const [selectedFilters, setSelectedFilters] = useState<Filters>({
+        categories: [],
+        methods: [],
+        priceRanges: [],
+    });
+    const [isFilterOpen, setIsFilterOpen] = useState({
+        categories: false,
+        methods: false,
+        price: false,
+    });
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const usersPerPage = 5;
+    const [recommendationStatus, setRecommendationStatus] = useState<{ [key: string]: boolean }>({});
+    const productsPerPage = 10;
 
-    interface Product {
-        createdAt: any;
-        _id: string;
-        productImages: string[];
-        productName: string;
-        productDescription: string;
-        price: {
-            newPrice: number;
-            oldPrice: number;
-        };
-        categories: string[];
-        harvestingDate: Date;
-        agricationMethod: string;
-        freeDelivery: boolean;
-    }
-
-    const [products, setProducts] = useState<Product[]>([]);
-    const [editedUserType, setEditedUserType] = useState<Partial<Product>>({});
-
-    // Fetch products on component mount
     useEffect(() => {
         const abortController = new AbortController();
         const fetchProducts = async () => {
@@ -46,11 +68,12 @@ function Products() {
                 const response = await axios.get('/api/product', {
                     signal: abortController.signal,
                 });
-                const usersData = response.data.map((user: any) => ({
-                    ...user,
-                    createdAt: new Date(user.createdAt),
+                const productData = response.data.map((product: any) => ({
+                    ...product,
+                    createdAt: new Date(product.createdAt),
+                    harvestingDate: new Date(product.harvestingDate),
                 }));
-                setProducts(usersData);
+                setProducts(productData);
                 setError(null);
             } catch (error) {
                 if (!axios.isCancel(error)) {
@@ -65,23 +88,46 @@ function Products() {
         return () => abortController.abort();
     }, []);
 
-    // Handle filter dropdown
-    const handleFilterDropDown = () => setIsFilterDropDownOpen((prev) => !prev);
-    const handleFilterSelection = (userType: string) => {
-        setSelectedFilter(userType);
-        setIsFilterDropDownOpen(false);
-    };
-    const clearFilter = () => setSelectedFilter(null);
+    useEffect(() => {
+        const initialState = products.reduce((acc, product) => ({
+            ...acc,
+            [product._id]: product.isItAllowedToBeRecommend
+        }), {});
+        setRecommendationStatus(initialState);
+    }, [products]);
 
-    // Handle sort dropdown
-    const handleShortDropDown = () => setIsShortDropDownOpen((prev) => !prev);
-    const handleShortSelection = (short: string) => {
-        setSelectedShort(short);
-        setIsShortDropDownOpen(false);
+    const handleFilterToggle = (filterType: keyof typeof isFilterOpen) => {
+        setIsFilterOpen(prev => ({
+            ...prev,
+            [filterType]: !prev[filterType]
+        }));
     };
-    const clearShort = () => setSelectedShort(null);
 
-    // Debounced search
+    const handleFilterSelection = (
+        filterType: keyof Filters,
+        value: string
+    ) => {
+        setSelectedFilters(prev => {
+            const currentValues = prev[filterType];
+            const newValues = currentValues.includes(value)
+                ? currentValues.filter(v => v !== value)
+                : [...currentValues, value];
+
+            return {
+                ...prev,
+                [filterType]: newValues
+            };
+        });
+    };
+
+    const clearAllFilters = () => {
+        setSelectedFilters({
+            categories: [],
+            methods: [],
+            priceRanges: [],
+        });
+    };
+
     const debounce = (func: Function, delay: number) => {
         let timeoutId: NodeJS.Timeout;
         return (...args: any[]) => {
@@ -90,156 +136,395 @@ function Products() {
         };
     };
 
-    const handleSearch = debounce((query: string) => {
-        setSearchQuery(query);
-    }, 300);
-
-    // Sort and filter products
-    const sortedUsers = () => {
-        let productsToDisplay = [...products];
-
-        // Filter by selected user type
-        if (selectedFilter) {
-            productsToDisplay = productsToDisplay.filter((product) => product.categories.includes(selectedFilter));
-        }
-
-        // Filter by search query (name, price, or mobile number)
-        if (searchQuery) {
-            productsToDisplay = productsToDisplay.filter((product) => {
-                const productName = product.productName.toLowerCase();
-                const price = product.price.newPrice.toString().toLowerCase();
-                const categories = product.categories.join(", ").toLowerCase();
-
-                return (
-                    productName.includes(searchQuery.toLowerCase()) ||
-                    price.includes(searchQuery.toLowerCase()) ||
-                    categories.includes(searchQuery.toLowerCase())
-                );
-            });
-
-        }
-
-        // Sort products
-        if (selectedShort === "new to old") {
-            productsToDisplay.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-        } else if (selectedShort === "old to new") {
-            productsToDisplay.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
-        }
-
-        return productsToDisplay;
-    };
-
-    const sortedUserList = sortedUsers();
-    const totalPages = Math.ceil(sortedUserList.length / usersPerPage);
-    const currentUsers = sortedUserList.slice(
-        (currentPage - 1) * usersPerPage,
-        currentPage * usersPerPage
+    const handleSearch = useCallback(
+        debounce((query: string) => setSearchQuery(query), 300),
+        []
     );
 
-    // Handle pagination
+    const filteredProducts = useMemo(() => products.filter(product => {
+        const categoryMatch = selectedFilters.categories.length > 0
+            ? product.categories.some(cat => selectedFilters.categories.includes(cat))
+            : true;
+
+        const methodMatch = selectedFilters.methods.length > 0
+            ? selectedFilters.methods.includes(product.agricationMethod)
+            : true;
+
+        const priceMatch = selectedFilters.priceRanges.length > 0
+            ? selectedFilters.priceRanges.some(range => {
+                const [min, max] = range === "1000+"
+                    ? [1000, Infinity]
+                    : range.split("-").map(Number);
+                return product.price.newPrice >= min && product.price.newPrice <= max;
+            })
+            : true;
+
+        const searchMatch = searchQuery
+            ? product.productName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            product.price.newPrice.toString().includes(searchQuery) ||
+            product.categories.join(" ").toLowerCase().includes(searchQuery.toLowerCase()) ||
+            product.agricationMethod.toLowerCase().includes(searchQuery.toLowerCase())
+            : true;
+
+        return categoryMatch && methodMatch && priceMatch && searchMatch;
+    }), [products, selectedFilters, searchQuery]);
+
+    const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+    const currentProduct = useMemo(() => filteredProducts.slice(
+        (currentPage - 1) * productsPerPage,
+        currentPage * productsPerPage
+    ), [filteredProducts, currentPage, productsPerPage]);
+
     const handlePageClick = (pageNumber: number) => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {
             setCurrentPage(pageNumber);
         }
     };
 
-    // Handle saving edited user
-    const handleSave = async (id: string) => {
+    const handleStopRecommending = async (productId: string) => {
         try {
-            await axios.put('/api/product', { _id: id, ...editedUserType });
-            setProducts(products.map((user) =>
-                user._id === id ? { ...user, ...editedUserType } : user
-            ));
-            setEditId(null);
+            const response = await axios.patch('/api/product', {
+                productId: productId,
+                isItAllowedToBeRecommend: false
+            });
+
+            console.log("API Response:", response);
+
+            if (response.status === 200) {
+                toast.success('Recommedation Stoped.');
+                setRecommendationStatus(prev => ({
+                    ...prev,
+                    [productId]: false,
+                }));
+            }
         } catch (error) {
-            console.error("Error updating user:", error);
+            toast.error("Failed to recommendation stop");
+            console.error("Update error:", error);
         }
     };
 
-    if (isLoading) {
-        return <p>Loading products...</p>;
+    const handleStartRecommending = async (productId: string) => {
+        try {
+            const response = await axios.patch('/api/product', {
+                productId: productId,
+                isItAllowedToBeRecommend: true
+            });
+
+            console.log("API Response:", response);
+
+            if (response.status === 200) {
+                toast.success('Recommendation started.');
+                setRecommendationStatus(prev => ({
+                    ...prev,
+                    [productId]: true,
+                }));
+            }
+        } catch (error) {
+            toast.error("Failed to recommendation start");
+            console.error("Update error:", error);
+        }
+    };
+
+    if (isLoading) return <p>Loading products...</p>;
+    if (error) return <p className="text-red-500">{error}</p>;
+
+    const productsCount = (currentPage: number, filteredProducts: number) => {
+        let endCount = productsPerPage * currentPage
+        if (endCount > filteredProducts) {
+            endCount = filteredProducts
+            return endCount
+        } else {
+            return endCount
+        }
     }
 
-    if (error) {
-        return <p className="text-red-500">{error}</p>;
-    }
     return (
-        <div className='ring-1 ring-gray-500 p-4 w-full'>
-            <div className="flex w-full justify-between">
-                {/* Filter Dropdown */}
-                <div className="relative flex gap-2">
-                    <button
-                        aria-label="Filter"
-                        className="flex gap-2 items-center ring-1 ring-gray-500 px-4 rounded-xl hover:bg-primaryColor hover:text-white hover:ring-primaryColor transition ease-in-out duration-500"
-                        onClick={handleFilterDropDown}
-                    >
-                        <LuFilter />
-                        Filter
-                        <RiArrowDropDownLine className="text-2xl" />
-                    </button>
-                    {isFilterDropDownOpen && (
-                        <div className="flex flex-col items-start w-max absolute top-12 left-0 bg-white py-2 px-2 gap-1 rounded-md drop-shadow-[0_5px_5px_rgba(0,0,0,0.5)] z-50">
-                            <button onClick={() => handleFilterSelection("consumer")} className="hover:bg-primaryColor hover:text-white px-2 py-[2px] w-full text-start rounded-md transition ease-in-out duration-500">Consumers</button>
-                            <button onClick={() => handleFilterSelection("seller")} className="hover:bg-primaryColor hover:text-white px-2 py-[2px] w-full text-start rounded-md transition ease-in-out duration-500">Sellers</button>
-                            <button onClick={() => handleFilterSelection("delivery partner")} className="hover:bg-primaryColor hover:text-white px-2 py-[2px] w-full text-start rounded-md transition ease-in-out duration-500">Delivery Partners</button>
-                            <button onClick={() => handleFilterSelection("delivery person")} className="hover:bg-primaryColor hover:text-white px-2 py-[2px] w-full text-start rounded-md transition ease-in-out duration-500">Delivery Persons</button>
-                            <button onClick={() => handleFilterSelection("admin")} className="hover:bg-primaryColor hover:text-white px-2 py-[2px] w-full text-start rounded-md transition ease-in-out duration-500">Admins</button>
-                        </div>
-                    )}
-                    {selectedFilter && (
-                        <div className="flex items-center gap-2 px-4 h-full rounded-xl bg-gray-200 ring-1 ring-gray-200 text-gray-700">
-                            <p className="font-semibold">{selectedFilter}</p>
-                            <MdClose
-                                className="text-xl cursor-pointer hover:text-red-500"
-                                onClick={clearFilter}
-                            />
-                        </div>
-                    )}
+        <div className="py-4 my-4 w-full">
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
+            <div className="flex w-full justify-between gap-4 flex-wrap">
+                {/* Filter Section */}
+                <div className="flex gap-4 flex-wrap">
+                    {/* Category Filter */}
+                    <div className="relative">
+                        <button
+                            onClick={() => handleFilterToggle('categories')}
+                            className="flex items-center gap-2 ring-1 ring-gray-500 px-4 py-2 rounded-lg hover:bg-primaryColor hover:text-white cursor-pointer"
+                        >
+                            <BiCategoryAlt /> Categories
+                            <RiArrowDropDownLine className="text-xl" />
+                        </button>
+                        {isFilterOpen.categories && (
+                            <div className="absolute top-full left-0 mt-2 bg-white ring-1 ring-gray-200 p-2 rounded-lg shadow-lg z-10 w-48">
+                                {['Vegetables', 'Fruits', 'Grains', 'Citrus', 'Spice'].map(category => (
+                                    <label key={category} className="flex items-center gap-2 p-1 hover:bg-primaryColor hover:text-white cursor-pointer rounded">
+                                        <input
+                                            type="checkbox"
+                                            className='accent-primaryColor'
+                                            checked={selectedFilters.categories.includes(category)}
+                                            onChange={() => handleFilterSelection('categories', category)}
+                                        />
+                                        {category}
+                                    </label>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Method Filter */}
+                    <div className="relative">
+                        <button
+                            onClick={() => handleFilterToggle('methods')}
+                            className="flex items-center gap-2 ring-1 ring-gray-500 px-4 py-2 rounded-lg hover:bg-primaryColor hover:text-white cursor-pointer"
+                        >
+                            <LuFilter /> Methods
+                            <RiArrowDropDownLine className="text-xl" />
+                        </button>
+                        {isFilterOpen.methods && (
+                            <div className="absolute top-full left-0 mt-2 bg-white ring-1 ring-gray-200 p-2 rounded-lg shadow-lg z-10 w-48">
+                                {['Organic', 'Conventional', 'Hydroponic'].map(method => (
+                                    <label key={method} className="flex items-center gap-2 p-1 hover:bg-primaryColor hover:text-white cursor-pointer rounded">
+                                        <input
+                                            type="checkbox"
+                                            className='accent-primaryColor'
+                                            checked={selectedFilters.methods.includes(method)}
+                                            onChange={() => handleFilterSelection('methods', method)}
+                                        />
+                                        {method}
+                                    </label>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Price Filter */}
+                    <div className="relative w-max">
+                        <button
+                            onClick={() => handleFilterToggle('price')}
+                            className="flex items-center gap-2 ring-1 ring-gray-500 px-4 py-2 rounded-lg hover:bg-primaryColor hover:text-white cursor-pointer"
+                        >
+                            <IoPricetagsOutline /> Price
+                            <RiArrowDropDownLine className="text-xl" />
+                        </button>
+                        {isFilterOpen.price && (
+                            <div className="absolute top-full left-0 mt-2 bg-white ring-1 ring-gray-200 p-2 rounded-lg shadow-lg z-10 w-52">
+                                {priceRangeOptions.map(option => (
+                                    <label key={option.value} className="flex items-center gap-2 p-1 hover:bg-primaryColor hover:text-white cursor-pointer rounded">
+                                        <input
+                                            type="checkbox"
+                                            className='accent-primaryColor'
+                                            checked={selectedFilters.priceRanges.includes(option.value)}
+                                            onChange={() => handleFilterSelection('priceRanges', option.value)}
+                                        />
+                                        {option.label}
+                                    </label>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Clear All Filters */}
+                    {(selectedFilters.categories.length > 0 ||
+                        selectedFilters.methods.length > 0 ||
+                        selectedFilters.priceRanges.length > 0) && (
+                            <button
+                                onClick={clearAllFilters}
+                                className="flex items-center gap-2 text-red-500 hover:text-red-700"
+                            >
+                                <MdClose /> Clear All Filters
+                            </button>
+                        )}
                 </div>
 
                 {/* Search Bar */}
-                <form className="flex items-center ring-1 ring-gray-500 px-4 rounded-xl overflow-hidden">
+                <div className="flex items-center ring-1 ring-gray-500 rounded-lg overflow-hidden flex-1 max-w-xl">
                     <input
                         type="search"
-                        placeholder="Search by product name, price, or categories..."
-                        className="outline-none py-2 w-96"
+                        placeholder="Search products..."
+                        className="px-4 py-2 w-full outline-none"
                         onChange={(e) => handleSearch(e.target.value)}
                     />
-                    <button aria-label="Search" className="flex items-center justify-center cursor-pointer h-full">
+                    <button className="px-4 py-2">
                         <BiSearch />
                     </button>
-                </form>
-
-                {/* Sort Dropdown */}
-                <div className="relative flex gap-2">
-                    {selectedShort && (
-                        <div className="flex items-center gap-2 px-4 h-full rounded-xl bg-gray-200 ring-1 ring-gray-200 text-gray-700">
-                            <p className="font-semibold">{selectedShort}</p>
-                            <MdClose
-                                className="text-xl cursor-pointer hover:text-red-500"
-                                onClick={clearShort}
-                            />
-                        </div>
-                    )}
-                    <button
-                        aria-label="Sort"
-                        className="flex gap-2 items-center ring-1 ring-gray-500 px-4 rounded-xl hover:bg-primaryColor hover:text-white hover:ring-primaryColor transition ease-in-out duration-500"
-                        onClick={handleShortDropDown}
-                    >
-                        <RiArrowDropDownLine className="text-2xl" />
-                        Sort
-                        <MdShortText className="text-xl" />
-                    </button>
-                    {isShortDropDownOpen && (
-                        <div className="flex flex-col w-max absolute top-12 right-0 bg-white items-start py-2 px-2 gap-1 rounded-md drop-shadow-[0_5px_5px_rgba(0,0,0,0.5)] z-50">
-                            <button onClick={() => handleShortSelection("new to old")} className="hover:bg-primaryColor hover:text-white px-2 py-[2px] w-full text-start rounded-md transition ease-in-out duration-500">New to old</button>
-                            <button onClick={() => handleShortSelection("old to new")} className="hover:bg-primaryColor hover:text-white px-2 py-[2px] w-full text-start rounded-md transition ease-in-out duration-500">Old to new</button>
-                        </div>
-                    )}
                 </div>
             </div>
+
+            {/* Active Filters Display */}
+            <div className="flex flex-wrap gap-2 my-4">
+                {selectedFilters.categories.map(category => (
+                    <span key={category} className="bg-green-100 text-green-800 px-2 py-1 rounded-full flex items-center gap-1">
+                        {category}
+                        <MdClose
+                            className="cursor-pointer hover:text-green-500"
+                            onClick={() => handleFilterSelection('categories', category)}
+                        />
+                    </span>
+                ))}
+                {selectedFilters.methods.map(method => (
+                    <span key={method} className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full flex items-center gap-1">
+                        {method}
+                        <MdClose
+                            className="cursor-pointer hover:text-blue-500"
+                            onClick={() => handleFilterSelection('methods', method)}
+                        />
+                    </span>
+                ))}
+                {selectedFilters.priceRanges.map(range => {
+                    const label = priceRangeOptions.find(opt => opt.value === range)?.label;
+                    return (
+                        <span key={range} className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full flex items-center gap-1">
+                            {label}
+                            <MdClose
+                                className="cursor-pointer hover:text-purple-500"
+                                onClick={() => handleFilterSelection('priceRanges', range)}
+                            />
+                        </span>
+                    );
+                })}
+            </div>
+
+            {/* Pagination */}
+            <div className="relative flex items-center justify-center gap-2 mt-8">
+                <button
+                    onClick={() => handlePageClick(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="px-4 py-2 rounded-lg border hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    Previous
+                </button>
+
+                {Array.from({ length: totalPages }, (_, i) => (
+                    <button
+                        key={i + 1}
+                        onClick={() => handlePageClick(i + 1)}
+                        className={`px-4 py-2 rounded-lg ${currentPage === i + 1 ? 'bg-primaryColor text-white' : 'border hover:bg-gray-100'}`}
+                    >
+                        {i + 1}
+                    </button>
+                ))}
+
+                <button
+                    onClick={() => handlePageClick(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="px-4 py-2 rounded-lg border hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    Next
+                </button>
+                <span className="absolute top-0 left-0 py-2 text-gray-500">
+                    Page {currentPage} of {totalPages || '1'} || Products {productsPerPage * (currentPage - 1)} - {productsCount(currentPage, filteredProducts.length)} of {filteredProducts.length}
+                </span>
+            </div>
+
+            {/* Product List */}
+            <div className="grid gap-4 my-6">
+                {currentProduct.map((product, index) => (
+                    <div key={product._id} className="relative p-4 border rounded-lg hover:shadow-lg transition-shadow">
+                        <p className='text-primaryColor'><span className='font-semibold'>ID: </span>{product._id}</p>
+                        <div className="flex gap-6 mt-4">
+                            <img
+                                src={product.productImages[0].imageUrl}
+                                alt={product.productName}
+                                className="w-36 h-36 object-cover rounded"
+                            />
+                            <div className="flex-1">
+                                <h3 className="text-xl font-semibold">{product.productName}</h3>
+                                <p className="text-gray-600">{product.productDescription}</p>
+                                <div className="mt-2 flex flex-wrap gap-2">
+                                    {product.categories.map(category => (
+                                        <span key={category} className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-sm">
+                                            {category}
+                                        </span>
+                                    ))}
+                                </div>
+                                <div className="mt-2 grid grid-cols-4 gap-4">
+                                    <div>
+                                        <p className="font-semibold">Price (Per kg):</p>
+                                        <div className='flex gap-4'>
+                                            <p><span className='font-semibold'>Old:</span> {product.price.oldPrice || '0'} LKR</p>
+                                            <p><span className='font-semibold'>New:</span> {product.price.newPrice} LKR</p>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p className="font-semibold">Farming Method:</p>
+                                        <p>{product.agricationMethod}</p>
+                                    </div>
+                                    <div>
+                                        <p className="font-semibold">Harvest Date:</p>
+                                        <p>{new Date(product.harvestingDate).toLocaleDateString('en-GB', {
+                                            day: '2-digit',
+                                            month: 'short',
+                                            year: 'numeric'
+                                        })}</p>
+                                    </div>
+                                    <div>
+                                        <p className="font-semibold">Is Delivery Free:</p>
+                                        <p>{product.freeDelivery ? "Yes" : "No"}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {recommendationStatus[product._id] ? (
+                            <button
+                                onClick={() => handleStopRecommending(product._id)}
+                                className="absolute top-4 right-4 py-1 px-4 rounded-2xl bg-red-50 text-red-600 cursor-pointer hover:bg-red-200 transition ease-in-out duration-300"
+                            >
+                                Stop Recommending
+                            </button>
+                        ) : (
+                            <button
+                                onClick={() => handleStartRecommending(product._id)}
+                                className="absolute top-4 right-4 py-1 px-4 rounded-2xl bg-green-50 text-green-600 cursor-pointer hover:bg-green-200 transition ease-in-out duration-300"
+                            >
+                                Start Recommending
+                            </button>
+                        )}
+                    </div>
+                ))}
+            </div>
+
+            {/* Pagination */}
+            <div className="relative flex items-center justify-center gap-2 mt-8">
+                <button
+                    onClick={() => handlePageClick(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="px-4 py-2 rounded-lg border hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    Previous
+                </button>
+
+                {Array.from({ length: totalPages }, (_, i) => (
+                    <button
+                        key={i + 1}
+                        onClick={() => handlePageClick(i + 1)}
+                        className={`px-4 py-2 rounded-lg ${currentPage === i + 1 ? 'bg-primaryColor text-white' : 'border hover:bg-gray-100'}`}
+                    >
+                        {i + 1}
+                    </button>
+                ))}
+
+                <button
+                    onClick={() => handlePageClick(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="px-4 py-2 rounded-lg border hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    Next
+                </button>
+                <span className="absolute top-0 left-0 py-2 text-gray-500">
+                    Page {currentPage} of {totalPages || '1'} || Products {productsPerPage * (currentPage - 1)} - {productsCount(currentPage, filteredProducts.length)} of {filteredProducts.length}
+                </span>
+            </div>
         </div>
-    )
+    );
 }
 
-export default Products
+export default Products;

@@ -156,7 +156,7 @@ const UploadProduct = () => {
 
     return (
         <div className="mx-60 p-6 bg-white rounded-lg ring-1 ring-gray-300 shadow-sm">
-            <h1 className="text-3xl font-bold text-gray-800 mb-8 text-center">Upload Your New Product</h1>
+            <h1 className="text-3xl font-bold text-gray-800 mb-8 text-center">Upload Your Product</h1>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                 {/* File Upload */}
@@ -195,7 +195,7 @@ const UploadProduct = () => {
                     />
                 </div>
 
-                <div className='grid grid-cols-4 items-center gap-6'>
+                <div className='grid grid-cols-5 items-center gap-6'>
                     {/* Price */}
                     <div className="space-y-2">
                         <label className="block text-sm font-medium text-gray-700">Price</label>
@@ -239,25 +239,25 @@ const UploadProduct = () => {
                     <div className="space-y-2">
                         <label className="block text-sm font-medium text-gray-700">Available Stock Unit</label>
                         <div className="flex gap-4">
-                            <label className="flex items-center gap-2 py-2 cursor-pointer">
+                            <label className="flex items-center gap-2 py-2">
                                 <input
                                     type="radio"
                                     name="unit"
                                     value="gram"
                                     checked={unit === "gram"}
                                     onChange={handleUnitChange}
-                                    className="accent-primaryColor cursor-pointer"
+                                    className="accent-primaryColor"
                                 />
                                 Gram
                             </label>
-                            <label className="flex items-center gap-2 py-2 cursor-pointer">
+                            <label className="flex items-center gap-2 py-2">
                                 <input
                                     type="radio"
                                     name="unit"
                                     value="kg"
                                     checked={unit === "kg"}
                                     onChange={handleUnitChange}
-                                    className="accent-primaryColor cursor-pointer"
+                                    className="accent-primaryColor"
                                 />
                                 Kilogram
                             </label>
@@ -268,35 +268,25 @@ const UploadProduct = () => {
                     <div className="space-y-2">
                         <label className="block text-sm font-medium text-gray-700">Farming Method</label>
                         <div className="flex gap-4">
-                            <label className="flex items-center gap-2 cursor-pointer">
+                            <label className="flex items-center gap-2">
                                 <input
                                     type="radio"
                                     name="agricationMethod"
-                                    value="Organic"
+                                    value="organic"
                                     onChange={(e) => setAgricationMethod(e.target.value)}
-                                    className="accent-primaryColor cursor-pointer"
+                                    className="accent-primaryColor"
                                 />
                                 Organic
                             </label>
-                            <label className="flex items-center gap-2 cursor-pointer">
+                            <label className="flex items-center gap-2">
                                 <input
                                     type="radio"
                                     name="agricationMethod"
-                                    value="Conventional"
+                                    value="inorganic"
                                     onChange={(e) => setAgricationMethod(e.target.value)}
-                                    className="accent-primaryColor cursor-pointer"
+                                    className="accent-primaryColor"
                                 />
-                                Conventional
-                            </label>
-                            <label className="flex items-center gap-2 cursor-pointer">
-                                <input
-                                    type="radio"
-                                    name="agricationMethod"
-                                    value="Hydroponic"
-                                    onChange={(e) => setAgricationMethod(e.target.value)}
-                                    className="accent-primaryColor cursor-pointer"
-                                />
-                                Hydroponic
+                                Inorganic
                             </label>
                         </div>
                     </div>
@@ -319,13 +309,13 @@ const UploadProduct = () => {
                         <label className="block text-sm font-medium text-gray-700">Categories</label>
                         <div className="grid grid-cols-9 gap-6">
                             {categoryOptions.map(category => (
-                                <label key={category} className="flex items-center gap-2 cursor-pointer">
+                                <label key={category} className="flex items-center gap-2">
                                     <input
                                         type="checkbox"
                                         value={category}
                                         checked={categories.includes(category)}
                                         onChange={handleCategoryChange}
-                                        className="accent-primaryColor cursor-pointer"
+                                        className="accent-primaryColor"
                                     />
                                     {category}
                                 </label>

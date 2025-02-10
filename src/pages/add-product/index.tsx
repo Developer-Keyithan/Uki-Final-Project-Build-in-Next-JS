@@ -1,4 +1,4 @@
-import React from 'react'
+import './style.css'
 import AddProduct from '../../../Components/AddProduct/AddPoduct'
 
 const index = () => {

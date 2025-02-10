@@ -88,15 +88,18 @@ export const PUT = async (req: NextRequest) => {
             newUserType,
             newProfileName,
             newFavProduct,
-            newFavReview
+            newFavReview,
+            isBlocked
         } = body;
 
-
+        console.log(body)
+        
         if (!userId || !Types.ObjectId.isValid(userId)) {
             return NextResponse.json({ error: 'Valid User ID is required' }, { status: 400 });
         }
-
-        const data: Record<string, any> = {};
+        
+        
+        const data: Record<string, any> = {}
         if (newFirstName) data.firstName = newFirstName;
         if (newLastName) data.lastName = newLastName;
         if (newEmail) {
@@ -115,7 +118,9 @@ export const PUT = async (req: NextRequest) => {
         if (newProfileImage) data.profileImage = newProfileImage;
         if (newFavProduct) data.favProduct = newFavProduct;
         if (newFavReview) data.favReview = newFavReview;
-
+        if (isBlocked) data.isBlocked = isBlocked;
+        if (!isBlocked) data.isBlocked = isBlocked;
+        
         if (Object.keys(data).length === 0) {
             return NextResponse.json({ error: 'No fields provided for update' }, { status: 400 });
         }
@@ -134,7 +139,7 @@ export const PUT = async (req: NextRequest) => {
 
         return NextResponse.json({ message: 'Update successful', user: updatedUser }, { status: 200 });
     } catch (error: any) {
-        console.error('Error updating user:', error);
+        console.log('Error updating user:', error);
         return NextResponse.json({ error: 'Server error', details: error.message }, { status: 500 });
     }
 };

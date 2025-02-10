@@ -70,14 +70,14 @@ export const POST = async (req: NextRequest) => {
 export const GET = async () => {
     try {
         await DBconnect();
-        const products = await Product.find()
+        const products = await Product.find({ isItAllowedToBeRecommend: true })
+            .sort({ updatedAt: -1 });
 
         return NextResponse.json(products, { status: 200 });
     } catch (error) {
         return NextResponse.json({ message: "Failed to fetch all products data." }, { status: 500 });
     }
-}
-
+};
 export const PATCH = async (req: NextRequest) => {
     try {
         const { productId, price, productName, productDescription, categories, harvestingDate, agricationMethod, isItAllowedToBeRecommend, freeDelivery } = await req.json();

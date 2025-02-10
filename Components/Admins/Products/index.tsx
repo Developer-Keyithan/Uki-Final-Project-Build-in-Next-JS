@@ -3,7 +3,7 @@ import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { BiCategoryAlt, BiSearch } from 'react-icons/bi';
 import { IoPricetagsOutline } from 'react-icons/io5';
 import { LuFilter } from 'react-icons/lu';
-import { MdClose } from 'react-icons/md';
+import { MdClose, MdShortText } from 'react-icons/md';
 import { RiArrowDropDownLine } from 'react-icons/ri';
 import { toast, ToastContainer } from 'react-toastify';
 
@@ -26,6 +26,7 @@ interface Product {
     agricationMethod: string;
     isItAllowedToBeRecommend: boolean;
     freeDelivery: boolean;
+    updatedAt: Date;
 }
 
 interface Filters {
@@ -53,24 +54,27 @@ function Products() {
         categories: false,
         methods: false,
         price: false,
+        sorting: false,
     });
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [recommendationStatus, setRecommendationStatus] = useState<{ [key: string]: boolean }>({});
+    const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
     const productsPerPage = 10;
 
     useEffect(() => {
         const abortController = new AbortController();
         const fetchProducts = async () => {
             try {
-                const response = await axios.get('/api/product', {
+                const response = await axios.get('/api/product/forAdmin', {
                     signal: abortController.signal,
                 });
                 const productData = response.data.map((product: any) => ({
                     ...product,
                     createdAt: new Date(product.createdAt),
+                    updatedAt: new Date(product.updatedAt), // Parse updatedAt
                     harvestingDate: new Date(product.harvestingDate),
                 }));
                 setProducts(productData);
@@ -141,33 +145,44 @@ function Products() {
         []
     );
 
-    const filteredProducts = useMemo(() => products.filter(product => {
-        const categoryMatch = selectedFilters.categories.length > 0
-            ? product.categories.some(cat => selectedFilters.categories.includes(cat))
-            : true;
+    const filteredProducts = useMemo(() => {
+        const filtered = products.filter(product => {
+            const categoryMatch = selectedFilters.categories.length > 0
+                ? product.categories.some(cat => selectedFilters.categories.includes(cat))
+                : true;
 
-        const methodMatch = selectedFilters.methods.length > 0
-            ? selectedFilters.methods.includes(product.agricationMethod)
-            : true;
+            const methodMatch = selectedFilters.methods.length > 0
+                ? selectedFilters.methods.includes(product.agricationMethod)
+                : true;
 
-        const priceMatch = selectedFilters.priceRanges.length > 0
-            ? selectedFilters.priceRanges.some(range => {
-                const [min, max] = range === "1000+"
-                    ? [1000, Infinity]
-                    : range.split("-").map(Number);
-                return product.price.newPrice >= min && product.price.newPrice <= max;
-            })
-            : true;
+            const priceMatch = selectedFilters.priceRanges.length > 0
+                ? selectedFilters.priceRanges.some(range => {
+                    const [min, max] = range === "1000+"
+                        ? [1000, Infinity]
+                        : range.split("-").map(Number);
+                    return product.price.newPrice >= min && product.price.newPrice <= max;
+                })
+                : true;
 
-        const searchMatch = searchQuery
-            ? product.productName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            product.price.newPrice.toString().includes(searchQuery) ||
-            product.categories.join(" ").toLowerCase().includes(searchQuery.toLowerCase()) ||
-            product.agricationMethod.toLowerCase().includes(searchQuery.toLowerCase())
-            : true;
+            const searchMatch = searchQuery
+                ? product.productName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                product.price.newPrice.toString().includes(searchQuery) ||
+                product.categories.join(" ").toLowerCase().includes(searchQuery.toLowerCase()) ||
+                product.agricationMethod.toLowerCase().includes(searchQuery.toLowerCase())
+                : true;
 
-        return categoryMatch && methodMatch && priceMatch && searchMatch;
-    }), [products, selectedFilters, searchQuery]);
+            return categoryMatch && methodMatch && priceMatch && searchMatch;
+        });
+
+        // Sorting based on updatedAt
+        return filtered.sort((a, b) => {
+            if (sortOrder === 'newest') {
+                return b.updatedAt.getTime() - a.updatedAt.getTime();
+            } else {
+                return a.updatedAt.getTime() - b.updatedAt.getTime();
+            }
+        });
+    }, [products, selectedFilters, searchQuery, sortOrder]);
 
     const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
     const currentProduct = useMemo(() => filteredProducts.slice(
@@ -205,7 +220,7 @@ function Products() {
 
     const handleStartRecommending = async (productId: string) => {
         try {
-            const response = await axios.patch('/api/product', {
+            const response = await axios.patch('/api/product/', {
                 productId: productId,
                 isItAllowedToBeRecommend: true
             });
@@ -346,16 +361,46 @@ function Products() {
                 </div>
 
                 {/* Search Bar */}
-                <div className="flex items-center ring-1 ring-gray-500 rounded-lg overflow-hidden flex-1 max-w-xl">
+                <div className="flex w-max items-center ring-1 ring-gray-500 rounded-lg overflow-hidden">
                     <input
                         type="search"
                         placeholder="Search products..."
-                        className="px-4 py-2 w-full outline-none"
+                        className="px-4 py-2 outline-none w-96"
                         onChange={(e) => handleSearch(e.target.value)}
                     />
                     <button className="px-4 py-2">
                         <BiSearch />
                     </button>
+                </div>
+
+                {/* Sorting Filter */}
+                <div className="relative">
+                    <button
+                        onClick={() => handleFilterToggle('sorting')}
+                        className="flex items-center gap-2 ring-1 ring-gray-500 px-4 py-2 rounded-lg hover:bg-primaryColor hover:text-white cursor-pointer"
+                    >
+                        <MdShortText className='text-xl' /> Sort By
+                        <RiArrowDropDownLine className="text-xl" />
+                    </button>
+                    {isFilterOpen.sorting && (
+                        <div className="absolute top-full right-0 mt-2 bg-white ring-1 ring-gray-200 p-2 rounded-lg shadow-lg z-10 w-[140px]">
+                            {[
+                                { label: "Newest", value: "newest" },
+                                { label: "Oldest", value: "oldest" }
+                            ].map(sortOption => (
+                                <label key={sortOption.value} className="flex items-center gap-2 p-1 hover:bg-primaryColor hover:text-white cursor-pointer rounded">
+                                    <input
+                                        type="checkbox"
+                                        name="sortOrder"
+                                        className='accent-primaryColor'
+                                        checked={sortOrder === sortOption.value}
+                                        onChange={() => setSortOrder(sortOption.value as 'newest' | 'oldest')}
+                                    />
+                                    {sortOption.label}
+                                </label>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -391,7 +436,19 @@ function Products() {
                         </span>
                     );
                 })}
+
+                {/* Active Sorting Display */}
+                {sortOrder && (
+                    <span className="bg-amber-100 text-amber-800 px-2 py-1 rounded-full flex items-center gap-1">
+                        {sortOrder === 'newest' ? 'Newest to Oldest' : 'Oldest to Newest'}
+                        <MdClose
+                            className="cursor-pointer hover:text-amber-500"
+                            onClick={() => setSortOrder('newest')} // Reset to default sorting
+                        />
+                    </span>
+                )}
             </div>
+
 
             {/* Pagination */}
             <div className="relative flex items-center justify-center gap-2 mt-8">

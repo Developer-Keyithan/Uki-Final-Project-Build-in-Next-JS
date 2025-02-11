@@ -76,6 +76,12 @@ const Calendar: React.FC<CalendarProps> = ({ onDateSelect }) => {
         }
 
         const selectedDate = new Date(selectedYear, selectedMonth, day);
+
+        // **Prevent future dates from being selected**
+        if (selectedDate > today) {
+            return;
+        }
+
         setSelectedDate(day);
         if (onDateSelect) {
             onDateSelect(selectedDate);
@@ -114,15 +120,19 @@ const Calendar: React.FC<CalendarProps> = ({ onDateSelect }) => {
                     const isSelected = selectedDate === day && isCurrentMonth;
                     const dayOfWeek = index % 7; // 0 = Sunday, 6 = Saturday
 
+                    // Check if the day is in the future
+                    const isFutureDate = new Date(year, month, day) > today;
+
                     return (
                         <div
                             key={index}
                             className={`p-2 rounded cursor-pointer
                                 ${isToday ? "bg-green-200 text-primaryColor" : ""}
-                                ${isCurrentMonth ? "bg-gray-100 hover:bg-blue-600 hover:text-white" : "bg-gray-200 text-gray-500 opacity-50"}
+                                ${isFutureDate ? "opacity-50 hover:bg-gray-200 cursor-not-allowed" : "hover:bg-blue-600 hover:text-white"}
+                                ${isCurrentMonth ? "bg-gray-100 hover:bg-primaryColor hover:text-white" : "bg-gray-200 text-gray-500 opacity-50"}
                                 ${isSelected ? "bg-primaryColor text-white transition ease-in-out duration-300" : dayOfWeek === 0 ? "text-red-600 bg-red-100" : dayOfWeek === 6 ? "text-orange-600 bg-orange-100" : ""}
                             `}
-                            onClick={() => handleDateClick(day, isCurrentMonth, isPrevMonth, isNextMonth)}
+                            onClick={() => !isFutureDate && handleDateClick(day, isCurrentMonth, isPrevMonth, isNextMonth)}
                         >
                             {day}
                         </div>

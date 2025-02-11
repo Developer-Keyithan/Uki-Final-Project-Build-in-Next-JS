@@ -82,7 +82,7 @@ export const GET = async () => {
 
 export const PATCH = async (req: NextRequest) => {
     try {
-        const { userId, productId, price, productName, productDescription, categories, harvestingDate, agricationMethod, isItAllowedToBeRecommend, freeDelivery } = await req.json();
+        const { userId, productId, productImages, price, productName, productDescription, categories, harvestingDate, agricationMethod, isItAllowedToBeRecommend, freeDelivery } = await req.json();
         await DBconnect();
         console.log(userId)
         const product = await Product.findById(productId);
@@ -104,7 +104,7 @@ export const PATCH = async (req: NextRequest) => {
                     product.isBlockedByAdmin = false;
                     product.isItAllowedToBeRecommend = true;
                 } else {
-                    return NextResponse.json({ message: "Only admin can unblock and allow recommendations for blocked products." }, { status: 403 });
+                    return NextResponse.json({ message: "This product has been blocked by the administration. The platform has notified the administration of this request." }, { status: 403 });
                 }
             } else {
                 // If isBlockedByAdmin is false, only the seller can update the recommendation
@@ -126,7 +126,9 @@ export const PATCH = async (req: NextRequest) => {
                     product.isItAllowedToBeRecommend = false;
                     product.isBlockedByAdmin = true; // Admin can block the product
                 } else {
-                    return NextResponse.json({ message: "Only the platform (admin) can stop recommendation for non-blocked products." }, { status: 403 });
+                    product.isItAllowedToBeRecommend = false;
+                    product.isBlockedByAdmin = false
+                    // return NextResponse.json({ message: "Only the platform (admin) can stop recommendation for non-blocked products." }, { status: 403 });
                 }
             }
         }
@@ -140,6 +142,7 @@ export const PATCH = async (req: NextRequest) => {
         if (productName) product.productName = productName;
         if (productDescription) product.productDescription = productDescription;
         if (categories) product.categories = categories;
+        if (productImages) product.productImages[0].imageUrl = productImages[0].imageUrl;
         if (harvestingDate) product.harvestingDate = harvestingDate;
         if (agricationMethod) product.agricationMethod = agricationMethod;
         if (freeDelivery !== undefined) product.freeDelivery = freeDelivery;
@@ -157,24 +160,45 @@ export const PATCH = async (req: NextRequest) => {
     }
 };
 
-
 export const DELETE = async (req: NextRequest) => {
     try {
-        const { productId } = await req.json();
+        const body = await req.json();
+        const { productId } = body;
+
+        if (!productId) {
+            return NextResponse.json(
+                { message: "Product ID is required" },
+                { status: 400 }
+            );
+        }
 
         await DBconnect();
 
         const deleteProduct = await Product.findById(productId);
-
         if (!deleteProduct) {
-            return NextResponse.json({ message: "Product not found" }, { status: 404 });
+            return NextResponse.json(
+                { message: "Product not found" },
+                { status: 404 }
+            );
         }
 
         await Product.findByIdAndDelete(productId);
 
-        return NextResponse.json({ message: "Product deleted successfully" }, { status: 200 });
+        return NextResponse.json(
+            { message: "Product deleted successfully" },
+            { status: 200 }
+        );
 
     } catch (error: any) {
-        return NextResponse.json({ message: "Can't delete product", error: error.message }, { status: 500 });
+        console.error('Delete error:', error);
+        return NextResponse.json(
+            {
+                message: "Failed to delete product",
+                error: process.env.NODE_ENV === "development"
+                    ? error.message
+                    : undefined
+            },
+            { status: 500 }
+        );
     }
 };

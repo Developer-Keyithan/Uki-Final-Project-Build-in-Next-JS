@@ -28,6 +28,7 @@ const DashboardPage = () => {
   const [user, setUser] = useState<UserDataType | null>(null);
   const [activePanel, setActivePanel] = useState<string>("Analytics");
   const [loading, setLoading] = useState<boolean>(true);
+  const [userId, setUserId] = useState<string>("");
   const router = useRouter();
 
   useEffect(() => {
@@ -41,6 +42,7 @@ const DashboardPage = () => {
 
         if (response.status === 200) {
           const { id } = response.data.user;
+          setUserId(id)
           const superAdmin = await axios.post("/api/user/get-user", { userId: id });
           setUser(superAdmin.data.user);
         }
@@ -58,7 +60,7 @@ const DashboardPage = () => {
 
   const panelComponents: { [key: string]: JSX.Element } = {
     Analytics: <Analytics />,
-    "My Products": <Products />,
+    "My Products": <Products id={userId}/>,
     Orders: <Orders />,
     Reviews: <Reviews />,
   };

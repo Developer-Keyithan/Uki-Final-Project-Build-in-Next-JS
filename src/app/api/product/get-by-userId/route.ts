@@ -15,7 +15,10 @@ export const POST = async (req: NextRequest) => {
 
     try {
         await DBconnect();
-        const userProducts = await Product.find({ userId });
+
+        // Fetch products sorted by updatedAt in descending order (newest first)
+        const userProducts = await Product.find({ userId })
+            .sort({ updatedAt: -1 }); // Sort by updatedAt in descending order
 
         if (userProducts.length === 0) {
             return NextResponse.json(

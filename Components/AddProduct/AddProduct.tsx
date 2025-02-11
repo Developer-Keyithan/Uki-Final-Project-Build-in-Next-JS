@@ -43,7 +43,6 @@ const UploadProduct: React.FC<CardFormProps> = ({ handleClose }) => {
 
         fetchUser();
     }, []);
-    console.log(userId)
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
@@ -400,7 +399,7 @@ const UploadProduct: React.FC<CardFormProps> = ({ handleClose }) => {
                             <p className="text-2xl font-bold text-primaryColor">LKR {product.price}</p>
                             <div className="flex gap-2 flex-wrap">
                                 {product.categories.map((cat: string) => (
-                                    <span key={cat} className="px-2 py-1 bg-green-100 text-green-800 text-sm rounded">
+                                    <span key={cat} className="px-2 py-1 bg-green-100 text-green-800 text-sm rounded-full">
                                         {cat}
                                     </span>
                                 ))}

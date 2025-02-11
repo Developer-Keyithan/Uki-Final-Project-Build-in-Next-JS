@@ -16,6 +16,16 @@ body {
   -moz-appearance: textfield;
 }
 
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+
 .btn-container span {
   max-width: 0;
   overflow: hidden;
@@ -27,3 +37,4 @@ body {
   max-width: 100px;
   margin-left: 0.5rem;
 }
+

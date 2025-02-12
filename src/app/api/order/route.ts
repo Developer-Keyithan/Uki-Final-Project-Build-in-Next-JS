@@ -40,7 +40,8 @@ export const POST = async (req: NextRequest) => {
                 value: product.finalQuantity,
                 unit: product.unit
             },
-            price: product.pricePerKg
+            price: product.pricePerKg,
+            isCanceled: false
         }));
 
         await DBconnect();

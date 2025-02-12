@@ -1,7 +1,7 @@
 import { Schema, model, models } from "mongoose";
 
 const orderSchema = new Schema(
-    {   
+    {
         userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
         products: [{
             productId: { type: Schema.Types.ObjectId, ref: "Product", required: true },
@@ -9,7 +9,9 @@ const orderSchema = new Schema(
                 value: { type: Number, required: true, min: 0 },
                 unit: { type: String, required: true, enum: ["kg", "gram"] }
             },
-            price: { type: Number, required: true, min: 0 }
+            price: { type: Number, required: true, min: 0 },
+            isCanceled: { type: Boolean, required: true },
+            isCanceledByConsumer: { type: Boolean, required: false },
         }],
         deliveryAddressId: { type: Schema.Types.ObjectId, ref: "Address", required: true },
         cardId: { type: String, required: false },
@@ -17,7 +19,7 @@ const orderSchema = new Schema(
         promoCodeDiscount: { type: Number, required: false, default: 0, min: 0 },
         totalPrice: { type: Number, required: true, min: 0 },
         status: { type: String, required: true, enum: ["placed", "shipped", "delivered", "cancelled"] },
-        isCashOnDelivery: {type: Boolean,  required: true}
+        isCashOnDelivery: { type: Boolean, required: true }
     },
     { timestamps: true }
 );

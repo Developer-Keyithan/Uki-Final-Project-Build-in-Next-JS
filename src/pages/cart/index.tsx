@@ -161,7 +161,7 @@ function CartPage() {
             console.error("Error removing item from cart:", error);
         }
     };
-
+ 
     useEffect(() => {
         const storedCart = localStorage.getItem('cart');
         if (storedCart) {
@@ -175,11 +175,13 @@ function CartPage() {
             const selectedItem = cartItems.find(item => item._id === selectedItemId);
             return selectedItem ? {
                 id: selectedItem._id,
+                productId: selectedItem.productId,
                 name: selectedItem.productName,
                 finalQuantity: selectedItem.quantity.value,
                 unit: selectedItem.quantity.unit,
                 pricePerKg: selectedItem.price.newPrice,
-                agricationMethod: selectedItem.agricationMethod
+                agricationMethod: selectedItem.agricationMethod,
+                imageUrl: selectedItem.productImage
             } : null;
         }).filter(item => item !== null);
 

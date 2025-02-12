@@ -51,7 +51,7 @@ const Cart: React.FC<CartProps> = ({ data, updateCartCount }) => {
 
             if (response.status === 200) {
                 toast.success("Item added to cart");
-                updateCartCount(); // Update cart count immediately
+                // updateCartCount();
             }
         } catch (error) {
             toast.error("Unable to add cart item");

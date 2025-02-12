@@ -7,16 +7,17 @@ const orderSchema = new Schema(
             productId: { type: Schema.Types.ObjectId, ref: "Product", required: true },
             quantity: {
                 value: { type: Number, required: true, min: 0 },
-                unit: { type: String, required: true, enum: ["kg", "g"] }
+                unit: { type: String, required: true, enum: ["kg", "gram"] }
             },
             price: { type: Number, required: true, min: 0 }
         }],
         deliveryAddressId: { type: Schema.Types.ObjectId, ref: "Address", required: true },
-        cardId: { type: String, required: true },
-        couponDiscount: { type: Number, required: true, default: 0, min: 0 },
-        promoCodeDiscount: { type: Number, required: true, default: 0, min: 0 },
+        cardId: { type: String, required: false },
+        couponDiscount: { type: Number, required: false, default: 0, min: 0 },
+        promoCodeDiscount: { type: Number, required: false, default: 0, min: 0 },
         totalPrice: { type: Number, required: true, min: 0 },
-        status: { type: String, required: true, enum: ["placed", "shipped", "delivered", "cancelled"] }
+        status: { type: String, required: true, enum: ["placed", "shipped", "delivered", "cancelled"] },
+        isCashOnDelivery: {type: Boolean,  required: true}
     },
     { timestamps: true }
 );

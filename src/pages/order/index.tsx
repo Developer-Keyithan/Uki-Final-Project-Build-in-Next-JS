@@ -22,7 +22,7 @@ interface Product {
     agricationMethod: string;
     productName: string;
     productDescription: string;
-    productImages?: { imageUrl: string }[];
+    imageUrl: string;
 }
 
 function OrderPage() {
@@ -40,7 +40,6 @@ function OrderPage() {
 
     const router = useRouter();
     const { id } = router.query;
-    console.log(id)
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -170,18 +169,15 @@ function OrderPage() {
                             </div>
                         </div>
 
-                        <div className="flex flex-col ring-1 ring-gray-300 p-4 rounded-md">
+                        <div className="flex flex-col ring-1 ring-gray-300 rounded-md">
                             {products.length > 0 ? (
                                 products.map((product, index) => (
                                     <div key={index} className="border-b-[1px] p-4 rounded hover:bg-gray-100">
-                                        <div className="w-full h-max flex gap-4 overflow-hidden">
-                                            <div className='h-full w-1/4 overflow-hidden'>
-                                                <Image
-                                                    src={product.productImages?.[0]?.imageUrl || '/default-image.jpg'}
+                                        <div className="w-full h-max flex gap-8 overflow-hidden">
+                                            <div className='h-40 w-40 overflow-hidden bg-gray-200 rounded'>
+                                                <img
+                                                    src={product.imageUrl || '/default-image.jpg'}
                                                     alt={product.productName || product.name || 'Product'}
-                                                    width={200}
-                                                    height={200}
-                                                    objectFit="cover"
                                                     className="h-full w-full object-cover"
                                                 />
                                             </div>
@@ -192,9 +188,9 @@ function OrderPage() {
                                                     <p><strong className='font-semibold'>Price Per kg:</strong> {product.price?.newPrice || product.pricePerKg}</p>
                                                 </div>
                                                 <div className="flex items-center gap-2 mt-3">
-                                                    <button onClick={() => handleQuantityChange(index, -1)} className="px-2 py-1 border rounded">-</button>
-                                                    <p className='text-center w-20 py-1 rounded border'>{product.finalQuantity}</p>
-                                                    <button onClick={() => handleQuantityChange(index, 1)} className="px-2 py-1 border rounded">+</button>
+                                                    <button onClick={() => handleQuantityChange(index, -1)} className="h-8 w-8 border rounded hover:bg-primaryColor hover:border-primaryColor hover:text-white transition ease-in-out duration-300">-</button>
+                                                    <p className='flex items-center justify-center w-20 h-8 rounded border'>{product.finalQuantity}</p>
+                                                    <button onClick={() => handleQuantityChange(index, 1)} className="h-8 w-8 border rounded hover:bg-primaryColor hover:border-primaryColor hover:text-white transition ease-in-out duration-300">+</button>
                                                     <label className='flex gap-2 ml-4 cursor-pointer' htmlFor={`gram-${index}`}>
                                                         <input
                                                             type="radio"
@@ -252,7 +248,7 @@ function OrderPage() {
                             />
                         </div>
                     </div>
-                )}
+                )} 
 
                 {showCardForm && (
                     <div className="fixed inset-0 flex justify-center items-center px-[30vw] backdrop-blur-lg z-[100]">

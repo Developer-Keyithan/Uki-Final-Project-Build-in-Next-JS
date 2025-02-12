@@ -3,12 +3,15 @@ import './OrderOverview.css';
 import { TiHome } from 'react-icons/ti';
 import { MdWork } from 'react-icons/md';
 import { FaLocationDot } from 'react-icons/fa6';
-import visa from '../../Assets/visa-card.png'
-import master from '../../Assets/master-card.png'
+import visa from '../../Assets/visa-card.png';
+import master from '../../Assets/master-card.png';
 import Image, { StaticImageData } from 'next/image';
-
+import axios from 'axios';
+import { toast, ToastContainer } from 'react-toastify';
+import { useRouter } from 'next/router';
 
 interface Address {
+    _id: string;
     data: any;
     no?: number;
     street: string;
@@ -20,6 +23,7 @@ interface Address {
 }
 
 interface Card {
+    _id: string;
     cardNumber: number;
     cardType: string;
     bankName: string;
@@ -44,7 +48,6 @@ interface OrderOverviewProps {
 }
 
 function OrderOverview({ products, userId, address, card, paymentMethod }: OrderOverviewProps) {
-
     const [isAddressHere, setIsAddressHere] = useState(false);
     const [isCardHere, setIsCardHere] = useState(false);
     const [formattedAddress, setFormattedAddress] = useState('');
@@ -52,11 +55,13 @@ function OrderOverview({ products, userId, address, card, paymentMethod }: Order
     const [icon, setIcon] = useState<React.ReactElement | null>(null);
     const [name, setName] = useState('');
     const [cardType, setCardType] = useState<StaticImageData | undefined>(undefined);
-    const [alt, setAlt] = useState('')
+    const [alt, setAlt] = useState('');
+    const [isCashOnDelivery, setIsCashOnDelivery] = useState(false);
+
+    const router = useRouter()
 
     useEffect(() => {
         if (address.district) {
-            console.log(address)
             setIsAddressHere(true);
             const formattedAddress = [
                 address.no ? address.no.toString() : '',
@@ -79,8 +84,9 @@ function OrderOverview({ products, userId, address, card, paymentMethod }: Order
             }
         }
 
-        if (paymentMethod === 'card' && card && card.cardNumber) { // ✅ Check if card exists before accessing properties
+        if (paymentMethod === 'card' && card && card.cardNumber) {
             setIsCardHere(true);
+            setIsCashOnDelivery(false);
 
             const maskCardNumber = (cardNumber: number) => {
                 const cardNumStr = cardNumber.toString().replace(/\D/g, '');
@@ -99,15 +105,15 @@ function OrderOverview({ products, userId, address, card, paymentMethod }: Order
                 setCardType(master);
                 setAlt('Master Card');
             }
-        } else {
+        } else if (paymentMethod === 'cash') {
             setIsCardHere(false);
+            setIsCashOnDelivery(true);
             setMaskedCardNumber('');
         }
     }, [address, card, paymentMethod]);
 
     let totalPrice = 0;
 
-    // Check if products is an array and then perform the iteration
     if (Array.isArray(products)) {
         products.forEach(product => {
             let quantityInKg = product.unit === "gram" ? product.finalQuantity / 1000 : product.finalQuantity;
@@ -117,19 +123,46 @@ function OrderOverview({ products, userId, address, card, paymentMethod }: Order
         console.error('Expected products to be an array');
     }
 
-    // Final price (modify if you have any additional logic, like applying a promo code)
     const finalPrice = totalPrice;
+
+    const handlePlaceOrder = async () => {
+        console.log(isCashOnDelivery)
+        try {
+            const response = await axios.post('/api/order', {
+                userId,
+                deliveryAddressId: address._id,
+                cardId: card?._id,
+                totalPrice: finalPrice,
+                status: 'placed',
+                products,
+                isCashOnDelivery
+            });
+
+            if (response.status === 200) {
+                localStorage.removeItem('checkoutItems');
+                toast.success('Order placed successfully.');
+                router.push('/cart');
+            }
+        } catch (error: any) {
+            console.error('Error placing order:', error);
+            toast.error(error.response?.data?.message || 'Failed to place order.');
+        }
+    };
 
     return (
         <div className='order-overview-container bg-green-500 px-60 sticky bottom-0'>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
             <div className="left-section">
-                {/* <div className="chosen-coupon">
-                    <h2>Coupon details here </h2>
-                    <p>Coupon info</p>
-                </div>
-
-                <input className='promo-code' type="text" placeholder='If you have a promo code? Enter the promo code.' /> */}
-
                 <div className="chosen-card flex items-center justify-around">
                     {paymentMethod === 'card' ? (
                         isCardHere ? (
@@ -189,7 +222,7 @@ function OrderOverview({ products, userId, address, card, paymentMethod }: Order
                     <h1 className='text-3xl font-semibold'>Final Price</h1>
                     <p className='text-2xl'>= Rs. {finalPrice}</p>
                 </div>
-                <button className='order-btn bg-primaryColor'>Place Order</button>
+                <button className='order-btn bg-primaryColor' onClick={handlePlaceOrder}>Place Order</button>
             </div>
         </div>
     );

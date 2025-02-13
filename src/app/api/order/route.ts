@@ -41,7 +41,8 @@ export const POST = async (req: NextRequest) => {
                 unit: product.unit
             },
             price: product.pricePerKg,
-            isCanceled: false
+            isCanceled: false,
+            isDeleyed: false
         }));
 
         await DBconnect();
@@ -74,7 +75,7 @@ export const POST = async (req: NextRequest) => {
 export const PUT = async (req: NextRequest) => {
     try {
         const body = await req.json();
-        const { orderId, status } = body;
+        const { orderId, status, productId, isCanceled, isDelayed, cancellingReason, delayingReason } = body;
 
         if (!orderId) return NextResponse.json({ message: "Order id is required" }, { status: 400 });
 
@@ -84,24 +85,28 @@ export const PUT = async (req: NextRequest) => {
         if (!order) return NextResponse.json({ message: "Order not found" }, { status: 404 });
 
         order.status = status;
+
+        if (productId) {
+            const product = order.products.find((p: any) => p.productId === productId);
+
+            if (!product) return NextResponse.json({ message: "Product not found in the order" }, { status: 404 });
+
+            if (isCanceled) product.isCanceled = isCanceled;
+            if (isDelayed) product.isDelayed = isDelayed;
+            if (cancellingReason) product.cancellingReason = cancellingReason;
+            if (delayingReason) product.delayingReason = delayingReason;
+        }
+
         await order.save();
 
-        if (status === "shipped") {
-            return NextResponse.json({ message: "Order shipped", order }, { status: 200 });
-        }
+        const messages: Record<string, string> = {
+            "canceled": "Order canceled",
+            "shipped": "Order shipped",
+            "delivered": "Order delivered",
+            "placed": "Order placed"
+        };
 
-        if (status === "delivered") {
-            return NextResponse.json({ message: "Order delivered", order }, { status: 200 });
-        }
-
-        if (status === "cancelled") {
-            return NextResponse.json({ message: "Order cancelled", order }, { status: 200 });
-        }
-
-        if (status === "placed") {
-            return NextResponse.json({ message: "Ordered again", order }, { status: 200 });
-        }
-
+        return NextResponse.json({ message: messages[status] || "Order updated", order }, { status: 200 });
     } catch (error: any) {
         return NextResponse.json({ message: "Failed to update order ", error: error.message }, { status: 500 });
     }

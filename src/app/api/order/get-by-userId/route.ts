@@ -110,15 +110,20 @@ export const POST = async (req: NextRequest) => {
 
             const filteredOrderDetails = filteredOrders.map(order => ({
                 orderId: order._id,
+                createdAt: order.createdAt,
                 updatedAt: order.updatedAt,
                 products: order.products.map(product => ({
                     productId: product.productId,
                     quantity: product.quantity,
                     price: product.price,
                     isCanceled: product.isCanceled,
+                    isDeleyed: product.isDeleyed,
+                    cancellingReason: product.cancellingReason,
+                    deleyingReasong: product.deleyingReasong,
                     ...productInfoMap[product.productId.toString()],
                 })),
-                isCashOnDelivery: order.isCashOnDelivery
+                isCashOnDelivery: order.isCashOnDelivery,
+                isCanceled: order.isCanceled,
             }));
 
             return NextResponse.json({ orders: filteredOrderDetails }, { status: 200 });

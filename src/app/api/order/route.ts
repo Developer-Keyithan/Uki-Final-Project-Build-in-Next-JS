@@ -77,26 +77,30 @@ export const PUT = async (req: NextRequest) => {
         const body = await req.json();
         const { orderId, status, productId, isCanceled, isDelayed, cancellingReason, delayingReason } = body;
 
-        if (!orderId) return NextResponse.json({ message: "Order id is required" }, { status: 400 });
+        // Validate required fields
+        if (!orderId) return NextResponse.json({ message: "Order ID is required" }, { status: 400 });
+        if (productId && typeof productId !== "string") return NextResponse.json({ message: "Product ID must be a string" }, { status: 400 });
 
         await DBconnect();
         const order = await Order.findById(orderId);
 
         if (!order) return NextResponse.json({ message: "Order not found" }, { status: 404 });
 
-        order.status = status;
+        if (status) order.status = status;
 
         if (productId) {
-            const product = order.products.find((p: any) => p.productId === productId);
+            const product = order.products.find((p: any) => p.productId.toString() === productId.toString());
+
+            console.log("Found product:", product);
 
             if (!product) return NextResponse.json({ message: "Product not found in the order" }, { status: 404 });
-
             if (isCanceled) product.isCanceled = isCanceled;
             if (isDelayed) product.isDelayed = isDelayed;
+            console.log('Is Delayed',isDelayed)
             if (cancellingReason) product.cancellingReason = cancellingReason;
             if (delayingReason) product.delayingReason = delayingReason;
         }
-
+        console.log('Updated Product:', order.products)
         await order.save();
 
         const messages: Record<string, string> = {
@@ -108,6 +112,7 @@ export const PUT = async (req: NextRequest) => {
 
         return NextResponse.json({ message: messages[status] || "Order updated", order }, { status: 200 });
     } catch (error: any) {
-        return NextResponse.json({ message: "Failed to update order ", error: error.message }, { status: 500 });
+        console.log("Error updating order:", error);
+        return NextResponse.json({ message: "Failed to update order", error: error.message }, { status: 500 });
     }
 };

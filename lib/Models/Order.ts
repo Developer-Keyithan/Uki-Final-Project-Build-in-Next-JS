@@ -12,7 +12,7 @@ const orderSchema = new Schema(
             price: { type: Number, required: true, min: 0 },
             isCanceled: { type: Boolean, required: true },
             isCanceledByConsumer: { type: Boolean, required: false },
-            isDeleyed: { type: Boolean, required: true },
+            isDelayed: { type: Boolean, required: true },
             cancellingReason: { type: String, required: false },
             delayingReason: { type: String, required: false }
         }],

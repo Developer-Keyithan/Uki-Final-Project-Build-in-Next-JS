@@ -28,7 +28,6 @@ import Order from "../../../../../lib/Models/Order";
 import Product from "../../../../../lib/Models/Product";
 import User from "../../../../../lib/Models/User";
 import DBconnect from "../../../../../lib/db";
-import deliveryAddressModel from "../../../../../lib/Models/DeliveryAddress";
 
 export const POST = async (req: NextRequest) => {
     try {
@@ -68,7 +67,7 @@ export const POST = async (req: NextRequest) => {
 
             const productIds = products.map(product => product._id.toString());
 
-            const orders = await Order.find({ "products.productId": { $in: productIds } });
+            const orders = await Order.find({ "products.productId": { $in: productIds } }).sort({ createdAt: -1 });;
 
             if (!orders || orders.length === 0) {
                 return NextResponse.json({ message: "No orders found for this seller's products" }, { status: 404 });
@@ -84,17 +83,6 @@ export const POST = async (req: NextRequest) => {
                     products: filteredProducts,
                 };
             });
-
-            // const deliveryAddressIds = filteredOrders.map(order => order.deliveryAddressId);
-            // const deliveryAddresses = await deliveryAddressModel.find({ _id: { $in: deliveryAddressIds } });
-
-            // const ordersWithAddresses = filteredOrders.map(order => {
-            //     const address = deliveryAddresses.find(addr => addr._id.toString() === order.deliveryAddressId.toString());
-            //     return {
-            //         ...order,
-            //         deliveryAddress: address,
-            //     };
-            // });
 
             const productDetails = await Product.find({ _id: { $in: productIds } });
 
@@ -117,7 +105,7 @@ export const POST = async (req: NextRequest) => {
                     quantity: product.quantity,
                     price: product.price,
                     isCanceled: product.isCanceled,
-                    isDeleyed: product.isDeleyed,
+                    isDelayed: product.isDelayed,
                     cancellingReason: product.cancellingReason,
                     deleyingReasong: product.deleyingReasong,
                     ...productInfoMap[product.productId.toString()],

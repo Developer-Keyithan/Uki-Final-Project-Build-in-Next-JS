@@ -15,7 +15,7 @@ interface Product {
         value: number;
     };
     isCanceled: boolean;
-    isDeleyed: boolean;
+    isDelayed: boolean;
 }
 
 interface Order {
@@ -49,7 +49,7 @@ const Orders = () => {
                     setOrders(businessOrders.data.orders);
                 }
             } catch (err) {
-                toast.error('Failed to update order')
+                toast.error('Failed to fetch orders');
                 setError('Failed to fetch orders');
             } finally {
                 setLoading(false);
@@ -59,37 +59,12 @@ const Orders = () => {
         fetchOrders();
     }, []);
 
-    // const handleCancelProduct = async (productId: string) => {
-    // try {
-    //     await axios.post('/api/order/cancel-product', { productId });
-    //     setOrders((prevOrders) =>
-    //         prevOrders.map((order) => ({
-    //             ...order,
-    //             products: order.products.map((product) =>
-    //                 product.productId === productId
-    //                     ? { ...product, isCanceled: true }
-    //                     : product
-    //             ),
-    //         }))
-    //     );
-    // } catch (err) {
-    //     setError('Failed to cancel product');
-    // }
-    // };
+    console.log(orders);
 
-    // const handleDelayRequest = async (productId: string) => {
-    // try {
-    //     await axios.post('/api/order/delay-request', { productId });
-    //     alert('Delay request submitted successfully');
-    // } catch (err) {
-    //     setError('Failed to submit delay request');
-    // }
-    // };
-
-    const handleCancelProduct = async (productId: string, reason: string) => {
+    const handleCancelProduct = async (productId: string, reason: string, orderId: string) => {
         setIsCanceling(true);
         try {
-            await axios.put('/api/order', { productId, cancellingReason: reason });
+            await axios.put('/api/order', { productId, cancellingReason: reason, orderId, isCanceled: true });
             setOrders((prevOrders) =>
                 prevOrders.map((order) => ({
                     ...order,
@@ -100,29 +75,60 @@ const Orders = () => {
                     ),
                 }))
             );
-            toast.error('Product canceled')
-            setOpenCancelFormProductId(null); 
+            toast.success('Product canceled successfully');
+            setOpenCancelFormProductId(null);
         } catch (err) {
-            toast.error('Failed to cancel product')
+            toast.error('Failed to cancel product');
             setError('Failed to cancel product');
         } finally {
             setIsCanceling(false);
         }
     };
 
-    const handleDelayRequest = async (productId: string, reason: string) => {
+    const handleDelayRequest = async (productId: string, reason: string, orderId: string) => {
         setIsDelaying(true);
         try {
-            await axios.put('/api/order', { productId, delayingReason: reason });
+            await axios.put('/api/order', { productId, delayingReason: reason, orderId, isDelayed: true });
+            setOrders((prevOrders) =>
+                prevOrders.map((order) => ({
+                    ...order,
+                    products: order.products.map((product) =>
+                        product.productId === productId
+                            ? { ...product, isDelayed: true }
+                            : product
+                    ),
+                }))
+            );
             toast.success('Delay request submitted successfully');
             setOpenDelayFormProductId(null);
         } catch (err) {
-            toast.error('Failed to submit delay request')
+            toast.error('Failed to submit delay request');
             setError('Failed to submit delay request');
         } finally {
             setIsDelaying(false);
         }
     };
+
+    const handleForwardProduct = async (productId: string, orderId: string) => {
+        try {
+            await axios.put('/api/order', { productId, orderId, isDelayed: false });
+            setOrders((prevOrders) =>
+                prevOrders.map((order) => ({
+                    ...order,
+                    products: order.products.map((product) =>
+                        product.productId === productId
+                            ? { ...product, isDelayed: false }
+                            : product
+                    ),
+                }))
+            );
+            toast.success('Order moved forward successfully');
+        } catch (err) {
+            toast.error('Failed to move order forward');
+            setError('Failed to move order forward');
+        }
+    };
+
 
     const convertToKilograms = (quantity: { unit: string; value: number }) => {
         return quantity.unit === 'g' ? quantity.value / 1000 : quantity.value;
@@ -190,7 +196,9 @@ const Orders = () => {
                                                         </div>
                                                         <div>
                                                             <p className="text-sm text-gray-500 font-semibold">Status:</p>
-                                                            <p className={`${product.isCanceled ? 'text-red-700 bg-red-100' : 'text-green-700 bg-green-100'} w-max py-1 px-2 rounded-full`}>{product.isCanceled ? "Order canceled" : "Order still active"}</p>
+                                                            <p className={`${product.isCanceled ? 'text-red-700 bg-red-100' : product.isDelayed ? 'text-orange-700 bg-orange-100' : 'text-green-700 bg-green-100'} w-max py-1 px-2 rounded-full`}>
+                                                                {product.isCanceled ? "Order canceled" : product.isDelayed ? "Order delayed" : "Order still active"}
+                                                            </p>
                                                         </div>
                                                     </div>
                                                     <div className="flex justify-between items-center gap-8">
@@ -201,7 +209,7 @@ const Orders = () => {
                                                                         e.preventDefault();
                                                                         const reason = e.currentTarget.querySelector('input')?.value;
                                                                         if (reason) {
-                                                                            handleCancelProduct(product.productId, reason);
+                                                                            handleCancelProduct(product.productId, reason, order.orderId);
                                                                         }
                                                                     }}
                                                                     className="flex gap-4 justify-between"
@@ -214,9 +222,16 @@ const Orders = () => {
                                                                     <button
                                                                         type="submit"
                                                                         disabled={isCanceling}
-                                                                        onClick={() => setOpenCancelFormProductId(null)}
-                                                                        className="bg-red-600 py-1 px-6 text-white hover:bg-red-700 rounded transition ease-in-out duration-300 cursor-pointer"
+                                                                        className="flex gap-2 bg-red-600 py-1 px-6 text-white hover:bg-red-700 rounded transition ease-in-out duration-300 cursor-pointer disabled:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
                                                                     >
+                                                                        {isCanceling ? (
+                                                                            <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                                                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                                                                            </svg>
+                                                                        ) : (
+                                                                            ''
+                                                                        )}
                                                                         {isCanceling ? 'Canceling...' : 'Send the reason'}
                                                                     </button>
                                                                 </form>
@@ -235,7 +250,7 @@ const Orders = () => {
                                                                         e.preventDefault();
                                                                         const reason = e.currentTarget.querySelector('input')?.value;
                                                                         if (reason) {
-                                                                            handleDelayRequest(product.productId, reason);
+                                                                            handleDelayRequest(product.productId, reason, order.orderId);
                                                                         }
                                                                     }}
                                                                     className="flex gap-4 justify-between"
@@ -248,20 +263,37 @@ const Orders = () => {
                                                                     <button
                                                                         type="submit"
                                                                         disabled={isDelaying}
-                                                                        // onClick={() => setOpenDelayFormProductId(null)}
-                                                                        className="bg-orange-600 py-1 px-6 text-white hover:bg-orange-700 rounded transition ease-in-out duration-300 cursor-pointer"
+                                                                        className="flex gap-2 bg-orange-600 py-1 px-6 text-white hover:bg-orange-700 rounded transition ease-in-out duration-300 cursor-pointer  disabled:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed"
                                                                     >
+                                                                        {isDelaying ? (
+                                                                            <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                                                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                                                                            </svg>
+                                                                        ) : (
+                                                                            ''
+                                                                        )}
                                                                         {isDelaying ? 'Delaying...' : 'Send the reason'}
                                                                     </button>
                                                                 </form>
                                                             ) : (
-                                                                <button
-                                                                    onClick={() => setOpenDelayFormProductId(product.productId)}
-                                                                    disabled={product.isCanceled || product.isDeleyed}
-                                                                    className="bg-orange-600 max-w-max py-1 px-6 text-white hover:bg-orange-700 rounded transition ease-in-out duration-300 cursor-pointer disabled:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                                                                >
-                                                                    Request to delay
-                                                                </button>
+                                                                product.isDelayed ? (
+                                                                    <button
+                                                                        onClick={() => handleForwardProduct(product.productId, order.orderId)}
+                                                                        disabled={product.isCanceled}
+                                                                        className="bg-primaryColor max-w-max py-1 px-6 text-white hover:bg-primaryButtonHoverColor rounded transition ease-in-out duration-300 cursor-pointer disabled:bg-primaryColor disabled:opacity-50 disabled:cursor-not-allowed"
+                                                                    >
+                                                                        Forward
+                                                                    </button>
+                                                                ) : (
+                                                                    <button
+                                                                        onClick={() => setOpenDelayFormProductId(product.productId)}
+                                                                        disabled={product.isCanceled || product.isDelayed}
+                                                                        className="bg-orange-600 max-w-max py-1 px-6 text-white hover:bg-orange-700 rounded transition ease-in-out duration-300 cursor-pointer disabled:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                                    >
+                                                                        Request to delay
+                                                                    </button>
+                                                                )
                                                             )}
                                                         </div>
                                                         <div className="flex items-center gap-2 font-semibold w-1/6">
@@ -310,5 +342,3 @@ const Orders = () => {
 };
 
 export default Orders;
-
-

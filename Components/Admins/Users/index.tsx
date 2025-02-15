@@ -279,7 +279,7 @@ function Users() {
                 {/* Active Filter and Short */}
                 <div className="flex gap-4 py-4">
                     {selectedFilter && (
-                        <div className="flex items-center gap-2 px-2 py-1 h-full rounded-full bg-green-100 text-green-800">
+                        <div className="flex items-center gap-2 px-2 py-1 h-full rounded-full bg-gray-100 text-gray-800">
                             <p className="capitalize">{selectedFilter}</p>
                             <MdClose
                                 className="text-xl cursor-pointer hover:text-red-500"
@@ -288,7 +288,7 @@ function Users() {
                         </div>
                     )}
                     {selectedShort && (
-                        <div className="flex items-center gap-2 px-2 py-1 h-full rounded-full bg-amber-100 text-amber-800">
+                        <div className="flex items-center gap-2 px-2 py-1 h-full rounded-full bg-gray-100 text-gray-800">
                             <p>{selectedShort}</p>
                             <MdClose
                                 className="text-xl cursor-pointer hover:text-red-500"

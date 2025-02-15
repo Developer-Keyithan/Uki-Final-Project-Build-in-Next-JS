@@ -67,7 +67,7 @@ export const POST = async (req: NextRequest) => {
 
             const productIds = products.map(product => product._id.toString());
 
-            const orders = await Order.find({ "products.productId": { $in: productIds } }).sort({ createdAt: -1 });;
+            const orders = await Order.find({ "products.productId": { $in: productIds } }).sort({ createdAt: -1 });
 
             if (!orders || orders.length === 0) {
                 return NextResponse.json({ message: "No orders found for this seller's products" }, { status: 404 });

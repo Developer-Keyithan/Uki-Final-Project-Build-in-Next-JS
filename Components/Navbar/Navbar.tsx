@@ -30,12 +30,23 @@ const Navbar: React.FC = () => {
     const updateCartCount = async () => {
         try {
             const { data } = await axios.get('/api/cookie');
-            const cartCountResponse = await axios.post('/api/cart/cart-size', { userId: data.user.id });
-            setCartCount(cartCountResponse.data.length);
+            
+            const fetchCartCount = async () => {
+                try {
+                    const cartCountResponse = await axios.post('/api/cart/cart-size', { userId: data.user.id });
+                    setCartCount(cartCountResponse.data.length);
+                } catch (error) {
+                    console.error('Error fetching cart count:', error);
+                }
+            };
+    
+            await fetchCartCount();
+            setInterval(fetchCartCount, 1000);
         } catch (error) {
             console.error('Error updating cart count:', error);
         }
     };
+    
 
     useEffect(() => {
         const fetchUser = async () => {

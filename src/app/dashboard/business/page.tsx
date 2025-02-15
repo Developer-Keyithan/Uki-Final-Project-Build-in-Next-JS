@@ -29,6 +29,7 @@ const DashboardPage = () => {
   const [activePanel, setActivePanel] = useState<string>("Analytics");
   const [loading, setLoading] = useState<boolean>(true);
   const [userId, setUserId] = useState<string>("");
+  const [products, setProducts] = useState<any[]>([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -42,7 +43,7 @@ const DashboardPage = () => {
 
         if (response.status === 200) {
           const { id } = response.data.user;
-          setUserId(id)
+          setUserId(id);
           const superAdmin = await axios.post("/api/user/get-user", { userId: id });
           setUser(superAdmin.data.user);
         }
@@ -56,11 +57,30 @@ const DashboardPage = () => {
     findUser();
   }, [router]);
 
-  const panels = ["Analytics", "My Products", "Orders", "Reviews"];
+  useEffect(() => {
+    if (userId) {
+      const getTotalProductsCount = async () => {
+        try {
+          const response = await axios.post("/api/product/get-by-userId", { userId });
+          setProducts(response.data.products);
+        } catch (error) {
+          console.error("Error fetching products:", error);
+        }
+      };
+
+      getTotalProductsCount();
+
+      const interval = setInterval(getTotalProductsCount, 3000);
+
+      return () => clearInterval(interval);
+    }
+  }, [userId]);
+
+  const panels = ["Analytics", `My Products (${products.length})`, "Orders", "Reviews"];
 
   const panelComponents: { [key: string]: JSX.Element } = {
     Analytics: <Analytics />,
-    "My Products": <Products id={userId}/>,
+    [`My Products (${products.length})`]: <Products id={userId} />,
     Orders: <Orders />,
     Reviews: <Reviews />,
   };

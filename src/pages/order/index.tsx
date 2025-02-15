@@ -69,7 +69,7 @@ function OrderPage() {
     console.log(products)
 
     useEffect(() => {
-        const fetchAddresses = async () => {
+        const fetchAddressesAndCards = async () => {
             const user = await axios.get('/api/cookie');
             setUserId(user.data.user.id);
 
@@ -84,7 +84,8 @@ function OrderPage() {
             setCards(cards.data.cards);
         };
 
-        fetchAddresses();
+        fetchAddressesAndCards();
+        setInterval(fetchAddressesAndCards, 3000);
     }, []);
 
     // Function to add a new address to the addresses state

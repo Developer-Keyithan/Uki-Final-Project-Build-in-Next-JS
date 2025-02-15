@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import Order from "../../../../lib/Models/Order";
 import DBconnect from "../../../../lib/db";
 import Cart from "../../../../lib/Models/Cart";
+import Order from "../../../../lib/Models/Order";
 
 export const POST = async (req: NextRequest) => {
     try {
@@ -72,6 +72,35 @@ export const POST = async (req: NextRequest) => {
     }
 };
 
+export const GET = async () => {
+    try {
+        await DBconnect();
+        const orders = await Order.find()
+            .sort({ updatedAt: -1 })
+            .populate({
+                path: 'products.productId',
+                select: 'productImages productName' // Populate productImages & productName
+            });
+
+        // Modify orders to extract first product image URL
+        const modifiedOrders = orders.map(order => ({
+            ...order._doc,
+            products: order.products.map(product => ({
+                ...product._doc,
+                productId: {
+                    productName: product.productId.productName,
+                    productImage: product.productId.productImages?.[0]?.imageUrl || null
+                }
+            }))
+        }));
+
+        return NextResponse.json({ success: true, orders: modifiedOrders });
+    } catch (error) {
+        console.error('Error fetching orders:', error);
+        return NextResponse.json({ success: false, message: 'Failed to fetch orders' }, { status: 500 });
+    }
+};
+
 export const PUT = async (req: NextRequest) => {
     try {
         const body = await req.json();
@@ -96,7 +125,7 @@ export const PUT = async (req: NextRequest) => {
             if (!product) return NextResponse.json({ message: "Product not found in the order" }, { status: 404 });
             if (isCanceled) product.isCanceled = isCanceled;
             if (isDelayed) product.isDelayed = isDelayed;
-            console.log('Is Delayed',isDelayed)
+            console.log('Is Delayed', isDelayed)
             if (cancellingReason) product.cancellingReason = cancellingReason;
             if (delayingReason) product.delayingReason = delayingReason;
         }

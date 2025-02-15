@@ -80,6 +80,8 @@ const UploadProduct: React.FC<CardFormProps> = ({ handleClose }) => {
 
         const formData = new FormData();
         formData.append('file', file);
+        formData.append('fileType', 'product');
+        formData.append('userId', userId);
 
         try {
             const response = await fetch('/api/s3-upload', {

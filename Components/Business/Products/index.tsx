@@ -65,6 +65,9 @@ const Products = ({ id }: { id: string }) => {
             }
         }
         fetchUserAndProducts()
+        // const interval = setInterval(fetchUserAndProducts, 3000);
+
+        // return () => clearInterval(interval);
     }, [userId])
 
     const handleEditProduct = (id: string) => {
@@ -102,6 +105,8 @@ const Products = ({ id }: { id: string }) => {
                 try {
                     const formData = new FormData();
                     formData.append('file', selectedImageFile);
+                    formData.append('fileType', 'product');
+                    formData.append('userId', userId);
 
                     const uploadResponse = await axios.post(
                         '/api/s3-upload',

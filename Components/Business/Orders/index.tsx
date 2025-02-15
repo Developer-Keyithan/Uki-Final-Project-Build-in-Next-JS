@@ -59,8 +59,6 @@ const Orders = () => {
         fetchOrders();
     }, []);
 
-    console.log(orders);
-
     const handleCancelProduct = async (productId: string, reason: string, orderId: string) => {
         setIsCanceling(true);
         try {
@@ -151,7 +149,19 @@ const Orders = () => {
             </div>
         );
     }
-
+    if (error) {
+        return (
+            <div className="text-center py-8">
+                <p className="text-red-600">{error}</p>
+                <button
+                    onClick={() => window.location.reload()}
+                    className="mt-4 bg-primaryColor text-white px-4 py-2 rounded hover:bg-primaryButtonHoverColor transition ease-in-out duration-300"
+                >
+                    Retry
+                </button>
+            </div>
+        );
+    }
     return (
         <div>
             {orders.length === 0 ? (
@@ -176,7 +186,7 @@ const Orders = () => {
                                         const subtotal = quantityInKg * product.price;
 
                                         return (
-                                            <div key={product.productId} className="flex gap-8 p-4 border-b-[1px] first:border-t-[1px] border-gray-300 w-full">
+                                            <div key={product.productId} className="flex gap-8 p-4 border-b-[1px] border-gray-300 w-full">
                                                 <img
                                                     src={product.imageUrl}
                                                     alt={`Image of ${product.productName}`}

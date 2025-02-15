@@ -86,7 +86,9 @@ function Products(id: string): JSX.Element {
                     setError("Failed to fetch products. Please try again later.");
                 }
             } finally {
-                setIsLoading(false);
+                setTimeout(() => {
+                    setIsLoading(false);
+                }, 3000);
             }
         };
         fetchProducts();
@@ -244,7 +246,110 @@ function Products(id: string): JSX.Element {
         }
     };
 
-    if (isLoading) return <p>Loading products...</p>;
+    if (isLoading) return (
+        <div className='flex flex-col justify-center gap-6 w-full my-8'>
+            <div className='flex gap-6 animate-pulse w-full ring-1 ring-gray-300 rounded-lg p-4'>
+                <div className='w-48 h-44 bg-gray-200 rounded-lg'></div>
+                <div className='flex flex-col gap-4 w-full'>
+                    <h3 className='w-96 py-1 rounded-md h-8 bg-gray-200'></h3>
+                    <p className='py-1 bg-gray-200 w-full rounded-md h-6'></p>
+                    <div className='flex gap-2'>
+                        <p className='py-1 w-20 bg-gray-200 rounded-md h-6'></p>
+                        <p className='py-1 w-24 bg-gray-200 rounded-md h-6'></p>
+                    </div>
+                    <div className='grid grid-cols-5 gap-4'>
+                        <div className='text-start w-full'>
+                            <p className='w-1/2 py-1 bg-gray-200 rounded-md h-4'></p>
+                            <p className='w-full py-1 bg-gray-200 rounded-md h-6 mt-2'></p>
+                        </div>
+                        <div className='text-start w-full'>
+                            <p className='w-1/2 py-1 bg-gray-200 rounded-md h-4'></p>
+                            <p className='w-full py-1 bg-gray-200 rounded-md h-6 mt-2'></p>
+                        </div>
+                        <div className='text-start w-full'>
+                            <p className='w-1/2 py-1 bg-gray-200 rounded-md h-4'></p>
+                            <p className='w-full py-1 bg-gray-200 rounded-md h-6 mt-2'></p>
+                        </div>
+                        <div className='text-start w-full'>
+                            <p className='w-1/2 py-1 bg-gray-200 rounded-md h-4'></p>
+                            <p className='w-full py-1 bg-gray-200 rounded-md h-6 mt-2'></p>
+                        </div>
+                        <div className='text-start w-full'>
+                            <p className='w-1/2 py-1 bg-gray-200 rounded-md h-4'></p>
+                            <p className='w-full py-1 bg-gray-200 rounded-md h-6 mt-2'></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className='flex gap-6 animate-pulse w-full ring-1 ring-gray-300 rounded-lg p-4'>
+                <div className='w-48 h-44 bg-gray-200 rounded-lg'></div>
+                <div className='flex flex-col gap-4 w-full'>
+                    <h3 className='w-96 py-1 rounded-md h-8 bg-gray-200'></h3>
+                    <p className='py-1 bg-gray-200 w-full rounded-md h-6'></p>
+                    <div className='flex gap-2'>
+                        <p className='py-1 w-20 bg-gray-200 rounded-md h-6'></p>
+                        <p className='py-1 w-24 bg-gray-200 rounded-md h-6'></p>
+                    </div>
+                    <div className='grid grid-cols-5 gap-4'>
+                        <div className='text-start w-full'>
+                            <p className='w-1/2 py-1 bg-gray-200 rounded-md h-4'></p>
+                            <p className='w-full py-1 bg-gray-200 rounded-md h-6 mt-2'></p>
+                        </div>
+                        <div className='text-start w-full'>
+                            <p className='w-1/2 py-1 bg-gray-200 rounded-md h-4'></p>
+                            <p className='w-full py-1 bg-gray-200 rounded-md h-6 mt-2'></p>
+                        </div>
+                        <div className='text-start w-full'>
+                            <p className='w-1/2 py-1 bg-gray-200 rounded-md h-4'></p>
+                            <p className='w-full py-1 bg-gray-200 rounded-md h-6 mt-2'></p>
+                        </div>
+                        <div className='text-start w-full'>
+                            <p className='w-1/2 py-1 bg-gray-200 rounded-md h-4'></p>
+                            <p className='w-full py-1 bg-gray-200 rounded-md h-6 mt-2'></p>
+                        </div>
+                        <div className='text-start w-full'>
+                            <p className='w-1/2 py-1 bg-gray-200 rounded-md h-4'></p>
+                            <p className='w-full py-1 bg-gray-200 rounded-md h-6 mt-2'></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className='flex gap-6 animate-pulse w-full ring-1 ring-gray-300 rounded-lg p-4'>
+                <div className='w-48 h-44 bg-gray-200 rounded-lg'></div>
+                <div className='flex flex-col gap-4 w-full'>
+                    <h3 className='w-96 py-1 rounded-md h-8 bg-gray-200'></h3>
+                    <p className='py-1 bg-gray-200 w-full rounded-md h-6'></p>
+                    <div className='flex gap-2'>
+                        <p className='py-1 w-20 bg-gray-200 rounded-md h-6'></p>
+                        <p className='py-1 w-24 bg-gray-200 rounded-md h-6'></p>
+                    </div>
+                    <div className='grid grid-cols-5 gap-4'>
+                        <div className='text-start w-full'>
+                            <p className='w-1/2 py-1 bg-gray-200 rounded-md h-4'></p>
+                            <p className='w-full py-1 bg-gray-200 rounded-md h-6 mt-2'></p>
+                        </div>
+                        <div className='text-start w-full'>
+                            <p className='w-1/2 py-1 bg-gray-200 rounded-md h-4'></p>
+                            <p className='w-full py-1 bg-gray-200 rounded-md h-6 mt-2'></p>
+                        </div>
+                        <div className='text-start w-full'>
+                            <p className='w-1/2 py-1 bg-gray-200 rounded-md h-4'></p>
+                            <p className='w-full py-1 bg-gray-200 rounded-md h-6 mt-2'></p>
+                        </div>
+                        <div className='text-start w-full'>
+                            <p className='w-1/2 py-1 bg-gray-200 rounded-md h-4'></p>
+                            <p className='w-full py-1 bg-gray-200 rounded-md h-6 mt-2'></p>
+                        </div>
+                        <div className='text-start w-full'>
+                            <p className='w-1/2 py-1 bg-gray-200 rounded-md h-4'></p>
+                            <p className='w-full py-1 bg-gray-200 rounded-md h-6 mt-2'></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+
     if (error) return <p className="text-red-500">{error}</p>;
 
     const productsCount = (currentPage: number, filteredProducts: number) => {
@@ -357,7 +462,7 @@ function Products(id: string): JSX.Element {
                         selectedFilters.priceRanges.length > 0) && (
                             <button
                                 onClick={clearAllFilters}
-                                className="flex items-center gap-2 text-red-500 hover:text-red-700"
+                                className="flex items-center gap-2 px-4 rounded-lg text-white bg-red-500 hover:bg-red-700 transition ease-in-out duration-300"
                             >
                                 <MdClose /> Clear All Filters
                             </button>
@@ -411,19 +516,19 @@ function Products(id: string): JSX.Element {
             {/* Active Filters Display */}
             <div className="flex flex-wrap gap-2 my-4">
                 {selectedFilters.categories.map(category => (
-                    <span key={category} className="bg-green-100 text-green-800 px-2 py-1 rounded-full flex items-center gap-1">
+                    <span key={category} className="bg-gray-100 text-gray-800 px-2 py-1 rounded-full flex items-center gap-1">
                         {category}
                         <MdClose
-                            className="cursor-pointer hover:text-green-500"
+                            className="cursor-pointer hover:text-gray-500"
                             onClick={() => handleFilterSelection('categories', category)}
                         />
                     </span>
                 ))}
                 {selectedFilters.methods.map(method => (
-                    <span key={method} className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full flex items-center gap-1">
+                    <span key={method} className="bg-gray-100 text-gray-800 px-2 py-1 rounded-full flex items-center gap-1">
                         {method}
                         <MdClose
-                            className="cursor-pointer hover:text-blue-500"
+                            className="cursor-pointer hover:text-gray-500"
                             onClick={() => handleFilterSelection('methods', method)}
                         />
                     </span>
@@ -431,10 +536,10 @@ function Products(id: string): JSX.Element {
                 {selectedFilters.priceRanges.map(range => {
                     const label = priceRangeOptions.find(opt => opt.value === range)?.label;
                     return (
-                        <span key={range} className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full flex items-center gap-1">
+                        <span key={range} className="bg-gray-100 text-gray-800 px-2 py-1 rounded-full flex items-center gap-1">
                             {label}
                             <MdClose
-                                className="cursor-pointer hover:text-purple-500"
+                                className="cursor-pointer hover:text-gray-500"
                                 onClick={() => handleFilterSelection('priceRanges', range)}
                             />
                         </span>
@@ -443,10 +548,10 @@ function Products(id: string): JSX.Element {
 
                 {/* Active Sorting Display */}
                 {sortOrder && (
-                    <span className="bg-amber-100 text-amber-800 px-2 py-1 rounded-full flex items-center gap-1">
+                    <span className="bg-gray-100 text-gray-800 px-2 py-1 rounded-full flex items-center gap-1">
                         {sortOrder === 'newest' ? 'Newest to Oldest' : 'Oldest to Newest'}
                         <MdClose
-                            className="cursor-pointer hover:text-amber-500"
+                            className="cursor-pointer hover:text-gray-500"
                             onClick={() => setSortOrder('newest')} // Reset to default sorting
                         />
                     </span>

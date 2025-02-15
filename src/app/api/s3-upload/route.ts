@@ -9,8 +9,20 @@ const s3Client = new S3Client({
     },
 });
 
-const uploadFileToS3 = async (file: Buffer, fileName: string, contentType: string) => {
-    const fileKey = `Product/${fileName}-${Date.now()}`;
+const uploadFileToS3 = async (file: Buffer, fileName: string, contentType: string, userId: string, fileType: string) => {
+    let directory = '';
+
+    if (fileType === 'profile') {
+        directory = `${userId}/Profile/`;
+    } else if (fileType === 'product') {
+        directory = `${userId}/Products/`;
+    } else if (fileType === 'document') {
+        directory = `${userId}/Documents/`;
+    } else {
+        throw new Error('Unsupported file type');
+    }
+
+    const fileKey = `User:${directory}${fileName}-${Date.now()}`;
 
     const uploadParams = {
         Bucket: process.env.AWS_S3_BUCKET_NAME!,
@@ -22,7 +34,7 @@ const uploadFileToS3 = async (file: Buffer, fileName: string, contentType: strin
     try {
         const command = new PutObjectCommand(uploadParams);
         await s3Client.send(command);
-        return fileKey; // Returning the full file key
+        return fileKey;
     } catch (error) {
         console.error('Error uploading file to S3:', error);
         throw new Error('Error uploading file to S3');
@@ -33,9 +45,11 @@ export const POST = async (req: NextRequest) => {
     try {
         const formData = await req.formData();
         const file = formData.get('file') as File | null;
+        const fileType = formData.get('fileType') as string | null;
+        const userId = formData.get('userId') as string | null;
 
-        if (!file) {
-            return NextResponse.json({ error: 'File is required.' }, { status: 400 });
+        if (!file || !userId || !fileType) {
+            return NextResponse.json({ error: 'File, userId, and fileType are required.' }, { status: 400 });
         }
 
         const buffer = Buffer.from(await file.arrayBuffer());
@@ -43,7 +57,7 @@ export const POST = async (req: NextRequest) => {
             return NextResponse.json({ error: 'Invalid file.' }, { status: 400 });
         }
 
-        const fileKey = await uploadFileToS3(buffer, file.name, file.type);
+        const fileKey = await uploadFileToS3(buffer, file.name, file.type, userId, fileType);
         const imageUrl = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/${fileKey}`;
 
         return NextResponse.json({ success: true, imageUrl }, { status: 200 });

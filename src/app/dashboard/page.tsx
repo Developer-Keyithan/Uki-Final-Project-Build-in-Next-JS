@@ -1,11 +1,12 @@
 'use client'
 
 import { useState, useEffect, JSX } from "react";
-import UserDashboard from "../../../Components/User Dashboard Controller/UserDashboardController";
+import UserDashboard from "../../../Components/Dashboard Components/User/User Dashboard Controller/UserDashboardController";
 import UserData from "../../../Data/User";
 import AddressData from "../../../Data/AddressData";
-import Delivered from "../../../Components/Delivered/Delivered";
-import Cancelled from "../../../Components/Cancelled/Cancelled";
+import Delivered from "../../../Components/Dashboard Components/User/Delivered/Delivered"
+import Cancelled from "../../../Components/Dashboard Components/User/Cancelled/Cancelled";
+import SavedData from "../../../Components/Dashboard Components/User/Saved Data/SavedData";
 import Loader from "../../../Components/Loader/Loader";
 import axios from "axios";
 import router, { useRouter } from "next/navigation";
@@ -55,6 +56,7 @@ const DashboardPage = () => {
   const panelComponents: { [key: string]: JSX.Element } = {
     Delivered: <Delivered />,
     Cancelled: <Cancelled />,
+    "Saved Data" : <SavedData />
     // You can add more panels here as your app grows
   };
 

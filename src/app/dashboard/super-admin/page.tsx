@@ -1,17 +1,17 @@
 'use client'
 
 import { useEffect, useState, JSX } from "react";
-import UserDashboard from "../../../../Components/User Dashboard Controller/UserDashboardController";
+import UserDashboard from "../../../../Components/Dashboard Components/User/User Dashboard Controller/UserDashboardController";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import Deliveries from "../../../../Components/Admins/Deliveries";
-import Users from "../../../../Components/Admins/Users";
-import Products from "../../../../Components/Admins/Products";
-import Orders from "../../../../Components/Admins/Orders";
-import Payments from "../../../../Components/Admins/Payments";
-import Requests from "../../../../Components/Admins/Requests";
-import Contacts from "../../../../Components/Admins/Contacts";
-import Offers from "../../../../Components/Admins/Offers";
+import Deliveries from "../../../../Components/Dashboard Components/Admins/Deliveries";
+import Users from "../../../../Components/Dashboard Components/Admins/Users";
+import Products from "../../../../Components/Dashboard Components/Admins/Products";
+import Orders from "../../../../Components/Dashboard Components/Admins/Orders";
+import Payments from "../../../../Components/Dashboard Components/Admins/Payments";
+import Requests from "../../../../Components/Dashboard Components/Admins/Requests";
+import Contacts from "../../../../Components/Dashboard Components/Admins/Contacts";
+import Offers from "../../../../Components/Dashboard Components/Admins/Offers";
 import Navbar from "../../../../Components/Navbar/Navbar";
 import Footer from "../../../../Components/Footer/Footer";
 

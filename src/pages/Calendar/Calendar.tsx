@@ -127,10 +127,8 @@ const Calendar: React.FC<CalendarProps> = ({ onDateSelect }) => {
                         <div
                             key={index}
                             className={`p-2 rounded cursor-pointer
-                                ${isToday ? "bg-green-200 text-primaryColor" : ""}
-                                ${isFutureDate ? "opacity-50 hover:bg-gray-200 cursor-not-allowed" : "hover:bg-blue-600 hover:text-white"}
-                                ${isCurrentMonth ? "bg-gray-100 hover:bg-primaryColor hover:text-white" : "bg-gray-200 text-gray-500 opacity-50"}
-                                ${isSelected ? "bg-primaryColor text-white transition ease-in-out duration-300" : dayOfWeek === 0 ? "text-red-600 bg-red-100" : dayOfWeek === 6 ? "text-orange-600 bg-orange-100" : ""}
+                                ${isCurrentMonth ? "bg-gray-200 hover:bg-primaryColor hover:text-white" : isFutureDate ? "opacity-50 bg-gray-200 cursor-not-allowed" :  "bg-gray-200 text-gray-500 opacity-50"}
+                                ${isSelected ? "bg-primaryColor text-white transition ease-in-out duration-300" : isToday ? "bg-green-200 text-primaryColor" :  dayOfWeek === 0 ? "text-red-600 bg-red-100" : dayOfWeek === 6 ? "text-orange-600 bg-orange-100" : "" }
                             `}
                             onClick={() => !isFutureDate && handleDateClick(day, isCurrentMonth, isPrevMonth, isNextMonth)}
                         >

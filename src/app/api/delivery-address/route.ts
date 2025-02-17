@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import DBconnect from '../../../../lib/db';
 import DeliveryAddress from '../../../../lib/Models/DeliveryAddress';
-import { Types } from 'mongoose';
 
 export const POST = async (req: NextResponse) => {
-
     try {
         const body = await req.json();
         const {
@@ -22,8 +20,18 @@ export const POST = async (req: NextResponse) => {
         if (!division) return NextResponse.json({ error: "Division is required" }, { status: 400 });
         if (!district) return NextResponse.json({ error: "District is required" }, { status: 400 });
         if (!contactNumber || contactNumber.length === 0) {
-            return NextResponse.json({ error: "At least one contact number is required" }, { status: 400 })
+            return NextResponse.json({ error: "At least one contact number is required" }, { status: 400 });
         }
+
+        const contactNumbersAsNumbers = contactNumber.map((num: string) => {
+            const cleanedNumber = num.replace(/\s/g, '');
+
+            if (!cleanedNumber || isNaN(Number(cleanedNumber))) {
+                throw new Error(`Invalid contact number: ${num}`);
+            }
+
+            return Number(cleanedNumber);
+        });
 
         await DBconnect();
 
@@ -35,7 +43,7 @@ export const POST = async (req: NextResponse) => {
             town,
             division,
             district,
-            contactNumber
+            contactNumber: contactNumbersAsNumbers // Use the cleaned and validated array
         });
 
         await newDeliveryAddress.save();
@@ -49,9 +57,9 @@ export const POST = async (req: NextResponse) => {
         return NextResponse.json({
             message: "Error adding new delivery address",
             error: error.message
-        }, { status: 500 })
+        }, { status: 500 });
     }
-}
+};
 
 export const GET = async () => {
     try {
@@ -123,9 +131,9 @@ export const DELETE = async (req: NextRequest) => {
         }
 
         await DeliveryAddress.findByIdAndDelete(deliveryAddressId);
-        return NextResponse.json({message: "Address deleted successfully"}, {status: 200});
+        return NextResponse.json({ message: "Address deleted successfully" }, { status: 200 });
 
     } catch (error: any) {
-        return NextResponse.json({message: "Can't delete delivery address", error: error.message}, {status: 500})
+        return NextResponse.json({ message: "Can't delete delivery address", error: error.message }, { status: 500 })
     }
 };

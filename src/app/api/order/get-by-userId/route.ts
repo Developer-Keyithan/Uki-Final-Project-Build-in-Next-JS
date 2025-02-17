@@ -1,33 +1,10 @@
-// import { NextRequest, NextResponse } from "next/server";
-// import Order from "../../../../../lib/Models/Order";
-// import DBconnect from "../../../../../lib/db";
-
-// export const POST = async (req: NextRequest) => {
-//     try {
-
-//         const body = await req.json();
-//         const { userId } = body;
-
-//         if (!userId) return NextResponse.json({ message: "User id is required" }, { status: 400 });
-
-//         await DBconnect();
-
-//         const orders = await Order.findById(userId);
-
-//         if (!orders) return NextResponse.json({ message: "Order not found" }, { status: 404 });
-
-//         return NextResponse.json({ message: orders }, { status: 200 });
-
-//     } catch (error: any) {
-//         return NextResponse.json({ message: "Failed to fetch order ", error: error.message }, { status: 500 });
-//     }
-// };
-
 import { NextRequest, NextResponse } from "next/server";
 import Order from "../../../../../lib/Models/Order";
 import Product from "../../../../../lib/Models/Product";
 import User from "../../../../../lib/Models/User";
 import DBconnect from "../../../../../lib/db";
+import DeliveryAddress from "../../../../../lib/Models/DeliveryAddress";
+import Card from "../../../../../lib/Models/BankCard";
 
 export const POST = async (req: NextRequest) => {
     try {
@@ -55,7 +32,49 @@ export const POST = async (req: NextRequest) => {
                 return NextResponse.json({ message: "No orders found for this user" }, { status: 404 });
             }
 
-            return NextResponse.json({ orders }, { status: 200 });
+            const productIds = orders.flatMap(order => order.products.map(product => product.productId.toString()));
+            const productDetails = await Product.find({ _id: { $in: productIds } });
+
+            const productInfoMap = productDetails.reduce((acc, product) => {
+                acc[product._id.toString()] = {
+                    imageUrl: product.productImages?.[0]?.imageUrl || null,
+                    productName: product.productName || "Unknown",
+                    productDescription: product.productDescription || "No description available",
+                    agricationMethod: product.agricationMethod || "Not specified",
+                    categories: product.categories,
+                    harvestingDate: product.harvestingDate,
+                    freeDelivery: product.freeDelivery
+                };
+                return acc;
+            }, {} as Record<string, any>);
+
+            const mergedOrderDetails = await Promise.all(orders.map(async (order) => {
+                const address = await DeliveryAddress.findById(order.deliveryAddressId);
+                const card = await Card.findById(order.cardId);
+            
+                return {
+                    orderId: order._id,
+                    createdAt: order.createdAt,
+                    updatedAt: order.updatedAt,
+                    deliveryAddress: address ? address : null,
+                    products: order.products.map(product => ({
+                        productId: product.productId,
+                        quantity: product.quantity,
+                        price: product.price,
+                        isCanceled: product.isCanceled,
+                        isDelayed: product.isDelayed,
+                        cancellingReason: product.cancellingReason,
+                        deleyingReasong: product.deleyingReasong,
+                        ...productInfoMap[product.productId.toString()],
+                    })),
+                    isCashOnDelivery: order.isCashOnDelivery,
+                    isCanceled: order.isCanceled,
+                    card: card || null,
+                    status: order.status
+                };
+            }));
+
+            return NextResponse.json({ orders: mergedOrderDetails }, { status: 200 });
         }
 
         if (user.userType === 'seller') {

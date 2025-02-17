@@ -59,13 +59,13 @@ const NavBarIcons: React.FC<NavBarIconsProps> = ({ userData, cartCount, updateCa
             {isCartOpen && <CartModel />}
 
             {/* Wishlist */}
-            <div className="relative text-2xl flex justify-center items-center cursor-pointer">
+            {/* <div className="relative text-2xl flex justify-center items-center cursor-pointer">
                 <LuFileHeart onClick={() => setIsWishListOpen((prev) => !prev)} />
                 <div className="absolute -top-2 -right-2 py-[1px] px-2 bg-bgRed rounded-full text-white text-xs">
                     2
                 </div>
             </div>
-            {isWishListOpen && <WishListModel />}
+            {isWishListOpen && <WishListModel />} */}
 
             {/* Dark Mode */}
             <div className="text-2xl flex justify-center items-center cursor-pointer" onClick={toggleDarkMode}>

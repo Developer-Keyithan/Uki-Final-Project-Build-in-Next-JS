@@ -12,6 +12,7 @@ import axios from "axios";
 import router, { useRouter } from "next/navigation";
 import Navbar from "../../../Components/Navbar/Navbar";
 import Footer from "../../../Components/Footer/Footer";
+import Orders from "../../../Components/Dashboard Components/User/Orders/Orders";
 
 type UserDataType = {
   id: string;
@@ -25,7 +26,7 @@ type UserDataType = {
 };
 
 const DashboardPage = () => {
-  const [activePanel, setActivePanel] = useState<string>("Delivered");
+  const [activePanel, setActivePanel] = useState<string>("Orders");
   const [loading, setLoading] = useState<boolean>(true);
   const [UserData, setUserData] = useState()
 
@@ -54,13 +55,12 @@ const DashboardPage = () => {
   }, [])
 
   const panelComponents: { [key: string]: JSX.Element } = {
-    Delivered: <Delivered />,
-    Cancelled: <Cancelled />,
-    "Saved Data" : <SavedData />
+    "Saved Data" : <SavedData />,
+    Orders: <Orders />
     // You can add more panels here as your app grows
   };
 
-  const panels = ["Delivered", "Tracking", "Reviews", "Wish List", "Messages", "Cancelled", "Saved Data"];
+  const panels = ["Orders", "Reviews", "Messages", "Saved Data"];
 
   const handlePanelClick = (panel: string) => {
     setActivePanel(panel);

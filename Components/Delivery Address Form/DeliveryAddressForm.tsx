@@ -134,16 +134,17 @@ const DeliveryAddressForm: React.FC<DeliveryAddressFormProps> = ({ handleClose, 
                             justifyContent: 'center'
                         }
                     });
-                } else {
-                    toast.error(response.data.error, {
-                        style: {
-                            width: '400px',
-                            height: '60px',
-                            display: 'flex',
-                            justifyContent: 'center'
-                        }
-                    });
-                }
+                } 
+                // else {
+                //     toast.error(response.data.error, {
+                //         style: {
+                //             width: '400px',
+                //             height: '60px',
+                //             display: 'flex',
+                //             justifyContent: 'center'
+                //         }
+                //     });
+                // }
             } catch (error: any) {
                 toast.error(error.response?.data?.error || "Something went wrong.", {
                     style: {

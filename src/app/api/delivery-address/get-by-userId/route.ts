@@ -5,7 +5,6 @@ import DeliveryAddress from '../../../../../lib/Models/DeliveryAddress';
 export const POST = async (req: NextRequest) => {
     const body = await req.json();
     const { userId } = body;
-    console.log(userId)
 
     if (!userId) {
         return NextResponse.json(
@@ -30,7 +29,7 @@ export const POST = async (req: NextRequest) => {
         }, { status: 200 });
 
     } catch (error: any) {
-        console.error("Error retrieving delivery addresses:", error);
+        console.log("Error retrieving delivery addresses:", error);
 
         return NextResponse.json({
             message: "Error retrieving delivery addresses",

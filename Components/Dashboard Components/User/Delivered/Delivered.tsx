@@ -41,10 +41,12 @@ type Order = {
 
 const DeliveredOrder: React.FC<{ data: Order }> = ({ data }) => {
   const { id, products, deliveredDate, status, usedPaymentMethod, } = data;
-
+console.log(products)
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [review, setReview] = useState('');
+
+
 
   let totalPrice = 0;
   products.forEach((product) => {

@@ -73,10 +73,10 @@ function OrderPage() {
             const user = await axios.get('/api/cookie');
             setUserId(user.data.user.id);
 
-            const addresses = await axios.post('/api/delivery-address/get-by-userid', {
+            const addresses = await axios.post('/api/delivery-address/get-by-userId', {
                 userId: user.data.user.id,
             });
-            const cards = await axios.post('/api/card/get-by-userid', {
+            const cards = await axios.post('/api/card/get-by-userId', {
                 userId: user.data.user.id,
             });
 

@@ -42,7 +42,7 @@ export const POST = async (req: NextRequest) => {
             },
             price: product.pricePerKg,
             isCanceled: false,
-            isDeleyed: false
+            isDelayed: false
         }));
 
         await DBconnect();
@@ -56,8 +56,10 @@ export const POST = async (req: NextRequest) => {
             promoCodeDiscount,
             totalPrice,
             status,
-            isCashOnDelivery
+            isCashOnDelivery,
         });
+
+        console.log(newOrder)
 
         await newOrder.save();
 
@@ -79,10 +81,9 @@ export const GET = async () => {
             .sort({ updatedAt: -1 })
             .populate({
                 path: 'products.productId',
-                select: 'productImages productName' // Populate productImages & productName
+                select: 'productImages productName'
             });
 
-        // Modify orders to extract first product image URL
         const modifiedOrders = orders.map(order => ({
             ...order._doc,
             products: order.products.map(product => ({

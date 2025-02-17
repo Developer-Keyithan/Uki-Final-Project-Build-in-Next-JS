@@ -129,19 +129,19 @@ const SavedData = () => {
                 <h2 className="text-2xl font-bold mb-5 text-gray-800">Saved Cards</h2>
                 <div className="space-y-3 w-full">
                     {savedData.Cards.map((card, index) => (
-                        <div key={index} className="flex justify-between items-center ring-1 ring-gray-200 rounded-lg p-4">
+                        <div key={index} className="flex justify-between items-center ring-1 ring-gray-200 rounded-lg p-4 hover:shadow-lg transition ease-in-out duration-300">
                             <div className="flex flex-col gap-2 pl-2">
                                 <div className="flex items-center gap-1">
                                     <span className="font-semibold">Bank:</span>
-                                    <p className="text-gray-700">{card.bank} Bank</p>
+                                    <p>{card.bank} Bank</p>
                                 </div>
                                 <div className="flex items-center gap-1">
                                     <span className="font-semibold">Card Number:</span>
-                                    <p className="text-gray-600">XXXX XXXX XXXX {card.cardNumber.toString().slice(-4)}</p>
+                                    <p>XXXX XXXX XXXX {card.cardNumber.toString().slice(-4)}</p>
                                 </div>
                                 <div className="flex items-center gap-1">
                                     <span className="font-semibold">Expire Date:</span>
-                                    <p className="text-gray-600">{formatMonth(card.expireDate.month)}/{card.expireDate.year}</p>
+                                    <p>{formatMonth(card.expireDate.month)}/{card.expireDate.year}</p>
                                 </div>
                             </div>
                             <div className="flex items-center gap-1 w-24 h-24">

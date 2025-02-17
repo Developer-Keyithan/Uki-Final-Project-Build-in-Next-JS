@@ -11,18 +11,19 @@ const orderSchema = new Schema(
             },
             price: { type: Number, required: true, min: 0 },
             isCanceled: { type: Boolean, required: true },
-            isCanceledByConsumer: { type: Boolean, required: false },
+            isThisCanceledByConsumer: { type: Boolean, required: false },
             isDelayed: { type: Boolean, required: true },
             cancellingReason: { type: String, required: false },
             delayingReason: { type: String, required: false }
         }],
         deliveryAddressId: { type: Schema.Types.ObjectId, ref: "Address", required: true },
-        cardId: { type: String, required: false },
+        cardId: { type: Schema.Types.ObjectId, ref: "Cart", required: false },
         couponDiscount: { type: Number, required: false, default: 0, min: 0 },
         promoCodeDiscount: { type: Number, required: false, default: 0, min: 0 },
         totalPrice: { type: Number, required: true, min: 0 },
-        status: { type: String, required: true, enum: ["placed", "shipped", "delivered", "cancelled"] },
-        isCashOnDelivery: { type: Boolean, required: true }
+        status: { type: String, required: true, enum: ["placed", "shipped", "delivered", "canceled"] },
+        isCashOnDelivery: { type: Boolean, required: true },
+        isCanceledByConsumer: { type: Boolean, required: false }
     },
     { timestamps: true }
 );

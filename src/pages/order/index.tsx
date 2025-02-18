@@ -43,11 +43,9 @@ function OrderPage() {
 
     useEffect(() => {
         const fetchProduct = async () => {
-            console.log(id)
             try {
                 if (id) {
                     const response = await axios.post('/api/product/get-product', { productId: id });
-                    console.log(response.data)
                     const product = response.data.product
                     setProducts(product);
                 } else {
@@ -65,8 +63,6 @@ function OrderPage() {
 
         fetchProduct();
     }, [id]);
-
-    console.log(products)
 
     useEffect(() => {
         const fetchAddressesAndCards = async () => {

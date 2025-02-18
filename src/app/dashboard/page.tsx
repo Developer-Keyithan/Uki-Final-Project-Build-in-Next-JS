@@ -1,18 +1,14 @@
 'use client'
 
 import { useState, useEffect, JSX } from "react";
-import UserDashboard from "../../../Components/Dashboard Components/User/User Dashboard Controller/UserDashboardController";
-import UserData from "../../../Data/User";
-import AddressData from "../../../Data/AddressData";
-import Delivered from "../../../Components/Dashboard Components/User/Delivered/Delivered"
-import Cancelled from "../../../Components/Dashboard Components/User/Cancelled/Cancelled";
-import SavedData from "../../../Components/Dashboard Components/User/Saved Data/SavedData";
-import Loader from "../../../Components/Loader/Loader";
+import { useRouter } from "next/navigation";
 import axios from "axios";
-import router, { useRouter } from "next/navigation";
 import Navbar from "../../../Components/Navbar/Navbar";
 import Footer from "../../../Components/Footer/Footer";
+import UserDashboard from "../../../Components/Dashboard Components/User/User Dashboard Controller/UserDashboardController";
+import SavedData from "../../../Components/Dashboard Components/User/Saved Data/SavedData";
 import Orders from "../../../Components/Dashboard Components/User/Orders/Orders";
+import Reviews from "../../../Components/Dashboard Components/User/Reviews/Reviews";
 
 type UserDataType = {
   id: string;
@@ -27,7 +23,6 @@ type UserDataType = {
 
 const DashboardPage = () => {
   const [activePanel, setActivePanel] = useState<string>("Orders");
-  const [loading, setLoading] = useState<boolean>(true);
   const [UserData, setUserData] = useState()
 
   const router = useRouter();
@@ -56,11 +51,11 @@ const DashboardPage = () => {
 
   const panelComponents: { [key: string]: JSX.Element } = {
     "Saved Data" : <SavedData />,
-    Orders: <Orders />
-    // You can add more panels here as your app grows
+    Orders: <Orders />,
+    "Reviews and Ratings": <Reviews />
   };
 
-  const panels = ["Orders", "Reviews", "Messages", "Saved Data"];
+  const panels = ["Orders", "Reviews and Ratings", "Saved Data"];
 
   const handlePanelClick = (panel: string) => {
     setActivePanel(panel);

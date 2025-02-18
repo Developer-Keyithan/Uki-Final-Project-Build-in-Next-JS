@@ -55,7 +55,6 @@ const UserDashboard: React.FC<{
     }
   };
 
-
   return (
     <div className="w-full border-[1px] mt-10 pt-10 rounded-sm relative">
       <div className="flex w-full justify-around">
@@ -80,7 +79,7 @@ const UserDashboard: React.FC<{
               })}
             </p>
           </div>
-          <div className="flex flex-col mt-10 border-[1px] px-5 py-4 rounded-sm">
+          <div className="relative flex flex-col mt-10 border-[1px] px-5 py-4 rounded-sm">
             <p>
               <strong className="font-semibold">E-mail: </strong>
               {email}
@@ -93,6 +92,13 @@ const UserDashboard: React.FC<{
               <strong className="font-semibold">Address: </strong>
               {address}
             </p>
+            <a href='/form'>
+              <p
+                className="absolute right-0 bottom-0 py-1 px-4 m-1 rounded-sm font-semibold cursor-pointer bg-primaryColor text-white hover:bg-primaryButtonHoverColor transition ease-in-out duration-300"
+              >
+                I want to run a business
+              </p>
+            </a>
           </div>
         </div>
       </div>
@@ -117,7 +123,7 @@ const UserDashboard: React.FC<{
           Log out from this device
         </p>
         <p
-        onClick={handleDelete}
+          onClick={handleDelete}
           className="font-semibold cursor-pointer text-red-600 hover:text-red-800 transition ease-in-out duration-300"
         >
           Delete my account

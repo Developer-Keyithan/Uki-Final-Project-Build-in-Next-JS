@@ -65,6 +65,7 @@ export const POST = async (req: NextRequest) => {
                         isDelayed: product.isDelayed,
                         cancellingReason: product.cancellingReason,
                         deleyingReasong: product.deleyingReasong,
+                        isReviewAndRatingHere: product.isReviewAndRatingHere,
                         ...productInfoMap[product.productId.toString()],
                     })),
                     isCashOnDelivery: order.isCashOnDelivery,

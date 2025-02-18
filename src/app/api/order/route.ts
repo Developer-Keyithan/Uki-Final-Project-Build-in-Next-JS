@@ -42,7 +42,8 @@ export const POST = async (req: NextRequest) => {
             },
             price: product.pricePerKg,
             isCanceled: false,
-            isDelayed: false
+            isDelayed: false,
+            idReviewAndRatingHere: false
         }));
 
         await DBconnect();

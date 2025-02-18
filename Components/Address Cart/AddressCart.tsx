@@ -38,7 +38,7 @@ function AddressCardItem({ data, isSelected, onClick }: AddressCardItemProps) {
   }
 
   const formattedAddress = [
-    data.no ? data.no.toString() : '',  // Ensure it's converted to string
+    data.no ? data.no.toString() : '',
     data.street,
     data.town,
     data.division,

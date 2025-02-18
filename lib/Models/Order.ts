@@ -14,7 +14,8 @@ const orderSchema = new Schema(
             isThisCanceledByConsumer: { type: Boolean, required: false },
             isDelayed: { type: Boolean, required: true },
             cancellingReason: { type: String, required: false },
-            delayingReason: { type: String, required: false }
+            delayingReason: { type: String, required: false },
+            isReviewAndRatingHere: { type: Boolean, required: false },
         }],
         deliveryAddressId: { type: Schema.Types.ObjectId, ref: "Address", required: true },
         cardId: { type: Schema.Types.ObjectId, ref: "Cart", required: false },

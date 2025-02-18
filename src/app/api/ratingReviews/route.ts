@@ -17,13 +17,13 @@ export const POST = async (req: NextRequest) => {
     const { userId, productId, review, rating } = body;
 
     try {
-        DBconnect();
+        await DBconnect();
         const newRatingReview = new RatingReviews({ userId, productId, review, rating });
 
         await newRatingReview.save();
         return NextResponse.json({ message: "Rating and review added successfully", newRatingReview }, { status: 200 });
     } catch (error: any) {
-        return NextResponse.json({ message: "Error add your rating and review", error:error.message }, { status: 500 });
+        return NextResponse.json({ message: "Error adding your rating and review", error: error.message }, { status: 500 });
     }
 };
 

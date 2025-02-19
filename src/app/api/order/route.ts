@@ -11,9 +11,7 @@ export const POST = async (req: NextRequest) => {
             userId,
             products,
             deliveryAddressId,
-            cardId,
             totalPrice,
-            status,
             isCashOnDelivery
         } = body;
 
@@ -32,7 +30,13 @@ export const POST = async (req: NextRequest) => {
         if (!products || !Array.isArray(products)) return NextResponse.json({ message: "At least one product is required" }, { status: 400 });
         if (!deliveryAddressId) return NextResponse.json({ message: "Delivery address is required" }, { status: 400 });
         if (!totalPrice) return NextResponse.json({ message: "Total price is required" }, { status: 400 });
-        if (isCashOnDelivery === false && !cardId) return NextResponse.json({ message: "Select a card or click cash on delivery" }, { status: 400 });
+
+        let status = ''
+        if (isCashOnDelivery === true) {
+            status = 'placed'
+        } else {
+            status = 'pending'
+        }
 
         const transformedProducts = products.map(product => ({
             productId: product.productId,
@@ -52,7 +56,6 @@ export const POST = async (req: NextRequest) => {
             userId,
             products: transformedProducts,
             deliveryAddressId,
-            cardId: isCashOnDelivery ? null : cardId,
             couponDiscount,
             promoCodeDiscount,
             totalPrice,

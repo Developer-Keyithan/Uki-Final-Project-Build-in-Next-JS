@@ -22,7 +22,7 @@ const orderSchema = new Schema(
         couponDiscount: { type: Number, required: false, default: 0, min: 0 },
         promoCodeDiscount: { type: Number, required: false, default: 0, min: 0 },
         totalPrice: { type: Number, required: true, min: 0 },
-        status: { type: String, required: true, enum: ["placed", "shipped", "delivered", "canceled"] },
+        status: { type: String, required: true, enum: ["pending", "placed", "shipped", "delivered", "canceled"] },
         isCashOnDelivery: { type: Boolean, required: true },
         isCanceledByConsumer: { type: Boolean, required: false }
     },

@@ -2,10 +2,6 @@ import React, { useState } from 'react';
 import './Login.css';
 import { MdOutlineLogin } from "react-icons/md";
 import { FaGoogle, FaFacebook, FaApple, FaTiktok } from "react-icons/fa";
-import { TiHome } from "react-icons/ti";
-import { HiMiniShoppingBag } from "react-icons/hi2";
-import { RiMoonClearFill } from "react-icons/ri";
-import Toggle from '../../../Components/Toggle/Toggle';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import axios from 'axios';
@@ -26,11 +22,11 @@ const Login: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
+        setIsLoading(true)
         const errors = [];
 
-        if (!emailOrMobileNumber) errors.push('e-mail or mobile number');
-        if (!password) errors.push('password');
+        if (!emailOrMobileNumber) {errors.push('e-mail or mobile number'),setIsLoading(false)};
+        if (!password) {errors.push('password'),setIsLoading(false)};
 
         if (errors.length > 0) {
             const errorMessage = errors
@@ -53,6 +49,7 @@ const Login: React.FC = () => {
                     justifyContent: 'center'
                 },
             });
+            setIsLoading(false)
             return;
         }
 
@@ -83,7 +80,6 @@ const Login: React.FC = () => {
                     },
                 });
             }
-            console.log(response)
 
 
         } catch (error: any) {
@@ -97,6 +93,8 @@ const Login: React.FC = () => {
                     },
                 }
             );
+        } finally {
+            setIsLoading(false)
         }
     };
 

@@ -71,7 +71,114 @@ function Orders() {
     };
 
     if (loading) {
-        return <div className="text-center py-8">Loading orders...</div>;
+        return (
+            <div className='animate-pulse rounded-md ring-1 ring-gray-300 p-4 my-8'>
+                <div className='w-96 h-8 bg-gray-200 rounded-md mb-4'></div>
+                <div className='flex flex-col'>
+                    <div className='flex gap-8 border-y-[1px] border-gray-300 py-4'>
+                        <div className="w-52 h-44 bg-gray-200 rounded-md"></div>
+                        <div className="w-full h-44 flex flex-col justify-between">
+                            <div className="w-96 h-8 bg-gray-200 rounded-md"></div>
+                            <div className="w-full bg-gray-200 h-6 rounded-md"></div>
+                            <div className="grid grid-cols-4 gap-4">
+                                <div className="flex flex-col gap-1">
+                                    <div className="h-4 w-40 bg-gray-200 rounded-md"></div>
+                                    <div className="h-6 w-full bg-gray-200 rounded-md"></div>
+                                </div>
+                                <div className="flex flex-col gap-1">
+                                    <div className="h-4 w-40 bg-gray-200 rounded-md"></div>
+                                    <div className="h-6 w-full bg-gray-200 rounded-md"></div>
+                                </div>
+                                <div className="flex flex-col gap-1">
+                                    <div className="h-4 w-40 bg-gray-200 rounded-md"></div>
+                                    <div className="h-6 w-full bg-gray-200 rounded-md"></div>
+                                </div>
+                                <div className="flex flex-col gap-1">
+                                    <div className="h-4 w-40 bg-gray-200 rounded-md"></div>
+                                    <div className="h-6 w-full bg-gray-200 rounded-md"></div>
+                                </div>
+                            </div>
+                            <div className='flex gap-4'>
+                                <div className="h-9 w-full bg-gray-200 rounded-md"></div>
+                                <div className="h-9 w-60 bg-gray-200 rounded-md"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className='flex gap-8 border-b-[1px] border-gray-300 py-4'>
+                        <div className="w-52 h-44 bg-gray-200 rounded-md"></div>
+                        <div className="w-full h-44 flex flex-col justify-between">
+                            <div className="w-96 h-8 bg-gray-200 rounded-md"></div>
+                            <div className="w-full bg-gray-200 h-6 rounded-md"></div>
+                            <div className="grid grid-cols-4 gap-4">
+                                <div className="flex flex-col gap-1">
+                                    <div className="h-4 w-40 bg-gray-200 rounded-md"></div>
+                                    <div className="h-6 w-full bg-gray-200 rounded-md"></div>
+                                </div>
+                                <div className="flex flex-col gap-1">
+                                    <div className="h-4 w-40 bg-gray-200 rounded-md"></div>
+                                    <div className="h-6 w-full bg-gray-200 rounded-md"></div>
+                                </div>
+                                <div className="flex flex-col gap-1">
+                                    <div className="h-4 w-40 bg-gray-200 rounded-md"></div>
+                                    <div className="h-6 w-full bg-gray-200 rounded-md"></div>
+                                </div>
+                                <div className="flex flex-col gap-1">
+                                    <div className="h-4 w-40 bg-gray-200 rounded-md"></div>
+                                    <div className="h-6 w-full bg-gray-200 rounded-md"></div>
+                                </div>
+                            </div>
+                            <div className='flex gap-4'>
+                                <div className="h-9 w-full bg-gray-200 rounded-md"></div>
+                                <div className="h-9 w-60 bg-gray-200 rounded-md"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className='flex gap-8 border-b-[1px] border-gray-300 py-4'>
+                        <div className="w-52 h-44 bg-gray-200 rounded-md"></div>
+                        <div className="w-full h-44 flex flex-col justify-between">
+                            <div className="w-96 h-8 bg-gray-200 rounded-md"></div>
+                            <div className="w-full bg-gray-200 h-6 rounded-md"></div>
+                            <div className="grid grid-cols-4 gap-4">
+                                <div className="flex flex-col gap-1">
+                                    <div className="h-4 w-40 bg-gray-200 rounded-md"></div>
+                                    <div className="h-6 w-full bg-gray-200 rounded-md"></div>
+                                </div>
+                                <div className="flex flex-col gap-1">
+                                    <div className="h-4 w-40 bg-gray-200 rounded-md"></div>
+                                    <div className="h-6 w-full bg-gray-200 rounded-md"></div>
+                                </div>
+                                <div className="flex flex-col gap-1">
+                                    <div className="h-4 w-40 bg-gray-200 rounded-md"></div>
+                                    <div className="h-6 w-full bg-gray-200 rounded-md"></div>
+                                </div>
+                                <div className="flex flex-col gap-1">
+                                    <div className="h-4 w-40 bg-gray-200 rounded-md"></div>
+                                    <div className="h-6 w-full bg-gray-200 rounded-md"></div>
+                                </div>
+                            </div>
+                            <div className='flex gap-4'>
+                                <div className="h-9 w-full bg-gray-200 rounded-md"></div>
+                                <div className="h-9 w-60 bg-gray-200 rounded-md"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className='grid grid-cols-3 gap-4 mt-4'>
+                    <div className="flex flex-col gap-1">
+                        <div className="h-4 w-40 bg-gray-200 rounded-md"></div>
+                        <div className="h-8 w-52 bg-gray-200 rounded-full"></div>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                        <div className="h-4 w-40 bg-gray-200 rounded-md"></div>
+                        <div className="h-6 w-full bg-gray-200 rounded-md"></div>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                        <div className="h-4 w-40 bg-gray-200 rounded-md"></div>
+                        <div className="h-6 w-full bg-gray-200 rounded-md"></div>
+                    </div>
+                </div>
+            </div>
+        )
     }
     return (
         <div className='my-8'>

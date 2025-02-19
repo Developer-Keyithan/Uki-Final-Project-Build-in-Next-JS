@@ -36,10 +36,6 @@ const DashboardPage = () => {
     const findUser = async () => {
       try {
         const response = await axios.get("/api/cookie");
-        if (response.status === 200 && response.data.user.userType !== "super-admin") {
-          router.push("/");
-          return;
-        }
 
         if (response.status === 200) {
           const { id } = response.data.user;

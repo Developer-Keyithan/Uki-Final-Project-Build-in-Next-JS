@@ -145,7 +145,6 @@ function OrderPage() {
                     <div className="flex flex-col gap-5 w-3/5 md:w-[56.9%]">
                         <div className="flex gap-5">
                             <AddOne textContent="Add New Delivery Address" onClick={() => setShowDeliveryForm(true)} />
-                            <AddOne textContent="Add New Card" onClick={() => setShowCardForm(true)} />
                         </div>
 
                         <div className="w-full mt-5">
@@ -230,7 +229,6 @@ function OrderPage() {
 
                     <div className="w-2/5 flex flex-col gap-5">
                         <AddressCart data={addresses} onSelectAddress={handleAddressSelection} />
-                        {paymentMethod === 'card' && <CardsCart data={cards} onSelectCard={handleCartSelection} />}
                         {/* <Coupon /> */}
                     </div>
                 </div>
@@ -241,7 +239,6 @@ function OrderPage() {
                             <DeliveryAddressForm
                                 handleClose={() => setShowDeliveryForm(false)}
                                 id={userId}
-                                // onAddNewAddress={handleAddNewAddress} // Pass the callback function
                             />
                         </div>
                     </div>
@@ -256,7 +253,7 @@ function OrderPage() {
                 )}
             </div>
             <div className="bottom-container mt-5 sticky bottom-0 z-40">
-                <OrderOverview products={products} userId={userId} address={selectedAddress} card={paymentMethod === 'card' ? selectedCard : null} paymentMethod={paymentMethod} />
+                <OrderOverview products={products} userId={userId} address={selectedAddress} paymentMethod={paymentMethod} />
             </div>
             <Footer />
         </div>

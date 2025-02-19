@@ -71,12 +71,11 @@ function CartPage() {
                         ...item,
                         quantity: {
                             ...item.quantity,
-                            // Check for kg and make sure the value doesn't go below 1
                             value: item.quantity.unit === 'kg'
-                                ? Math.max(newValue, 1)  // Ensure value doesn't go below 1 for kg
+                                ? Math.max(newValue, 1)
                                 : item.quantity.unit === 'g'
-                                    ? Math.max(newValue, 50)  // Ensure value doesn't go below 50 for g
-                                    : newValue  // For other units, no restrictions
+                                    ? Math.max(newValue, 50)
+                                    : newValue
                         }
                     }
                     : item
@@ -120,19 +119,19 @@ function CartPage() {
     const handleUnpin = (_id: string) => {
         setSelectedItems((prevSelectedItems) => {
             const newSelectedItems = new Set(prevSelectedItems);
-            newSelectedItems.delete(_id); // Remove the item from selected items
+            newSelectedItems.delete(_id);
             return newSelectedItems;
         });
     };
 
     const calculateProductSubtotal = (item: CartItem) => {
         const itemValue = item.quantity.unit === 'kg'
-            ? item.quantity.value  // If the unit is kg, use the value directly
+            ? item.quantity.value
             : item.quantity.unit === 'g'
-                ? item.quantity.value / 1000  // If the unit is grams, convert to kg
-                : item.quantity.value;  // If there's another unit, use the value as it is
+                ? item.quantity.value / 1000
+                : item.quantity.value;
 
-        return item.price.newPrice * itemValue; // Calculate the subtotal for this item
+        return item.price.newPrice * itemValue;
     };
 
     const calculateCartTotal = () => {
@@ -141,8 +140,8 @@ function CartPage() {
             : cartItems
                 .filter(item => selectedItems.has(item._id))
                 .reduce((total, item) => {
-                    const subtotal = calculateProductSubtotal(item); // Get the subtotal for the item
-                    return total + subtotal;  // Add the subtotal to the total
+                    const subtotal = calculateProductSubtotal(item);
+                    return total + subtotal;
                 }, 0);
     };
 
@@ -161,7 +160,7 @@ function CartPage() {
             console.error("Error removing item from cart:", error);
         }
     };
- 
+
     useEffect(() => {
         const storedCart = localStorage.getItem('cart');
         if (storedCart) {
@@ -187,15 +186,7 @@ function CartPage() {
 
         localStorage.setItem('checkoutItems', JSON.stringify(selectedItemsData));
 
-        if (!isLoggedIn) {
-            router.push('/login')
-            return
-        }
-
-        if (isLoggedIn) {
-            router.push('/order')
-            return
-        }
+        router.push('/order')
     };
 
     return (
@@ -231,7 +222,6 @@ function CartPage() {
                                             <div className='w-4/5'>
                                                 <div className=''>
                                                     <h1 className='font-semibold text-2xl'>{cartItem.productName}</h1>
-                                                    {/* <p className='text-lg'>{cartItem.productDescription}</p> */}
                                                     <div className="flex justify-between">
                                                         <p><strong className='font-semibold'>Agrication Method:</strong> {cartItem.agricationMethod}</p>
                                                         <p><strong className='font-semibold'>Price Per kg:</strong> {cartItem.price.newPrice}</p>
@@ -279,7 +269,6 @@ function CartPage() {
                                                     </div>
                                                 </div>
                                                 <div className='flex justify-between items-center'>
-                                                    {/* Displaying the subtotal for each product */}
                                                     <p className='text-base'>
                                                         <strong className='font-semibold text-lg'>Subtotal:</strong> {calculateProductSubtotal(cartItem)} LKR
                                                     </p>

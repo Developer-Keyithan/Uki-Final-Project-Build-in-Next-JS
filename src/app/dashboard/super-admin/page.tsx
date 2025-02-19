@@ -1,17 +1,12 @@
 'use client'
 
 import { useEffect, useState, JSX } from "react";
-import UserDashboard from "../../../../Components/Dashboard Components/User/User Dashboard Controller/UserDashboardController";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import Deliveries from "../../../../Components/Dashboard Components/Admins/Deliveries";
 import Users from "../../../../Components/Dashboard Components/Admins/Users";
 import Products from "../../../../Components/Dashboard Components/Admins/Products";
 import Orders from "../../../../Components/Dashboard Components/Admins/Orders";
-import Payments from "../../../../Components/Dashboard Components/Admins/Payments";
-import Requests from "../../../../Components/Dashboard Components/Admins/Requests";
 import Contacts from "../../../../Components/Dashboard Components/Admins/Contacts";
-import Offers from "../../../../Components/Dashboard Components/Admins/Offers";
 import Navbar from "../../../../Components/Navbar/Navbar";
 import Footer from "../../../../Components/Footer/Footer";
 
@@ -32,9 +27,6 @@ const adminDashboard = () => {
   useEffect(() => {
     const findUser = async () => {
       const response = await axios.get('/api/cookie');
-      if (response.status === 200 && response.data.user.userType !== 'super-admin') {
-        router.push('/')
-      }
 
       if (response.status === 200 && response.data.user.userType === 'super-admin') {
         const id = response.data.user.id;
@@ -49,17 +41,13 @@ const adminDashboard = () => {
     findUser()
   }, [])
 
-  const panels = ["Users", "Products", "Orders", "Payments", "Deliveries", "Requests", "Contacts", "Offers"];
+  const panels = ["Users", "Products", "Orders", "Contacts"];
 
   const panelComponents: { [key: string]: JSX.Element } = {
     Users: <Users />,
     Products: <Products id={user._id}/>,
     Orders: <Orders />,
-    Payments: <Payments />,
-    Deliveries: <Deliveries />,
-    Requests: <Requests />,
-    Contacts: <Contacts />,
-    Offers: <Offers />
+    Contacts: <Contacts />
   };
 
   const handlePanelClick = (panel: string) => {

@@ -86,9 +86,7 @@ function Products(id: string): JSX.Element {
                     setError("Failed to fetch products. Please try again later.");
                 }
             } finally {
-                setTimeout(() => {
-                    setIsLoading(false);
-                }, 3000);
+                setIsLoading(false);
             }
         };
         fetchProducts();

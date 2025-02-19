@@ -2,10 +2,6 @@
 import { useState, useEffect } from "react";
 import { BiUser } from "react-icons/bi";
 import { IoCartOutline } from "react-icons/io5";
-import { LuFileHeart } from "react-icons/lu";
-import { RiMoonClearFill } from "react-icons/ri";
-import CartModel from "../CartModel/CartModel";
-import WishListModel from "../WishListModel/WishListModel";
 import Profile from "../Profile/Profile";
 
 interface NavBarIconsProps {
@@ -51,12 +47,14 @@ const NavBarIcons: React.FC<NavBarIconsProps> = ({ userData, cartCount, updateCa
 
             {/* Cart */}
             <div className="relative text-2xl flex justify-center items-center cursor-pointer">
-                <IoCartOutline onClick={() => setIsCartOpen((prev) => !prev)} />
-                <div className="absolute -top-2 -right-2 py-[1px] px-2 bg-bgRed rounded-full text-white text-xs">
-                    {cartCount}
-                </div>
+                <a href="/cart">
+                    <IoCartOutline />
+                    <div className="absolute -top-2 -right-2 py-[1px] px-2 bg-bgRed rounded-full text-white text-xs">
+                        {cartCount}
+                    </div>
+                </a>
             </div>
-            {isCartOpen && <CartModel />}
+            {/* {isCartOpen && <CartModel />} */}
 
             {/* Wishlist */}
             {/* <div className="relative text-2xl flex justify-center items-center cursor-pointer">
@@ -68,9 +66,9 @@ const NavBarIcons: React.FC<NavBarIconsProps> = ({ userData, cartCount, updateCa
             {isWishListOpen && <WishListModel />} */}
 
             {/* Dark Mode */}
-            <div className="text-2xl flex justify-center items-center cursor-pointer" onClick={toggleDarkMode}>
+            {/* <div className="text-2xl flex justify-center items-center cursor-pointer" onClick={toggleDarkMode}>
                 <RiMoonClearFill />
-            </div>
+            </div> */}
         </div>
     );
 };

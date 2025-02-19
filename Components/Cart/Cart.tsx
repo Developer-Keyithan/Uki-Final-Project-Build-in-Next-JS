@@ -2,12 +2,11 @@
 import { useRouter } from 'next/navigation';
 import { StaticImageData } from "next/image";
 import RatingCart from '../Rating Cart/RatingCart';
-import Image from 'next/image';
 import { IoCartOutline } from 'react-icons/io5';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { GoHeart, GoHeartFill } from 'react-icons/go';
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 
 interface ProductData {
     _id?: string;
@@ -28,35 +27,42 @@ interface CartProps {
     updateCartCount: () => void;
 }
 
-const Cart: React.FC<CartProps> = ({ data, updateCartCount }) => {
+const Cart: React.FC<CartProps> = ({ data }) => {
     const [isHover, setIsHover] = useState(false);
-    const [userId, setUserId] = useState<string>('');
     const router = useRouter();
-
-    useEffect(() => {
-        const fetchUser = async () => {
-            const user = await axios.get('/api/cookie');
-            setUserId(user.data.user.id);
-        };
-
-        fetchUser();
-    }, []);
 
     const handleAddToCart = async () => {
         const id = data._id;
         try {
+            const user = await axios.get('/api/cookie');
+
+            if (user.status !== 200 || !user.data?.user?.id) {
+                return toast.error('If you want to add an item to your cart, you must login or register');
+            }
+
             const response = await axios.post('/api/cart', {
-                userId, productId: id, value: 1, unit: 'kg'
+                userId: user.data.user.id,
+                productId: id,
+                value: 1,
+                unit: 'kg',
             });
 
             if (response.status === 200) {
                 toast.success("Item added to cart");
-                // updateCartCount();
             }
         } catch (error) {
-            toast.error("Unable to add cart item");
+            if (axios.isAxiosError(error)) {
+                if (error.response?.status === 401 || error.response?.status === 403) {
+                    toast.error('If you want to add an item to your cart, you must login or register');
+                } else {
+                    toast.error("Unable to add cart item");
+                }
+            } else {
+                toast.error("Unable to add cart item");
+            }
         }
     };
+
 
     const handleHover = () => {
         setIsHover(true);
@@ -75,6 +81,17 @@ const Cart: React.FC<CartProps> = ({ data, updateCartCount }) => {
 
     return (
         <div className="relative rounded-md overflow-hidden shadow-md w-[calc((100%-100px)/6)] cursor-pointer hover:scale-100">
+            <ToastContainer
+                position="top-center"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
             <div onClick={handleProduct}>
                 <div className="w-full h-56 rounded overflow-hidden">
                     <img src={image} alt={data.productName} className='w-full h-full object-cover' />

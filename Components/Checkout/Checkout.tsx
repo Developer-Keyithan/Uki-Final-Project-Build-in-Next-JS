@@ -3,8 +3,10 @@
 import React, { useEffect, useState } from "react"
 import { useStripe, useElements, PaymentElement } from "@stripe/react-stripe-js"
 import ConvertToSubcurrency from "../../lib/ConvertToSubcurrency"
+import axios from "axios"
+import { toast } from "react-toastify"
 
-const Checkout = ({ finalAmount }: { finalAmount: number }) => {
+const Checkout = ({ finalAmount, orderId }: { finalAmount: number, orderId: string }) => {
   const stripe = useStripe();
   const elements = useElements();
   const amount = Number((finalAmount / 296.73).toFixed(2));
@@ -28,6 +30,15 @@ const Checkout = ({ finalAmount }: { finalAmount: number }) => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
+
+    const updateOrderResponse = await axios.put('/api/order', {
+      orderId: orderId,
+      status: 'placed'
+    })
+
+    if (updateOrderResponse.status !== 200) {
+      toast.error('Payment failed')
+    }
 
     if (!stripe || !elements) {
       return;

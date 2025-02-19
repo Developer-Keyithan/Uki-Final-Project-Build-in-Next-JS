@@ -6,20 +6,8 @@ import axios from "axios";
 import Navbar from "../../../Components/Navbar/Navbar";
 import Footer from "../../../Components/Footer/Footer";
 import UserDashboard from "../../../Components/Dashboard Components/User/User Dashboard Controller/UserDashboardController";
-import SavedData from "../../../Components/Dashboard Components/User/Saved Data/SavedData";
 import Orders from "../../../Components/Dashboard Components/User/Orders/Orders";
 import Reviews from "../../../Components/Dashboard Components/User/Reviews/Reviews";
-
-type UserDataType = {
-  id: string;
-  name: string;
-  email: string;
-  userType: string;
-  mobileNumber: number[];
-  firstName: string;
-  lastName: string;
-  updatedAt: string;
-};
 
 const DashboardPage = () => {
   const [activePanel, setActivePanel] = useState<string>("Orders");
@@ -30,11 +18,6 @@ const DashboardPage = () => {
   useEffect(() => {
     const findUser = async () => {
       const response = await axios.get('/api/cookie');
-
-
-      if (response.status === 200 && response.data.user.userType !== 'consumer') {
-        router.push('/')
-      }
 
       if (response.status === 200 && response.data.user.userType === 'consumer') {
         const id = response.data.user.id;
@@ -50,12 +33,11 @@ const DashboardPage = () => {
   }, [])
 
   const panelComponents: { [key: string]: JSX.Element } = {
-    "Saved Data" : <SavedData />,
     Orders: <Orders />,
     "Reviews and Ratings": <Reviews />
   };
 
-  const panels = ["Orders", "Reviews and Ratings", "Saved Data"];
+  const panels = ["Orders", "Reviews and Ratings"];
 
   const handlePanelClick = (panel: string) => {
     setActivePanel(panel);

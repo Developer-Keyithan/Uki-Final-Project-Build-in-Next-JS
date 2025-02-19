@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
 import '../../../../src/app/globals.css'
 
@@ -24,7 +24,7 @@ interface Product {
 }
 
 interface Order {
-    orderId: string;
+    _id: string;
     products: Product[];
     isCashOnDelivery: boolean;
     isCanceled: boolean;
@@ -51,8 +51,6 @@ function Orders() {
 
         fetchAllOrders()
     }, [])
-
-    console.log(orders)
 
     if (error) {
         return (
@@ -88,10 +86,10 @@ function Orders() {
                         );
 
                         return (
-                            <div key={order.orderId} className="flex flex-col gap-6 ring-1 ring-gray-300 p-4 rounded-lg">
+                            <div key={order._id} className="flex flex-col gap-6 ring-1 ring-gray-300 p-4 rounded-lg">
                                 <div className="text-xl font-semibold text-primaryColor">
                                     <span>Order ID: </span>
-                                    <span className="uppercase">{order.orderId}</span>
+                                    <span className="uppercase">{order._id}</span>
                                 </div>
                                 <div>
                                     {order.products.map((product) => {
@@ -138,9 +136,9 @@ function Orders() {
                                                             <p className="text-sm text-orange-500 font-semibold overflow-x-auto no-scrollbar">Delaying Reason</p>
                                                             <p>
                                                                 {product.isCanceled && product.isDelayed
-                                                                    ? product.delayingReason || '<No reason provided.>'
+                                                                    ? product.delayingReason
                                                                     : product.isDelayed
-                                                                        ? product.delayingReason
+                                                                        ? product.delayingReason || '<No reason provided.>'
                                                                         : product.isCanceled && !product.isDelayed
                                                                             ? '<This product is directly canceled.>'
                                                                             : !product.isDelayed

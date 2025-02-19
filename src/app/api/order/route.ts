@@ -83,7 +83,7 @@ export const GET = async () => {
             .populate({
                 path: 'products.productId',
                 select: 'productImages productName'
-            });
+            })
 
         const modifiedOrders = orders.map(order => ({
             ...order._doc,

@@ -7,7 +7,7 @@ import Navbar from './Components/Navbar/Navbar';
 import Footer from './Components/Footer/Footer';
 import Hero from './Components/Hero/Hero';
 import { FaArrowRightLong } from "react-icons/fa6";
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
 const LandingPage: React.FC = () => {

@@ -5,7 +5,6 @@ import Order from "../../lib/Models/Order";
 
 
 interface Product {
-    _doc: any;
     finalQuantity: number;
     unit: string;
     pricePerKg: number;

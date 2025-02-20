@@ -32,6 +32,7 @@ export const POST = async (req: NextRequest) => {
 
         return NextResponse.json({ message: 'Transaction successfull' });
     } catch (error) {
+        console.log(error)
         return NextResponse.json({ message: 'Transaction failed' });
     }
 };

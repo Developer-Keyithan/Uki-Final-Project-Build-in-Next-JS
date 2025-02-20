@@ -72,7 +72,7 @@ const Products = ({ id }: { id: string }) => {
         setCalendarProductId(null);
     };
 
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, productId: string) => {
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         if (file) {
             setSelectedImageFile(file)
@@ -425,7 +425,7 @@ const Products = ({ id }: { id: string }) => {
                                                     accept="image/*"
                                                     className="mt-2 text-sm hidden"
                                                     id={`upload-input-${product._id}`}
-                                                    onChange={(e) => handleImageChange(e, product._id)}
+                                                    onChange={(e) => handleImageChange(e)}
                                                 />
                                                 <label
                                                     htmlFor={`upload-input-${product._id}`}

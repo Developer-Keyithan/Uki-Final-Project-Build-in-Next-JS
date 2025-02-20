@@ -159,7 +159,7 @@ const Login: React.FC = () => {
                             <button className="login-api"><FaTiktok /></button>
                         </div>
                     </div>
-                    <p>Don't have an account? <Link href="/signup">Sign Up</Link></p>
+                    <p>Do not have an account? <Link href="/signup">Sign Up</Link></p>
                 </div>
             </div>
             <Footer />

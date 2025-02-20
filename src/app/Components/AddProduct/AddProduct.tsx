@@ -6,7 +6,6 @@ import React, { useEffect, useState } from 'react';
 import Calendar from '../Calendar/Calendar';
 import { toast } from 'react-toastify';
 import { IoClose } from 'react-icons/io5';
-import { error } from 'console';
 
 interface CardFormProps {
     handleClose: () => void;
@@ -14,7 +13,7 @@ interface CardFormProps {
 
 interface Product {
     userId: string;
-    ProductImage: any;
+    ProductImage: string;
     productName: string;
     productDescription: string;
     price: number | undefined;
@@ -135,7 +134,7 @@ const UploadProduct: React.FC<CardFormProps> = ({ handleClose }) => {
                 }
 
             }
-        } catch (error: any) {
+        } catch (error) {
             console.error(error);
             toast.error('Failed to upload product.');
             setUploading(false);

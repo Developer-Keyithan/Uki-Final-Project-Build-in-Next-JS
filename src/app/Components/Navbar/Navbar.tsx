@@ -6,7 +6,7 @@ import SearchBar from "./SearchBar";
 import NavBarIcons from "./NavBarIcons";
 import Link from "next/link";
 import Menu from "./Menu";
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 
 const Navbar: React.FC = () => {
     const [user, setUser] = useState(null);

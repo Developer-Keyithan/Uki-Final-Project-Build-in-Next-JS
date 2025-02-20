@@ -218,9 +218,8 @@ function Products({ id }: { id: string }) {
                     [productId]: false,
                 }));
             }
-        } catch (error: any) {
-            const errorMessage = error.response ? error.response.data.message : "Failed to start recommendation";
-            toast.error(errorMessage);
+        } catch (error) {
+            toast.error("Failed to start recommendation");
             console.error("Update error:", error);
         }
     };

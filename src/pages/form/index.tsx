@@ -1,7 +1,7 @@
 'use client'
 
 import './style.css'
-import React, { useEffect, useState, ChangeEvent } from 'react';
+import React, { useState, ChangeEvent } from 'react';
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useRouter } from 'next/router';
@@ -13,8 +13,6 @@ import Footer from '../../app/Components/Footer/Footer';
 
 const sellerForm = () => {
     const router = useRouter();
-
-    const [logo, setLogo] = useState('');
     const [businessName, setBusinessName] = useState('');
     const [businessEmail, setBusinessEmail] = useState('');
     const [businessPhoneNumber, setBusinessPhoneNumber] = useState('');
@@ -64,7 +62,6 @@ const sellerForm = () => {
 
         try {
             const response = await axios.post('/api/seller', {
-                logo,
                 businessName,
                 businessEmail,
                 businessPhoneNumber,
@@ -381,7 +378,7 @@ const sellerForm = () => {
                                     </label>
                                     <label htmlFor="terms-and-conditions">
                                         <p className='cursor-pointer mt-3'>
-                                            I hereby confirm that I have read, understood, and agree to abide by the platform's terms and conditions, privacy policy, and guidelines for selling. I acknowledge that any violation of these terms may result in the suspension or termination of my seller account.
+                                            I hereby confirm that I have read, understood, and agree to abide by the platform is terms and conditions, privacy policy, and guidelines for selling. I acknowledge that any violation of these terms may result in the suspension or termination of my seller account.
                                         </p>
                                     </label>
                                 </div>

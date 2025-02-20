@@ -4,7 +4,6 @@ import Product from "../../../lib/Models/Product";
 import User from "../../../lib/Models/User";
 import DBconnect from "../../../lib/db";
 import DeliveryAddress from "../../../lib/Models/DeliveryAddress";
-import Card from "../../../lib/Models/BankCard";
 
 interface ProductInfo {
     productId: string;

@@ -7,7 +7,6 @@ import AddOne from '../../app/Components/Add One/AddOne';
 import AddressCart from '../../app/Components/Address Cart/AddressCart';
 import OrderOverview from '../../app/Components/OrderOverview/OrderOverview';
 import DeliveryAddressForm from '../../app/Components/Delivery Address Form/DeliveryAddressForm';
-import CardForm from '../../app/Components/cardForm/index';
 import { RiUnpinFill } from 'react-icons/ri';
 
 interface Product {
@@ -22,6 +21,18 @@ interface Product {
     imageUrl: string;
 }
 
+interface Address {
+    id: string;
+    userId: string;
+    address: string;
+    city: string;
+    state: string;
+    country: string;
+    postalCode: string;
+    phoneNumber: string;
+    isDefault: boolean;
+}
+
 function OrderPage() {
     const [showDeliveryForm, setShowDeliveryForm] = useState(false);
     // const [showCardForm, setShowCardForm] = useState(false);
@@ -29,15 +40,15 @@ function OrderPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [userId, setUserId] = useState<string>('');
-    const [addresses, setAddresses] = useState<any[]>([]);
+    const [addresses, setAddresses] = useState<Address[]>([]);
     const [selectedAddress, setSelectedAddress] = useState<any>({});
-    interface Card {
-        // Define the properties of a card here
-        id: string;
-        cardNumber: string;
-        expiryDate: string;
-        cardHolderName: string;
-    }
+    // interface Card {
+    //     // Define the properties of a card here
+    //     id: string;
+    //     cardNumber: string;
+    //     expiryDate: string;
+    //     cardHolderName: string;
+    // }
     
     // const [cards, setCards] = useState<Card[]>([]);
     // const [selectedCard, setSelectedCard] = useState(null);
@@ -60,6 +71,7 @@ function OrderPage() {
                     }
                 }
             } catch (err) {
+                console.error(err);
                 setError('Failed to fetch product details.');
             } finally {
                 setLoading(false);
@@ -75,9 +87,6 @@ function OrderPage() {
             setUserId(user.data.user.id);
 
             const addresses = await axios.post('/api/delivery-address/get-by-userId', {
-                userId: user.data.user.id,
-            });
-            const cards = await axios.post('/api/card/get-by-userId', {
                 userId: user.data.user.id,
             });
 
@@ -127,7 +136,7 @@ function OrderPage() {
         return unit === "kg" ? price * quantity : (price / 1000) * quantity;
     };
 
-    const handleAddressSelection = (address: any) => {
+    const handleAddressSelection = (address: Address) => {
         setSelectedAddress(address);
     };
 

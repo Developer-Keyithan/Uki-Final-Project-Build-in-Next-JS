@@ -1,9 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
-import AddProduct from '../../../AddProduct/AddProduct';
 import { MdDelete, MdEdit, MdSave } from 'react-icons/md';
 import Calendar from '../../../Calendar/Calendar';
 import { toast, ToastContainer } from 'react-toastify';
-import '../../../../src/app/globals.css';
 import axios from 'axios';
 
 interface Stock {

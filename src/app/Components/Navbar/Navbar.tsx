@@ -93,7 +93,7 @@ const Navbar: React.FC = () => {
                     <div className="">
                         <div className='flex flex-row gap-2'>
                             <SearchBar />
-                            {user && <NavBarIcons userData={user} cartCount={cartCount} updateCartCount={updateCartCount} />}
+                            <NavBarIcons userData={user} cartCount={cartCount} updateCartCount={updateCartCount} />
                         </div>
                     </div>
                 </div>

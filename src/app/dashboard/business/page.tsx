@@ -10,7 +10,6 @@ import Navbar from "../../Components/Navbar/Navbar";
 
 import Products from "../../Components/Dashboard Components/Business/Products";
 import Orders from "../../Components/Dashboard Components/Business/Orders";
-import Reviews from "../../Components/Dashboard Components/Business/Reviews";
 
 type UserDataType = {
   id: string;
@@ -36,10 +35,8 @@ interface ProductType {
 
 const DashboardPage = () => {
   const [user, setUser] = useState<UserDataType | null>(null);
-  const [activePanel, setActivePanel] = useState<string>("Analytics");
   const [loading, setLoading] = useState<boolean>(true);
   const [userId, setUserId] = useState<string>("");
-  const [products, setProducts] = useState<ProductType[] | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -59,35 +56,16 @@ const DashboardPage = () => {
         setLoading(false);
       }
     };
-
+    
     findUser();
   }, [router]);
-
-  useEffect(() => {
-    if (userId) {
-      const getTotalProductsCount = async () => {
-        try {
-          const response = await axios.post("/api/product/get-by-userId", { userId });
-          setProducts(response.data.products);
-        } catch (error) {
-          console.error("Error fetching products:", error);
-        }
-      };
-
-      getTotalProductsCount();
-
-      const interval = setInterval(getTotalProductsCount, 3000);
-
-      return () => clearInterval(interval);
-    }
-  }, [userId]);
-
-  const panels = [`My Products (${products?.length || 0})`, "Orders", "Reviews"];
+  
+  const [activePanel, setActivePanel] = useState<string>(`My Products`);
+  const panels = [`My Products`, "Orders"];
 
   const panelComponents: { [key: string]: JSX.Element } = {
-    [`My Products (${products?.length})`]: <Products id={userId} />,
-    Orders: <Orders />,
-    Reviews: <Reviews />,
+    [`My Products`]: <Products id={userId} />,
+    Orders: <Orders />
   };
 
   if (loading) return <Loader />;

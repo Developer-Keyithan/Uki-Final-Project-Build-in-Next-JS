@@ -1,5 +1,5 @@
 import './Coupon.css';
-import sampleData from '../../../../Data/CouponData';
+import sampleData from '../../Data/CouponData';
 import { useEffect, useState } from 'react';
 
 interface Coupon {

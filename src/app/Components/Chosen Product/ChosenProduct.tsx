@@ -2,7 +2,7 @@ import { useState } from "react";
 import { StaticImageData } from "next/image";
 import Image from "next/image";
 import "./ChosenProduct.css";
-import cartItems from "../../../../Data/ProductData";
+import cartItems from "../../Data/ProductData";
 
 interface Product {
     id: string;

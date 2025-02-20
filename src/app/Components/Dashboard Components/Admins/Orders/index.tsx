@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
-import '../../../../src/app/globals.css'
 
 
 interface Product {

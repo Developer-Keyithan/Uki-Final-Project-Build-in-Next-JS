@@ -49,6 +49,7 @@ const Orders = () => {
                     setOrders(businessOrders.data.orders);
                 }
             } catch (err) {
+                console.log(err);
                 toast.error('Failed to fetch orders');
                 setError('Failed to fetch orders');
             } finally {
@@ -76,6 +77,7 @@ const Orders = () => {
             toast.success('Product canceled successfully');
             setOpenCancelFormProductId(null);
         } catch (err) {
+            console.log(err);
             toast.error('Failed to cancel product');
             setError('Failed to cancel product');
         } finally {
@@ -100,6 +102,7 @@ const Orders = () => {
             toast.success('Delay request submitted successfully');
             setOpenDelayFormProductId(null);
         } catch (err) {
+            console.log(err);
             toast.error('Failed to submit delay request');
             setError('Failed to submit delay request');
         } finally {
@@ -122,6 +125,7 @@ const Orders = () => {
             );
             toast.success('Order moved forward successfully');
         } catch (err) {
+            console.log(err);
             toast.error('Failed to move order forward');
             setError('Failed to move order forward');
         }

@@ -5,7 +5,6 @@ import React, { useEffect, useState, ChangeEvent } from 'react';
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 import { MdImage } from 'react-icons/md';
 import { BiUser } from 'react-icons/bi';
 
@@ -39,13 +38,6 @@ const sellerForm = () => {
     const [bankAccountNumber, setBankAccountNumber] = useState('');
     const [bankAccountHolderName, setBankAccountHolderName] = useState('');
 
-    const [nicFront, setNICFront] = useState('');
-    const [nicBack, setNICBack] = useState('');
-    const [passportFront, setPassportFront] = useState('');
-    const [passportBack, setPassportBack] = useState('');
-    const [businessRegCerFront, setBusinessRegCerFront] = useState('');
-    const [businessRegCerBack, setBusinessRegCerBack] = useState('');
-
     const [isPlatformDelivery, setIsPlatformDelivery] = useState(true);
 
     const [isAgree, setIsAgree] = useState(true);
@@ -72,7 +64,27 @@ const sellerForm = () => {
 
         try {
             const response = await axios.post('/api/seller', {
-
+                logo,
+                businessName,
+                businessEmail,
+                businessPhoneNumber,
+                isIntivitual,
+                businessRegNum,
+                businessAddressNo,
+                businessAddressStreet,
+                businessAddressTown,
+                businessAddressPostalCode,
+                pickUpAddressNo,
+                pickUpAddressStreet,
+                pickUpAddressTown,
+                pickUpAddressPostalCode,
+                isSriLankan,
+                country,
+                bankName,
+                bankAccountNumber,
+                bankAccountHolderName,
+                isPlatformDelivery,
+                isAgree
             });
 
             if (response.status === 200) {

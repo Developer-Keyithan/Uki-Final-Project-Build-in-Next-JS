@@ -33,11 +33,11 @@ export const POST = async (req: NextRequest) => {
             { status: 200 }
         );
 
-    } catch (error: any) {
+    } catch (error) {
         console.error("Error retrieving rating and review:", error);
 
         return NextResponse.json(
-            { message: "Error retrieving rating and review", error: error.message },
+            { message: "Error retrieving rating and review", error: (error as Error).message },
             { status: 500 }
         );
     }

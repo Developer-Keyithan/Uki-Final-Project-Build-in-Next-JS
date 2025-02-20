@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, JSX } from "react";
-import { useRouter } from "next/navigation";
 import axios from "axios";
 import Navbar from "../Components/Navbar/Navbar";
 import Footer from "../Components/Footer/Footer";
@@ -12,8 +11,6 @@ import Reviews from "../Components/Dashboard Components/User/Reviews/Reviews";
 const DashboardPage = () => {
   const [activePanel, setActivePanel] = useState<string>("Orders");
   const [UserData, setUserData] = useState()
-
-  const router = useRouter();
 
   useEffect(() => {
     const findUser = async () => {

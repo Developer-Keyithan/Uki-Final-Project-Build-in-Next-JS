@@ -35,25 +35,25 @@ export const POST = async (req: NextRequest) => {
             message: "New bank card added successfully",
             newBankCard
         }, { status: 200 })
-    } catch (error: any) {
+    } catch (error) {
         console.log(error)
         return NextResponse.json({
             message: "Error add new bank card",
-            error: error.message
+            error: (error as Error).message
         }, { status: 500 })
     }
 };
 
 
-export const GET = async (req: NextRequest) => {
+export const GET = async () => {
     try {
         await DBconnect();
         const bankCards = await BankCard.find();
         return NextResponse.json(bankCards, { status: 200 });
-    } catch (error: any) {
+    } catch (error) {
         return NextResponse.json({
             message: "Error fetching bank cards",
-            error: error.message
+            error: (error as Error).message
         }, { status: 500 })
     }
 }
@@ -73,10 +73,10 @@ export const DELETE = async (req: NextRequest) => {
             message: "Card deleted successfully",
             deletedCard
         }, { status: 200 });
-    } catch (error: any) {
+    } catch (error) {
         return NextResponse.json({
             message: "Error deleting card",
-            error: error.message
+            error: (error as Error).message
         }, { status: 500 })
     }
 };
@@ -103,10 +103,10 @@ export const PATCH = async (req: NextRequest) => {
             message: "Card updated successfully",
             updatedCard
         }, { status: 200 });
-    } catch (error: any) {
+    } catch (error) {
         return NextResponse.json({
             message: "Error updating card",
-            error: error.message
+            error: (error as Error).message
         }, { status: 500 })
     }
 };

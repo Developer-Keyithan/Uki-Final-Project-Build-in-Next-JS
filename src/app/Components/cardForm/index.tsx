@@ -28,10 +28,21 @@ interface FormState {
     cardType: string;
 }
 
+interface NewCard {
+    userId: string;
+    bankName: string;
+    branch: string;
+    cardNumber: number;
+    cvv: number;
+    year: number;
+    month: number;
+    cardType: string;
+}
+
 interface CardFormProps {
     id: string;
     handleClose: () => void;
-    onAddNewCard: (newCard: any) => void;
+    onAddNewCard: (newCard: NewCard) => void;
 }
 
 const CardForm: React.FC<CardFormProps> = ({ handleClose, id, onAddNewCard }) => {
@@ -131,6 +142,7 @@ const CardForm: React.FC<CardFormProps> = ({ handleClose, id, onAddNewCard }) =>
                     toast.error('Failed to save your card.');
                 }
             } catch (error) {
+                console.error('Failed to save your card:', error);
                 toast.error('Failed to save your card.');
             }
         } else {

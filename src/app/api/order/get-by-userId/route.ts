@@ -21,6 +21,7 @@ interface ProductInfo {
     isDelayed: boolean;
     cancellingReason: string;
     deleyingReasong: string;
+    isReviewAndRatingHere: boolean;
 }
 
 export const POST = async (req: NextRequest) => {
@@ -67,14 +68,13 @@ export const POST = async (req: NextRequest) => {
 
             const mergedOrderDetails = await Promise.all(orders.map(async (order) => {
                 const address = await DeliveryAddress.findById(order.deliveryAddressId);
-                const card = await Card.findById(order.cardId);
             
                 return {
                     orderId: order._id,
                     createdAt: order.createdAt,
                     updatedAt: order.updatedAt,
                     deliveryAddress: address ? address : null,
-                    products: order.products.map((product: any) => ({
+                    products: order.products.map((product: ProductInfo) => ({
                         productId: product.productId,
                         quantity: product.quantity,
                         price: product.price,
@@ -156,7 +156,7 @@ export const POST = async (req: NextRequest) => {
         // If the user type is invalid
         return NextResponse.json({ message: "Invalid user type" }, { status: 400 });
 
-    } catch (error: any) {
-        return NextResponse.json({ message: "Failed to fetch orders", error: error.message }, { status: 500 });
+    } catch (error) {
+        return NextResponse.json({ message: "Failed to fetch orders", error: (error as Error).message }, { status: 500 });
     }
 };

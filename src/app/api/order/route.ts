@@ -3,6 +3,20 @@ import DBconnect from "../../lib/db";
 import Cart from "../../lib/Models/Cart";
 import Order from "../../lib/Models/Order";
 
+
+interface Product {
+    _doc: any;
+    finalQuantity: number;
+    unit: string;
+    pricePerKg: number;
+    productId: {
+        productName: string;
+        productImages: {
+            imageUrl: string;
+        }[];
+    };
+}
+
 export const POST = async (req: NextRequest) => {
     try {
         const body = await req.json();
@@ -63,8 +77,6 @@ export const POST = async (req: NextRequest) => {
             isCashOnDelivery,
         });
 
-        console.log(newOrder)
-
         await newOrder.save();
 
         const orderedCartIds = products.map(product => product.id);
@@ -72,9 +84,9 @@ export const POST = async (req: NextRequest) => {
         await Cart.deleteMany({ _id: { $in: orderedCartIds } });
 
         return NextResponse.json({ message: "Order placed successfully", newOrder }, { status: 200 });
-    } catch (error: any) {
+    } catch (error) {
         console.log(error);
-        return NextResponse.json({ message: "Failed to create order", error: error.message }, { status: 500 });
+        return NextResponse.json({ message: "Failed to create order", error: (error as Error).message }, { status: 500 });
     }
 };
 
@@ -90,7 +102,7 @@ export const GET = async () => {
 
         const modifiedOrders = orders.map(order => ({
             ...order._doc,
-            products: order.products.map(product => ({
+            products: order.products.map((product: Product) => ({
                 ...product._doc,
                 productId: {
                     productName: product.productId.productName,
@@ -123,18 +135,14 @@ export const PUT = async (req: NextRequest) => {
         if (status) order.status = status;
 
         if (productId) {
-            const product = order.products.find((p: any) => p.productId.toString() === productId.toString());
-
-            console.log("Found product:", product);
+            const product = order.products.find((p: Product) => p.productId.toString() === productId.toString());
 
             if (!product) return NextResponse.json({ message: "Product not found in the order" }, { status: 404 });
             if (isCanceled) product.isCanceled = isCanceled;
             if (isDelayed) product.isDelayed = isDelayed;
-            console.log('Is Delayed', isDelayed)
             if (cancellingReason) product.cancellingReason = cancellingReason;
             if (delayingReason) product.delayingReason = delayingReason;
         }
-        console.log('Updated Product:', order.products)
         await order.save();
 
         const messages: Record<string, string> = {
@@ -145,8 +153,8 @@ export const PUT = async (req: NextRequest) => {
         };
 
         return NextResponse.json({ message: messages[status] || "Order updated", order }, { status: 200 });
-    } catch (error: any) {
+    } catch (error) {
         console.log("Error updating order:", error);
-        return NextResponse.json({ message: "Failed to update order", error: error.message }, { status: 500 });
+        return NextResponse.json({ message: "Failed to update order", error: (error as Error).message }, { status: 500 });
     }
 };

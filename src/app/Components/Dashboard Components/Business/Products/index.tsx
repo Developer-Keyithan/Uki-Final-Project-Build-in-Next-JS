@@ -56,6 +56,7 @@ const Products = ({ id }: { id: string }) => {
                 })
                 setProducts(data.products)
             } catch (error) {
+                console.log(error);
                 toast.error('Failed to load products')
             } finally {
                 setTimeout(() => {
@@ -64,9 +65,6 @@ const Products = ({ id }: { id: string }) => {
             }
         }
         fetchUserAndProducts()
-        // const interval = setInterval(fetchUserAndProducts, 3000);
-
-        // return () => clearInterval(interval);
     }, [userId])
 
     const handleEditProduct = (id: string) => {
@@ -152,12 +150,9 @@ const Products = ({ id }: { id: string }) => {
             setTempImageUrl(null);
             toast.success('Product updated successfully!');
 
-        } catch (error: any) {
+        } catch (error) {
             console.error('Save error:', error);
-            const errorMessage = error.response?.data?.message ||
-                error.message ||
-                'Failed to update product';
-            toast.error(errorMessage);
+            toast.error('Failed to update product');
         } finally {
             setIsSaving(false);
         }
@@ -166,12 +161,13 @@ const Products = ({ id }: { id: string }) => {
     const handleDeleteProduct = async (productId: string) => {
         try {
             await axios.delete('/api/product', {
-                data: { productId } // Send data in the request body
+                data: { productId }
             });
             setProducts(prev => prev.filter(p => p._id !== productId));
             toast.success('Product deleted successfully!');
-        } catch (error: any) {
-            toast.error(error.response?.data?.message || 'Failed to delete product');
+        } catch (error) {
+            console.error(error);
+            toast.error('Failed to delete product');
         }
     };
 
@@ -184,7 +180,7 @@ const Products = ({ id }: { id: string }) => {
             const newRecommendationState = !product.isItAllowedToBeRecommend;
 
             // Send the update to the API
-            const { data } = await axios.patch('/api/product', {
+            await axios.patch('/api/product', {
                 productId,
                 isItAllowedToBeRecommend: newRecommendationState,
                 userId
@@ -196,8 +192,9 @@ const Products = ({ id }: { id: string }) => {
             ));
 
             toast.success(`Product recommendation ${newRecommendationState ? 'enabled' : 'disabled'}`);
-        } catch (error: any) {
-            toast.error(error.response?.data?.message || 'Failed to update recommendation');
+        } catch (error) {
+            console.error(error);
+            toast.error('Failed to update recommendation');
         }
     };
 

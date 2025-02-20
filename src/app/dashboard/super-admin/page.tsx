@@ -2,7 +2,6 @@
 
 import { useEffect, useState, JSX } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import Users from "../../Components/Dashboard Components/Admins/Users";
 import Products from "../../Components/Dashboard Components/Admins/Products";
 import Orders from "../../Components/Dashboard Components/Admins/Orders";
@@ -20,9 +19,6 @@ const adminDashboard = () => {
     userType: ''
   })
   const [activePanel, setActivePanel] = useState<string>("Users");
-
-
-  const router = useRouter();
 
   useEffect(() => {
     const findUser = async () => {

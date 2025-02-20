@@ -22,11 +22,10 @@ export const POST = async (req: NextRequest) => {
 
         return NextResponse.json({ message: "Cart added successfully", newCart }, { status: 200 });
 
-    } catch (error: any) {
-        return NextResponse.json({ message: "Failed to add cart ", error: error.message }, { status: 500 });
+    } catch (error) {
+        return NextResponse.json({ message: "Failed to add cart ", error: (error as Error).message }, { status: 500 });
     }
 };
-
 
 export const DELETE = async (req: NextRequest) => {
     try {
@@ -47,8 +46,8 @@ export const DELETE = async (req: NextRequest) => {
         await Cart.findByIdAndDelete(cartId);
 
         return NextResponse.json({ message: "Cart deleted successfully" }, { status: 200 });
-    } catch (error: any) {
-        return NextResponse.json({ message: "Failed to delete cart", error: error.message }, { status: 500 });
+    } catch (error) {
+        return NextResponse.json({ message: "Failed to delete cart", error: (error as Error).message }, { status: 500 });
     }
 };
 
@@ -69,7 +68,7 @@ export const PUT = async (req: NextRequest) => {
         await cart.save();
 
         return NextResponse.json({ message: "Cart updated successfully", cart }, { status: 200 });
-    } catch (error: any) {
-        return NextResponse.json({ message: "Failed to update cart ", error: error.message }, { status: 500 });
+    } catch (error) {
+        return NextResponse.json({ message: "Failed to update cart ", error: (error as Error).message }, { status: 500 });
     }
 };

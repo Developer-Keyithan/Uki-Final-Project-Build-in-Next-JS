@@ -3,8 +3,6 @@
 import React, { useEffect, useState } from "react"
 import { useStripe, useElements, PaymentElement } from "@stripe/react-stripe-js"
 import ConvertToSubcurrency from "../../lib/ConvertToSubcurrency"
-import axios from "axios"
-import { toast } from "react-toastify"
 
 const Checkout = ({ finalAmount, orderId, userId }: { finalAmount: number, orderId: string, userId: string }) => {
   const stripe = useStripe();

@@ -6,9 +6,23 @@ import React, { useEffect, useState } from 'react';
 import Calendar from '../Calendar/Calendar';
 import { toast } from 'react-toastify';
 import { IoClose } from 'react-icons/io5';
+import { error } from 'console';
 
 interface CardFormProps {
     handleClose: () => void;
+}
+
+interface Product {
+    userId: string;
+    ProductImage: any;
+    productName: string;
+    productDescription: string;
+    price: number | undefined;
+    categories: string[];
+    harvestingDate: string;
+    agricationMethod: string;
+    stockValue: string;
+    unit: string;
 }
 
 const UploadProduct: React.FC<CardFormProps> = ({ handleClose }) => {
@@ -23,7 +37,7 @@ const UploadProduct: React.FC<CardFormProps> = ({ handleClose }) => {
     const [unit, setUnit] = useState<string>('');
     const [categories, setCategories] = useState<string[]>([]);
     const [harvestingDate, setHarvestingDate] = useState<string>('');
-    const [product, setProduct] = useState<any>(null);
+    const [product, setProduct] = useState<Product | null>(null);
     const [userId, setUserId] = useState<string>('')
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [isCalenderOpen, setIsCalenderOpen] = useState<boolean>(false);
@@ -121,8 +135,9 @@ const UploadProduct: React.FC<CardFormProps> = ({ handleClose }) => {
                 }
 
             }
-        } catch (error) {
-            toast.error('Failed to upload product.')
+        } catch (error: any) {
+            console.error(error);
+            toast.error('Failed to upload product.');
             setUploading(false);
         }
     };

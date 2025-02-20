@@ -10,7 +10,7 @@ import Pagination from '../../app/Components/Pagination/Pagination';
 const ProductPage = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 42;
 
@@ -19,9 +19,9 @@ const ProductPage = () => {
       try {
         const response = await axios.get('/api/product'); // Replace with your real API endpoint
         setProducts(response.data);
-      } catch (error: any) {
+      } catch (error) {
         console.error('Error fetching products:', error);
-        setError(error.message || 'Failed to fetch products');
+        setError('Failed to fetch products');
       } finally {
         setLoading(false);
       }

@@ -10,7 +10,6 @@ import axios, { AxiosError } from 'axios';
 
 const Navbar: React.FC = () => {
     const [user, setUser] = useState(null);
-    const [error, setError] = useState<string | null>(null);
     const [cartCount, setCartCount] = useState<number>(0); // State for cart count
 
     const router = useRouter();
@@ -54,11 +53,9 @@ const Navbar: React.FC = () => {
                 const { data } = await axios.get('/api/cookie');
                 const response = await axios.post('/api/user/get-user', { userId: data.user.id });
                 setUser(response.data.user);
-                await updateCartCount(); // Fetch initial cart count
-                setError(null);
+                await updateCartCount();
             } catch (error) {
-                const axiosError = error as AxiosError;
-                setError(axiosError.message || 'Failed to fetch user data');
+                console.log(error)
                 setUser(null);
             }
         };
@@ -96,7 +93,7 @@ const Navbar: React.FC = () => {
                     <div className="">
                         <div className='flex flex-row gap-2'>
                             <SearchBar />
-                            <NavBarIcons userData={user} cartCount={cartCount} updateCartCount={updateCartCount} />
+                            {user && <NavBarIcons userData={user} cartCount={cartCount} updateCartCount={updateCartCount} />}
                         </div>
                     </div>
                 </div>

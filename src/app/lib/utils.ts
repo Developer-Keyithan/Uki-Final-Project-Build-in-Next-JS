@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
       if (typeof input === 'string') return input;
       if (typeof input === 'object' && input !== null) {
         return Object.entries(input)
-          .filter(([_, value]) => value)
+          .filter(([value]) => value)
           .map(([key]) => key);
       }
       return [];

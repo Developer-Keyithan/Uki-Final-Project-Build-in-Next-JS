@@ -21,8 +21,8 @@ const SignUp = () => {
     const [mobileNumber, setMobileNumber] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [userType, setUserType] = useState('consumer');
     const [showPassword, setShowPassword] = useState(false);
+    const userType = 'consumer'
 
     const router = useRouter();
 
@@ -121,8 +121,8 @@ const SignUp = () => {
                     }
                 });
             }
-        } catch (error: any) {
-            toast.error(error.response?.data?.error || "Something went wrong.", {
+        } catch (error) {
+            toast.error("Something went wrong.", {
                 style: {
                     width: '400px',
                     height: '60px',

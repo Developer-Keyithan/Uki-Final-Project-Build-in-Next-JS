@@ -66,6 +66,7 @@ const Reviews = () => {
                 toast.success("Item added to cart");
             }
         } catch (error) {
+            console.error(error);
             toast.error("Unable to add cart item");
         }
     };

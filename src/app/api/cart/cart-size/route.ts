@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import Cart from "../../../lib/Models/Cart";
-import Product from "../../../lib/Models/Product";
 import connectDb from "../../../lib/db";
 
 export const POST = async (req: NextRequest) => {
@@ -17,8 +16,8 @@ export const POST = async (req: NextRequest) => {
         const cart = await Cart.find({ userId })
     
         return NextResponse.json({length: cart.length}, { status: 200 });
-    } catch (error: any) {
-        console.error(error.message);
-        return NextResponse.json({ message: "Failed to fetch cart", error: error.message }, { status: 500 });
+    } catch (error) {
+        console.error((error as Error).message);
+        return NextResponse.json({ message: "Failed to fetch cart", error: (error as Error).message }, { status: 500 });
     }
 };

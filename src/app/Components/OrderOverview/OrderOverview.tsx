@@ -9,7 +9,6 @@ import { useRouter } from 'next/router';
 
 interface Address {
     _id: string;
-    data: any;
     no?: number;
     street: string;
     town: string;
@@ -49,7 +48,11 @@ function OrderOverview({ products, userId, address, paymentMethod }: OrderOvervi
     const [formattedAddress, setFormattedAddress] = useState('');
     const [icon, setIcon] = useState<React.ReactElement | null>(null);
     const [process, setProcess] = useState<boolean>(false)
-    let isCashOnDelivery = false;
+    const [isCashOnDelivery, setIsCashOnDelivery] = useState<boolean>(false);
+
+    if (paymentMethod === 'cash') {
+        setIsCashOnDelivery(true);
+    }
 
     const router = useRouter()
 
@@ -79,7 +82,7 @@ function OrderOverview({ products, userId, address, paymentMethod }: OrderOvervi
 
     if (Array.isArray(products)) {
         products.forEach(product => {
-            let quantityInKg = product.unit === "gram" ? product.finalQuantity / 1000 : product.finalQuantity;
+            const quantityInKg = product.unit === "gram" ? product.finalQuantity / 1000 : product.finalQuantity;
             totalPrice += quantityInKg * product.pricePerKg;
         });
     } else {
@@ -109,9 +112,9 @@ function OrderOverview({ products, userId, address, paymentMethod }: OrderOvervi
                 localStorage.removeItem('checkoutItems');
                 router.push(`/payment?a=${finalPrice}&o=${response.data.newOrder._id}&u=${userId}`);
             }
-        } catch (error: any) {
+        } catch (error) {
             console.error('Error placing order:', error);
-            toast.error(error.response?.data?.message || 'Failed to place order.');
+            toast.error('Failed to place order.');
         } finally {
             setProcess(false)
         }
@@ -190,4 +193,4 @@ function OrderOverview({ products, userId, address, paymentMethod }: OrderOvervi
     );
 }
 
-export default OrderOverview;
+export default OrderOverview

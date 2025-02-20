@@ -3,17 +3,22 @@ import { useState, useEffect } from "react";
 import { BiUser } from "react-icons/bi";
 import { IoCartOutline } from "react-icons/io5";
 import Profile from "../Profile/Profile";
+import Link from "next/link";
+
+
 
 interface NavBarIconsProps {
-    userData: any;
+    userData: {
+        firstName: string;
+        lastName: string;
+        profileImage: string;
+    };
     cartCount: number;
     updateCartCount: () => void;
 }
 
-const NavBarIcons: React.FC<NavBarIconsProps> = ({ userData, cartCount, updateCartCount }) => {
+const NavBarIcons: React.FC<NavBarIconsProps> = ({ userData, cartCount}) => {
     const [isProfileOpen, setIsProfileOpen] = useState(false);
-    const [isCartOpen, setIsCartOpen] = useState(false);
-    const [isWishListOpen, setIsWishListOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(true);
 
     useEffect(() => {
@@ -21,7 +26,6 @@ const NavBarIcons: React.FC<NavBarIconsProps> = ({ userData, cartCount, updateCa
     }, [userData]);
 
     const handleProfile = () => setIsProfileOpen((prev) => !prev);
-    const toggleDarkMode = () => document.body.classList.toggle('dark-mode');
     const nameLogo = `${userData?.firstName?.[0]}${userData?.lastName?.[0]}`;
 
     return (
@@ -47,12 +51,12 @@ const NavBarIcons: React.FC<NavBarIconsProps> = ({ userData, cartCount, updateCa
 
             {/* Cart */}
             <div className="relative text-2xl flex justify-center items-center cursor-pointer">
-                <a href="/cart">
+                <Link href="/cart">
                     <IoCartOutline />
                     <div className="absolute -top-2 -right-2 py-[1px] px-2 bg-bgRed rounded-full text-white text-xs">
                         {cartCount}
                     </div>
-                </a>
+                </Link>
             </div>
             {/* {isCartOpen && <CartModel />} */}
 

@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useActionState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import axios, { AxiosError } from 'axios';
 import { BiCamera } from 'react-icons/bi';
 import { MdEdit, MdSave } from 'react-icons/md';
 import { IoClose } from 'react-icons/io5';
 import { toast } from 'react-toastify';
-import Image from 'next/image';
 
 
 interface User {
@@ -18,7 +17,6 @@ interface User {
 }
 
 const Profile: React.FC = () => {
-  const [file, setFile] = useState<File | null>(null)
   const [user, setUser] = useState<User | null>(null);
   const [id, setId] = useState<string>('')
   const [close, setClose] = useState(false);
@@ -76,7 +74,7 @@ const Profile: React.FC = () => {
           setEditedMobileNumber(fetchedUser.mobileNumber.join(', '));
         }
       } catch (error) {
-        const axiosError = error as AxiosError;
+        console.error('Failed to fetch user', error);
         if (isMounted) {
           setUser(null);
         }
@@ -125,12 +123,6 @@ const Profile: React.FC = () => {
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setFile(e.target.files[0]);
-    }
-  }
-
   if (close) return null;
 
   if (!user) {
@@ -157,7 +149,6 @@ const Profile: React.FC = () => {
   }
 
   const nameLogo = `${user.firstName[0]}${user.lastName[0]}`;
-  const profileImage = user.profileImage;
   const name = `${user.firstName} ${user.lastName}`;
   const email = user.email;
   const phone = user.mobileNumber;

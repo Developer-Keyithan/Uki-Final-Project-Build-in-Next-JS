@@ -1,14 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import Image from 'next/image';
 import Navbar from '../../app/Components/Navbar/Navbar';
 import Footer from '../../app/Components/Footer/Footer';
 import AddOne from '../../app/Components/Add One/AddOne';
 import AddressCart from '../../app/Components/Address Cart/AddressCart';
-import CardsCart from '../../app/Components/Cards Cart/CardsCart';
 import OrderOverview from '../../app/Components/OrderOverview/OrderOverview';
-import Coupon from '../../app/Components/Coupon/Coupon';
 import DeliveryAddressForm from '../../app/Components/Delivery Address Form/DeliveryAddressForm';
 import CardForm from '../../app/Components/cardForm/index';
 import { RiUnpinFill } from 'react-icons/ri';
@@ -27,15 +24,23 @@ interface Product {
 
 function OrderPage() {
     const [showDeliveryForm, setShowDeliveryForm] = useState(false);
-    const [showCardForm, setShowCardForm] = useState(false);
+    // const [showCardForm, setShowCardForm] = useState(false);
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [userId, setUserId] = useState<string>('');
     const [addresses, setAddresses] = useState<any[]>([]);
     const [selectedAddress, setSelectedAddress] = useState<any>({});
-    const [cards, setCards] = useState([]);
-    const [selectedCard, setSelectedCard] = useState(null);
+    interface Card {
+        // Define the properties of a card here
+        id: string;
+        cardNumber: string;
+        expiryDate: string;
+        cardHolderName: string;
+    }
+    
+    // const [cards, setCards] = useState<Card[]>([]);
+    // const [selectedCard, setSelectedCard] = useState(null);
     const [paymentMethod, setPaymentMethod] = useState<'card' | 'cash'>('card');
 
     const router = useRouter();
@@ -77,7 +82,7 @@ function OrderPage() {
             });
 
             setAddresses(addresses.data.userDeliveryAddress);
-            setCards(cards.data.cards);
+            // setCards(cards.data.cards);
         };
 
         fetchAddressesAndCards();
@@ -126,9 +131,9 @@ function OrderPage() {
         setSelectedAddress(address);
     };
 
-    const handleCartSelection = (card: any) => {
-        setSelectedCard(card);
-    };
+    // const handleCartSelection = (card: any) => {
+    //     setSelectedCard(card);
+    // };
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
@@ -209,7 +214,7 @@ function OrderPage() {
                                                     </label>
                                                 </div>
                                                 <div className='flex justify-between items-center mt-5'>
-                                                    <p><span className='font-semibold'>Sub Total: </span>{calculateSubtotal(product, index).toFixed(2)}</p>
+                                                    <p><span className='font-semibold'>Sub Total: </span>{calculateSubtotal(product).toFixed(2)}</p>
                                                     <button
                                                         onClick={() => handleRemoveProduct(index)}
                                                         className='flex gap-3 items-center px-4 py-1 bg-red-600 text-white rounded hover:bg-red-800 transition ease-in-out duration-500'
@@ -244,13 +249,13 @@ function OrderPage() {
                     </div>
                 )} 
 
-                {showCardForm && (
+                {/* {showCardForm && (
                     <div className="fixed inset-0 flex justify-center items-center px-[30vw] backdrop-blur-lg z-[100]">
                         <div className="relative bg-white rounded-lg">
-                            <CardForm handleClose={() => setShowCardForm(false)} id={userId} />
+                            <CardForm handleClose={() => setShowCardForm(false)} id={userId} onAddNewCard={(newCard) => setCards((prevCards) => [...prevCards, newCard])} />
                         </div>
                     </div>
-                )}
+                )} */}
             </div>
             <div className="bottom-container mt-5 sticky bottom-0 z-40">
                 <OrderOverview products={products} userId={userId} address={selectedAddress} paymentMethod={paymentMethod} />

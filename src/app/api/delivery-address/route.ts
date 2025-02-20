@@ -53,10 +53,10 @@ export const POST = async (req: NextResponse) => {
             newDeliveryAddress
         }, { status: 200 });
 
-    } catch (error: any) {
+    } catch (error) {
         return NextResponse.json({
             message: "Error adding new delivery address",
-            error: error.message
+            error: (error as Error).message
         }, { status: 500 });
     }
 };
@@ -68,6 +68,7 @@ export const GET = async () => {
 
         return NextResponse.json(deliveryAddress, { status: 200 });
     } catch (error) {
+        console.error("Error fetching all delivery address data", error);
         return NextResponse.json({ message: "Failed to fetch all delivery address data." }, { status: 500 });
     }
 }
@@ -108,10 +109,10 @@ export const PATCH = async (req: NextResponse) => {
             updateDeliveryAddress
         }, { status: 200 });
 
-    } catch (error: any) {
+    } catch (error) {
         return NextResponse.json({
             message: "Error updating delivery address.",
-            error: error.message
+            error: (error as Error).message
         }, { status: 500 });
     };
 };
@@ -133,7 +134,7 @@ export const DELETE = async (req: NextRequest) => {
         await DeliveryAddress.findByIdAndDelete(deliveryAddressId);
         return NextResponse.json({ message: "Address deleted successfully" }, { status: 200 });
 
-    } catch (error: any) {
-        return NextResponse.json({ message: "Can't delete delivery address", error: error.message }, { status: 500 })
+    } catch (error) {
+        return NextResponse.json({ message: "Can't delete delivery address", error: (error as Error).message }, { status: 500 })
     }
 };

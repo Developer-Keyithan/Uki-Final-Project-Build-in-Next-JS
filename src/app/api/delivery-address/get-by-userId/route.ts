@@ -28,12 +28,12 @@ export const POST = async (req: NextRequest) => {
             userDeliveryAddress
         }, { status: 200 });
 
-    } catch (error: any) {
+    } catch (error) {
         console.log("Error retrieving delivery addresses:", error);
 
         return NextResponse.json({
             message: "Error retrieving delivery addresses",
-            error: error.message
+            error: (error as Error).message
         }, { status: 500 });
     }
 };

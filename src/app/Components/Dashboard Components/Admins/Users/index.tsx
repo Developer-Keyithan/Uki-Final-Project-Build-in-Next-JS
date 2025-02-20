@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState, useCallback } from "react";
-import { BiSearch, BiUser } from "react-icons/bi";
+import { BiSearch } from "react-icons/bi";
 import { CgUnblock } from "react-icons/cg";
 import { LuFilter } from "react-icons/lu";
 import { MdBlock, MdClose, MdEdit, MdSave, MdShortText } from "react-icons/md";
@@ -43,7 +43,7 @@ function Users() {
                 const response = await axios.get('/api/user', {
                     signal: abortController.signal,
                 });
-                const usersData = response.data.map((user: any) => ({
+                const usersData = response.data.map((user: User) => ({
                     ...user,
                     createdAt: new Date(user.createdAt),
                 }));
@@ -102,16 +102,23 @@ function Users() {
     };
     const clearShort = () => setSelectedShort(null);
 
-    const debounce = useCallback((func: Function, delay: number) => {
-        let timeoutId: NodeJS.Timeout;
-        return (...args: any[]) => {
-            clearTimeout(timeoutId);
-            timeoutId = setTimeout(() => func(...args), delay);
-        };
-    }, []);
+    const debounce = useCallback(
+        (func: (query: string) => void, delay: number) => {
+            let timeoutId: NodeJS.Timeout;
+            return (query: string) => {
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => func(query), delay);
+            };
+        },
+        []
+    );
 
     const handleSearch = useCallback(
-        debounce((query: string) => setSearchQuery(query), 300),
+        (query: string) => {
+            debounce((q: string) => {
+                setSearchQuery(q);
+            }, 300)(query);
+        },
         [debounce]
     );
 

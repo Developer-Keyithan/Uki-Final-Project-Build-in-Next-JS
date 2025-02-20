@@ -29,12 +29,12 @@ export const POST = async (req: NextRequest) => {
             orderTransactions
         }, { status: 200 });
 
-    } catch (error: any) {
+    } catch (error) {
         console.error("Error retrieving bank cards:", error);
 
         return NextResponse.json({
             message: "Error retrieving bank cards",
-            error: error.message
+            error: (error as Error).message
         }, { status: 500 });
     }
 };

@@ -2,6 +2,7 @@ import { BiCamera, BiUser } from "react-icons/bi";
 import "./style.css";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Link from "next/link";
 
 interface UserDataType {
   _id: string;
@@ -35,6 +36,7 @@ const UserDashboard: React.FC<{
         toast.error('Oops! Logout Failed.');
       }
     } catch (error) {
+      console.error(error);
       toast.error('Oops! Logout Failed.');
     }
   }
@@ -51,6 +53,7 @@ const UserDashboard: React.FC<{
         toast.error('Oops! Logout Failed.');
       }
     } catch (error) {
+      console.error(error);
       toast.error('Oops! Logout Failed.');
     }
   };
@@ -92,13 +95,13 @@ const UserDashboard: React.FC<{
               <strong className="font-semibold">Address: </strong>
               {address}
             </p>
-            <a href='/form'>
+            <Link href='/form'>
               <p
                 className="absolute right-0 bottom-0 py-1 px-4 m-1 rounded-sm font-semibold cursor-pointer bg-primaryColor text-white hover:bg-primaryButtonHoverColor transition ease-in-out duration-300"
               >
                 I want to run a business
               </p>
-            </a>
+            </Link>
           </div>
         </div>
       </div>

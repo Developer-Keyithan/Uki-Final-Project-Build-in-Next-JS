@@ -1,8 +1,8 @@
 interface Reviews {
-    id: String,
-    name: String,
-    time: String,
-    review: String
+    id: string,
+    name: string,
+    time: string,
+    review: string
 }
 
 const ReviewData: Reviews[] = [

@@ -8,7 +8,6 @@ import Loader from '../../Components/Loader/Loader';
 import Footer from "../../Components/Footer/Footer";
 import Navbar from "../../Components/Navbar/Navbar";
 
-import Analytics from "../../Components/Dashboard Components/Business/Analytics";
 import Products from "../../Components/Dashboard Components/Business/Products";
 import Orders from "../../Components/Dashboard Components/Business/Orders";
 import Reviews from "../../Components/Dashboard Components/Business/Reviews";
@@ -24,12 +23,23 @@ type UserDataType = {
   updatedAt: string;
 };
 
+interface ProductType {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  quantity: number;
+  userId: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 const DashboardPage = () => {
   const [user, setUser] = useState<UserDataType | null>(null);
   const [activePanel, setActivePanel] = useState<string>("Analytics");
   const [loading, setLoading] = useState<boolean>(true);
   const [userId, setUserId] = useState<string>("");
-  const [products, setProducts] = useState<any[]>([]);
+  const [products, setProducts] = useState<ProductType[] | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -72,11 +82,10 @@ const DashboardPage = () => {
     }
   }, [userId]);
 
-  const panels = ["Analytics", `My Products (${products.length})`, "Orders", "Reviews"];
+  const panels = [`My Products (${products?.length || 0})`, "Orders", "Reviews"];
 
   const panelComponents: { [key: string]: JSX.Element } = {
-    Analytics: <Analytics />,
-    [`My Products (${products.length})`]: <Products id={userId} />,
+    [`My Products (${products?.length})`]: <Products id={userId} />,
     Orders: <Orders />,
     Reviews: <Reviews />,
   };

@@ -88,9 +88,9 @@ const DeliveryAddressForm: React.FC<DeliveryAddressFormProps> = ({ handleClose, 
         setAddContactClicked(false);
     };
 
-    const handleAddressChange = (e: any) => {
+    const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedAddress(e.target.value);
-    };
+    };    
 
     const validateForm = () => {
         const newErrors: Record<string, string> = {};
@@ -135,18 +135,9 @@ const DeliveryAddressForm: React.FC<DeliveryAddressFormProps> = ({ handleClose, 
                         }
                     });
                 } 
-                // else {
-                //     toast.error(response.data.error, {
-                //         style: {
-                //             width: '400px',
-                //             height: '60px',
-                //             display: 'flex',
-                //             justifyContent: 'center'
-                //         }
-                //     });
-                // }
-            } catch (error: any) {
-                toast.error(error.response?.data?.error || "Something went wrong.", {
+            } catch (error) {
+                console.log(error);
+                toast.error("Something went wrong.", {
                     style: {
                         width: '400px',
                         height: '60px',

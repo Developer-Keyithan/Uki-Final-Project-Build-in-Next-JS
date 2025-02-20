@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState, useCallback, useMemo, JSX } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { BiCategoryAlt, BiSearch } from 'react-icons/bi';
 import { IoPricetagsOutline } from 'react-icons/io5';
 import { LuFilter } from 'react-icons/lu';
@@ -72,18 +72,21 @@ function Products({ id }: { id: string }) {
                 const response = await axios.get('/api/product/forAdmin', {
                     signal: abortController.signal,
                 });
-                const productData = response.data.map((product: any) => ({
+                const productData = response.data.map((product: Product) => ({
                     ...product,
                     createdAt: new Date(product.createdAt),
-                    updatedAt: new Date(product.updatedAt), // Parse updatedAt
+                    updatedAt: new Date(product.updatedAt),
                     harvestingDate: new Date(product.harvestingDate),
                 }));
                 setProducts(productData);
                 setError(null);
-            } catch (error) {
-                if (!axios.isCancel(error)) {
+            } catch (error: unknown) {
+                if (axios.isAxiosError(error)) {
+                    const errorMessage = error.response ? error.response.data.message : "Failed to fetch products. Please try again later.";
+                    setError(errorMessage);
+                } else {
                     console.error("Error fetching products:", error);
-                    setError("Failed to fetch products. Please try again later.");
+                    setError("An unexpected error occurred.");
                 }
             } finally {
                 setIsLoading(false);
@@ -133,16 +136,18 @@ function Products({ id }: { id: string }) {
         });
     };
 
-    const debounce = (func: Function, delay: number) => {
+    const debounce = (func: (...args: string[]) => void, delay: number) => {
         let timeoutId: NodeJS.Timeout;
-        return (...args: any[]) => {
+        return (...args: string[]) => {
             clearTimeout(timeoutId);
             timeoutId = setTimeout(() => func(...args), delay);
         };
     };
 
     const handleSearch = useCallback(
-        debounce((query: string) => setSearchQuery(query), 300),
+        (query: string) => {
+            debounce((q: string) => setSearchQuery(q), 300)(query);
+        },
         []
     );
 
@@ -237,9 +242,9 @@ function Products({ id }: { id: string }) {
                     [productId]: true,
                 }));
             }
-        } catch (error: any) {
-            const errorMessage = error.response ? error.response.data.message : "Failed to start recommendation";
-            toast.error(errorMessage);
+        } catch (error) {
+            console.log(error)
+            toast.error("Failed to start recommendation");
             console.error("Update error:", error);
         }
     };

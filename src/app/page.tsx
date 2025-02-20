@@ -11,14 +11,10 @@ import axios, { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 
 const LandingPage: React.FC = () => {
-    const [user, setUser] = useState(null);
-    const [error, setError] = useState<string | null>(null);
     const [products, setProducts] = useState([]);
     const [visibleProducts, setVisibleProducts] = useState(12);
-    const [isDarkMode, setIsDarkMode] = useState(false);
     const [visibleShowMoreBtn, setVisibleShowMoreBtn] = useState(true);
-    const [cartCount, setCartCount] = useState<number>()
-
+    const [cartCount, setCartCount] = useState(0);
     const router = useRouter();
 
     useEffect(() => {
@@ -34,48 +30,30 @@ const LandingPage: React.FC = () => {
         fetchProducts();
     }, []);
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const { data } = await axios.get('/api/cookie');
-                const response = await axios.post('/api/user/get-user', { userId: data.user.id });
-                setUser(response.data.user);
-                setError(null);
-            } catch (error) {
-                const axiosError = error as AxiosError;
-                setError(axiosError.message || 'Failed to fetch user data');
-                setUser(null);
-            }
-        };
-
-        fetchUser();
-    }, []);
-
     const loadMoreProducts = () => {
         setVisibleProducts(visibleProducts + 12);
         setVisibleShowMoreBtn(false);
-    };
-
-    const toggleTheme = () => {
-        setIsDarkMode(!isDarkMode);
     };
 
     const handleViewAll = () => {
         router.push('/products');
     };
 
-    const updateCartCount = async () => {
-        try {
-            const { data } = await axios.get('/api/cookie');
-            const cartCountResponse = await axios.post('/api/cart/cart-size', { userId: data.user.id });
-            setCartCount(cartCountResponse.data.length);
-        } catch (error) {
-            console.error('Error updating cart count:', error);
-        }
-    };
+    useEffect(() => {
+        const fetchCardCount = async () => {
+            try {
+                const { data } = await axios.get('/api/cookie');
+                const cartCountResponse = await axios.post('/api/cart/cart-size', { userId: data.user.id });
+                setCartCount(cartCountResponse.data.length)
+            } catch (error) {
+                console.error('Error updating cart count:', error);
+            }
+        };
+        fetchCardCount();
+    }, []);
 
     return (
-        <div className={isDarkMode ? "dark" : "light"}>
+        <div>
             <Navbar />
             <hr className='sticky top-16' />
             <div>
@@ -83,7 +61,7 @@ const LandingPage: React.FC = () => {
                     <Hero />
                 </div>
                 <div className='Products-container mx-60'>
-                    <Product data={products.slice(0, visibleProducts)} updateCartCount={updateCartCount} />
+                    <Product data={products.slice(0, visibleProducts)} updateCartCount={() => setCartCount(cartCount)} />
                     {visibleShowMoreBtn ? (
                         <div className="show-more">
                             <button onClick={loadMoreProducts}>Show More <FaArrowRightLong /></button>

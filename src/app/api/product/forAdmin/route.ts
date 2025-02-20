@@ -9,6 +9,7 @@ export const GET = async () => {
 
         return NextResponse.json(products, { status: 200 });
     } catch (error) {
+        console.log(error);
         return NextResponse.json({ message: "Failed to fetch all products data." }, { status: 500 });
     }
 }

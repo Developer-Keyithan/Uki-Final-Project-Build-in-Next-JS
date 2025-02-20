@@ -41,6 +41,7 @@ function Orders() {
                 const orders = await axios.get('/api/order')
                 setOrders(orders.data.orders)
             } catch (error) {
+                console.log(error)
                 toast.error('Failed to fetch orders');
                 setError('Failed to fetch orders');
             } finally {

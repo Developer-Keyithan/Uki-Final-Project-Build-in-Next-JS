@@ -1,8 +1,7 @@
 'use client'
 
-import { useEffect, useState, JSX } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import '../../../../src/app/globals.css'
 import Navbar from "../../Components/Navbar/Navbar";
 import Footer from "../../Components/Footer/Footer";
@@ -44,8 +43,6 @@ const adminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const router = useRouter();
-
   useEffect(() => {
     const findUser = async () => {
       const response = await axios.get('/api/cookie');
@@ -70,6 +67,7 @@ const adminDashboard = () => {
         const orders = await axios.get('/api/order')
         setOrders(orders.data.orders)
       } catch (error) {
+        console.log(error)
         toast.error('Failed to fetch orders');
         setError('Failed to fetch orders');
       } finally {
@@ -79,8 +77,6 @@ const adminDashboard = () => {
 
     fetchAllOrders()
   }, [])
-
-  console.log(orders)
 
   if (error) {
     return (

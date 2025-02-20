@@ -32,12 +32,12 @@ export const POST = async (req: NextRequest) => {
             products: userProducts
         }, { status: 200 });
 
-    } catch (error: any) {
+    } catch (error) {
         console.error("Error retrieving products:", error);
 
         return NextResponse.json({
             message: "Error retrieving products",
-            error: error.message
+            error: (error as Error).message
         }, { status: 500 });
     }
 };

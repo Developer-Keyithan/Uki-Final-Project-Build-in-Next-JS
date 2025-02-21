@@ -27,7 +27,6 @@ interface CartProps {
 }
 
 const Cart: React.FC<CartProps> = ({ data }) => {
-    const [isHover, setIsHover] = useState(false);
     const router = useRouter();
 
     const handleAddToCart = async () => {
@@ -60,15 +59,6 @@ const Cart: React.FC<CartProps> = ({ data }) => {
                 toast.error("Unable to add cart item");
             }
         }
-    };
-
-
-    const handleHover = () => {
-        setIsHover(true);
-    };
-
-    const handleNotHover = () => {
-        setIsHover(false);
     };
 
     const image = typeof data.productImages[0].imageUrl === 'string' ? data.productImages[0].imageUrl : data.productImages[0].imageUrl;
@@ -110,23 +100,6 @@ const Cart: React.FC<CartProps> = ({ data }) => {
             </div>
             <div className="cart-actions w-full rounded-full text-end px-4 mb-4">
                 <button onClick={handleAddToCart} className='flex items-center gap-2 bg-primaryColor text-white hover:bg-secondaryButtonColor rounded py-1 px-4 mt-4 transition ease-in-out duration-500'>Add to Cart <IoCartOutline /></button>
-            </div>
-            <div>
-                {isHover ? (
-                    <div className='absolute top-3 right-3 bg-primaryColor p-2 w-fit h-fit rounded-full'>
-                        <GoHeartFill
-                            className="text-white text-[20px] transition-opacity ease-in-out duration-500 opacity-0 hover:opacity-100"
-                            onMouseLeave={handleNotHover}
-                        />
-                    </div>
-                ) : (
-                    <div className='absolute top-3 right-3 bg-primaryColor p-2 w-fit h-fit rounded-full'>
-                        <GoHeart
-                            className="text-white text-[20px] transition-opacity ease-in-out duration-500 opacity-100 hover:opacity-0"
-                            onMouseEnter={handleHover}
-                        />
-                    </div>
-                )}
             </div>
         </div>
     );

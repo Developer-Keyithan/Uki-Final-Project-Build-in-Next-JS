@@ -3,8 +3,8 @@ import { useRouter } from 'next/navigation';
 import Image, { StaticImageData } from "next/image";
 import RatingCart from '../Rating Cart/RatingCart';
 import { IoCartOutline } from 'react-icons/io5';
-import { useState } from 'react';
-import { GoHeart, GoHeartFill } from 'react-icons/go';
+// import { useState } from 'react';
+// import { GoHeart, GoHeartFill } from 'react-icons/go';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 

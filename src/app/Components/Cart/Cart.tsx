@@ -27,7 +27,6 @@ interface CartProps {
 }
 
 const Cart: React.FC<CartProps> = ({ data }) => {
-    const [isHover, setIsHover] = useState(false);
     const router = useRouter();
 
     const handleAddToCart = async () => {
@@ -60,15 +59,6 @@ const Cart: React.FC<CartProps> = ({ data }) => {
                 toast.error("Unable to add cart item");
             }
         }
-    };
-
-
-    const handleHover = () => {
-        setIsHover(true);
-    };
-
-    const handleNotHover = () => {
-        setIsHover(false);
     };
 
     const image = typeof data.productImages[0].imageUrl === 'string' ? data.productImages[0].imageUrl : data.productImages[0].imageUrl;

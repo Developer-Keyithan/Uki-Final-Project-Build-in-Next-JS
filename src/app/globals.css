@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+.no-spinner::-webkit-outer-spin-button,
+.no-spinner::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.no-spinner {
+  -moz-appearance: textfield;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+
+.btn-container span {
+  max-width: 0;
+  overflow: hidden;
+  transition: max-width 0.3s ease-in-out;
+  white-space: nowrap;
+}
+
+.btn-container:hover span {
+  max-width: 100px;
+  margin-left: 0.5rem;
+}
+
+@layer utilities {
+  @keyframes fadeInScale {
+    0% { opacity: 0; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  .animate-fade-in-scale {
+    animation: fadeInScale 0.8s ease-out;
+  }
+}

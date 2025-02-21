@@ -1,6 +1,6 @@
-import userModel from "@/app/lib/Models/User";
-import transactionModel from "@/app/lib/Models/Transaction";
-import connectDB from "@/app/lib/db";
+import userModel from "../../lib/Models/User";
+import transactionModel from "../../lib/Models/Transaction";
+import connectDB from "../../lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (req: NextRequest) => {

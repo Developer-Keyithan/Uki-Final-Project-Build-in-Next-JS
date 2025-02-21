@@ -28,7 +28,6 @@ const Index = () => {
             setLoading(true);
             try {
                 const transactinAPIReaponse = await axios.get("/api/transaction");
-                console.log(transactinAPIReaponse);
                 if (transactinAPIReaponse.status === 200 && transactinAPIReaponse.data?.transactions) {
                     setTransactions(transactinAPIReaponse.data.transactions);
                 }

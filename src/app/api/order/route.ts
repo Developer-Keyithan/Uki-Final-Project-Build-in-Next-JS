@@ -22,6 +22,7 @@ interface Order {
     products: {
       _id: string;
       productName: string;
+      productImage: string;
       price: number;
       quantity: {
         unit: string;
@@ -130,6 +131,7 @@ export const GET = async () => {
                     modifiedProducts.push({
                         _id: product._id,
                         productName: productData.productName,
+                        productImage: productData.productImages[0].imageUrl,
                         price: product.price,
                         quantity: {
                             unit: product.quantity.unit,

@@ -6,10 +6,8 @@ import { toast } from 'react-toastify';
 
 interface Product {
     _id: string;
-    product: {
-        productImage: string
-        productName: string
-    }
+    productImage: string
+    productName: string
     imageUrl: string;
     productDescription: string;
     price: number;
@@ -52,7 +50,6 @@ function Orders() {
 
         fetchAllOrders()
     }, [])
-
     if (error) {
         return (
             <div className="text-center py-8">
@@ -211,14 +208,14 @@ function Orders() {
                                         return (
                                             <div key={product._id} className="flex gap-8 p-4 border-b-[1px] first:border-t-[1px] border-gray-300 w-full items-center">
                                                 <Image
-                                                    src={product.product.productImage}
-                                                    alt={`Image of ${product.product.productName}`}
+                                                    src={product.productImage}
+                                                    alt={`Image of ${product.productName}`}
                                                     width={160}
                                                     height={160}
                                                     className="w-40 h-40 object-cover rounded-md flex-none"
                                                 />
                                                 <div className="flex flex-col justify-between w-full">
-                                                    <h4 className="text-2xl font-semibold">{product.product.productName}</h4>
+                                                    <h4 className="text-2xl font-semibold">{product.productName}</h4>
                                                     <p className="text-gray-600">{product.productDescription}</p>
                                                     <div className="grid grid-cols-3">
                                                         <div>

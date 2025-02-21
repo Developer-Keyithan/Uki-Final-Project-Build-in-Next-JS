@@ -44,13 +44,16 @@ const Success = () => {
             status: 'placed'
           });
 
+          if (updateOrderAPIResponse.status === 200) {
+            setTimeout(() => {
+              router.push('/dashboard');
+            }
+              , 5000);
+          }
           if (updateOrderAPIResponse.status !== 200) {
             router.push(`/payment?a=${amount}&o=${orderId}&u=${userId}`);
           }
 
-          if (updateOrderAPIResponse.status === 200) {
-            router.push('/dashboard');
-          }
         }
 
       } catch (error) {
@@ -59,7 +62,7 @@ const Success = () => {
       }
     }
     fetchUser();
-  }, [payment_intent ,redirect_status, userId, orderId, amount, router]);
+  }, [payment_intent, redirect_status, userId, orderId, amount, router]);
   return (
     <div className='min-h-screen flex items-center justify-center'>
       <div className='px-20 py-40 shadow-xl animate-fade-in-scale text-white text-center border m-10 rounded-md bg-gradient-to-tr from-primaryColor to-primaryButtonColor'>

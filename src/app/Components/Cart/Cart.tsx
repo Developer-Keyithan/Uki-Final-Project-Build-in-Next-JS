@@ -1,6 +1,6 @@
 // Cart.tsx
 import { useRouter } from 'next/navigation';
-import { StaticImageData } from "next/image";
+import Image, { StaticImageData } from "next/image";
 import RatingCart from '../Rating Cart/RatingCart';
 import { IoCartOutline } from 'react-icons/io5';
 import { useState } from 'react';
@@ -94,7 +94,7 @@ const Cart: React.FC<CartProps> = ({ data }) => {
             />
             <div onClick={handleProduct}>
                 <div className="w-full h-56 rounded overflow-hidden">
-                    <img src={image} alt={data.productName} className='w-full h-full object-cover' />
+                    <Image src={image} alt={data.productName} width={244} height={244} className='w-full h-full object-cover' />
                 </div>
                 <div className="mt-4 px-4">
                     <div className="flex justify-between">

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import './Login.css';
 import { MdOutlineLogin } from "react-icons/md";
-import { FaGoogle, FaFacebook, FaApple, FaTiktok } from "react-icons/fa";
+// import { FaGoogle, FaFacebook, FaApple, FaTiktok } from "react-icons/fa";
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { BiUser } from 'react-icons/bi';
+// import { BiUser } from 'react-icons/bi';
 import Navbar from '../../app/Components/Navbar/Navbar';
 import Footer from '../../app/Components/Footer/Footer';
 
@@ -73,7 +73,7 @@ const Login: React.FC = () => {
                 if (response.data.user.userType === 'consumer') {
                     router.push('/');
                 } else {
-                    router.push('/dashboard');
+                    router.push(`/dashboard/${response.data.user.userType}`);
                 }
             } else {
                 toast.error(response.data.error, {
@@ -108,10 +108,10 @@ const Login: React.FC = () => {
             <Navbar />
             <hr className='stick top-16' />
             <div className="login-content-container mx-60 my-[20px] p-[20px] gap-[20px] rounded-xl">
-                <div className="flex flex-col items-center w-1/3 justify-center gap-12 h-[78vh] bg-gray-50 sticky cursor-pointer border-[1px] border-gray-300 p-10 rounded-md hover:bg-gray-100 hover:text-gray-500 transition ease-in-out duration-300 z-0">
+                {/* <div className="flex flex-col items-center w-1/3 justify-center gap-12 h-[78vh] bg-gray-50 sticky cursor-pointer border-[1px] border-gray-300 p-10 rounded-md hover:bg-gray-100 hover:text-gray-500 transition ease-in-out duration-300 z-0">
                     <BiUser className='text-[15vh] border-[10px] border-gray-700 text-gray-700 rounded-full' />
                     <p className='font-semibold text-xl text-center'>Our Logo</p>
-                </div>
+                </div> */}
                 <div className="login-content bg-white rounded-md w-2/3">
                     <h1 className='font-semibold'>Login</h1>
                     <form onSubmit={handleSubmit} method="POST" className="login-form w-full">
@@ -150,7 +150,7 @@ const Login: React.FC = () => {
 
                     </form>
 
-                    <div className="api-btn w-full">
+                    {/* <div className="api-btn w-full">
                         <p>or login with</p>
                         <div className="login-api-btn w-full">
                             <button className="login-api"><FaGoogle /></button>
@@ -158,7 +158,7 @@ const Login: React.FC = () => {
                             <button className="login-api"><FaApple /></button>
                             <button className="login-api"><FaTiktok /></button>
                         </div>
-                    </div>
+                    </div> */}
                     <p>Do not have an account? <Link href="/signup">Sign Up</Link></p>
                 </div>
             </div>

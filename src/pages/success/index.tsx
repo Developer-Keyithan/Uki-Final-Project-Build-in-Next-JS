@@ -11,7 +11,7 @@ const Success = () => {
 
   useEffect(() => {
     if (redirect_status !== 'succeeded') {
-        router.push(`/payment?a=${amount}&o=${orderId}&u=${userId}`);
+      router.push(`/payment?a=${amount}&o=${orderId}&u=${userId}`);
     }
     const fetchUser = async () => {
       const cookieResponse = await axios.get('/api/cookie');
@@ -38,7 +38,7 @@ const Success = () => {
           router.push(`/payment?a=${amount}&o=${orderId}&u=${userId}`);
         }
 
-        if (transactionAPIResponse.status === 200) { 
+        if (transactionAPIResponse.status === 200) {
           const updateOrderAPIResponse = await axios.put('/api/order/', {
             orderId: orderId,
             status: 'placed'
@@ -47,11 +47,12 @@ const Success = () => {
           if (updateOrderAPIResponse.status !== 200) {
             router.push(`/payment?a=${amount}&o=${orderId}&u=${userId}`);
           }
+
+          if (updateOrderAPIResponse.status === 200) {
+            router.push('/dashboard');
+          }
         }
 
-        setTimeout(() => {
-          router.push('/dashboard');
-        }, 3000);
       } catch (error) {
         console.error(error);
         router.push(`/payment?a=${amount}&o=${orderId}&u=${userId}`);

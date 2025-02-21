@@ -1,4 +1,5 @@
 import axios from 'axios'
+import Image from 'next/image';
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
 
@@ -205,9 +206,11 @@ function Orders() {
 
                                         return (
                                             <div key={product._id} className="flex gap-8 p-4 border-b-[1px] first:border-t-[1px] border-gray-300 w-full items-center">
-                                                <img
+                                                <Image
                                                     src={product.productId.productImage}
                                                     alt={`Image of ${product.productId.productName}`}
+                                                    width={160}
+                                                    height={160}
                                                     className="w-40 h-40 object-cover rounded-md flex-none"
                                                 />
                                                 <div className="flex flex-col justify-between w-full">

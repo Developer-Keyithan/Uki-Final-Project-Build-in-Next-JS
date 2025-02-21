@@ -10,7 +10,7 @@ import axios from 'axios';
 
 const Navbar: React.FC = () => {
     const [user, setUser] = useState(null);
-    const [cartCount, setCartCount] = useState<number>(0); // State for cart count
+    const [cartCount, setCartCount] = useState<number>(0);
 
     const router = useRouter();
 

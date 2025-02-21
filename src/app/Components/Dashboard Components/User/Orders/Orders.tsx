@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { IoStar } from 'react-icons/io5';
 
@@ -273,9 +274,11 @@ const ConsumerOrders = () => {
                                 {order.products.map(product => (
                                     <div key={product.productId} className="flex gap-8 py-4 border-b-[1px] first:border-t-[1px] border-gray-300">
                                         <div className='w-44 min-w-44 h-44 rounded-md overflow-hidden'>
-                                            <img
+                                            <Image
                                                 src={product.imageUrl}
                                                 alt={product.productName}
+                                                width={176}
+                                                height={176}
                                                 className='w-full h-full object-cover'
                                             />
                                         </div>

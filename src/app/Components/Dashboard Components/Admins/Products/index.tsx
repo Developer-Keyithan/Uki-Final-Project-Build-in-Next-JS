@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Image from 'next/image';
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { BiCategoryAlt, BiSearch } from 'react-icons/bi';
 import { IoPricetagsOutline } from 'react-icons/io5';
@@ -599,9 +600,11 @@ function Products({ id }: { id: string }) {
                     <div key={product._id} className="relative p-4 border rounded-lg hover:shadow-lg transition-shadow">
                         <p className='text-primaryColor'><span className='font-semibold'>ID: </span>{product._id}</p>
                         <div className="flex gap-6 mt-4">
-                            <img
+                            <Image
                                 src={product.productImages[0].imageUrl}
                                 alt={product.productName}
+                                width={144}
+                                height={144}
                                 className="w-36 h-36 object-cover rounded"
                             />
                             <div className="flex-1">

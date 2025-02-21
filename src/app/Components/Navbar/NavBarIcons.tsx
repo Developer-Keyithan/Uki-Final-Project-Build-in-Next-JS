@@ -4,6 +4,7 @@ import { BiUser } from "react-icons/bi";
 import { IoCartOutline } from "react-icons/io5";
 import Profile from "../Profile/Profile";
 import Link from "next/link";
+import Image from "next/image";
 
 
 
@@ -34,9 +35,11 @@ const NavBarIcons: React.FC<NavBarIconsProps> = ({ userData, cartCount}) => {
             <div className="text-2xl flex justify-center items-center cursor-pointer">
                 {isLoggedIn ? (
                     userData?.profileImage ? (
-                        <img
+                        <Image
                             src={userData.profileImage}
                             alt="Profile"
+                            width={32}
+                            height={32}
                             className="w-8 h-8 rounded-full object-cover"
                             onClick={handleProfile}
                         />

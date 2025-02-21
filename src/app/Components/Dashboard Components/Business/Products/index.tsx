@@ -4,6 +4,7 @@ import { MdDelete, MdEdit, MdSave } from 'react-icons/md';
 import Calendar from '../../../Calendar/Calendar';
 import { toast, ToastContainer } from 'react-toastify';
 import axios from 'axios';
+import Image from 'next/image';
 
 interface Stock {
     unit: string;
@@ -414,9 +415,11 @@ const Products = ({ id }: { id: string }) => {
                                                     Product Image
                                                 </label>
                                                 <div className="w-40 h-40 bg-gray-100 rounded-lg overflow-hidden">
-                                                    <img
+                                                    <Image
                                                         src={tempImageUrl || product.productImages[0]?.imageUrl || '/default-product.png'}
                                                         alt="Product preview"
+                                                        width={160}
+                                                        height={160}
                                                         className="w-full h-full object-cover"
                                                     />
                                                 </div>
@@ -584,9 +587,11 @@ const Products = ({ id }: { id: string }) => {
                                     <div className='relative'>
                                         <div className='flex gap-6 flex-wrap'>
                                             <div className='w-40 h-40 bg-gray-100 rounded-lg overflow-hidden shrink-0'>
-                                                <img
+                                                <Image
                                                     src={product.productImages[0]?.imageUrl || '/default-product.png'}
                                                     alt={product.productName}
+                                                    width={160}
+                                                    height={160}
                                                     className='w-full h-full object-cover'
                                                 />
                                             </div>

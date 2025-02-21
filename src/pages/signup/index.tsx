@@ -184,7 +184,7 @@ const SignUp = () => {
                         <button className='signup-btn' type='submit'>Create Account <MdOutlineAccountBalanceWallet /></button>
                     </form>
 
-                    <div className="api-btn w-full">
+                    {/* <div className="api-btn w-full">
                         <p>or signup with</p>
                         <div className='signup-api-btn w-full'>
                             <button className='signup-api'><FaGoogle /></button>
@@ -192,7 +192,7 @@ const SignUp = () => {
                             <button className='signup-api'><FaApple /></button>
                             <button className='signup-api'><FaTiktok /></button>
                         </div>
-                    </div>
+                    </div> */}
                     <p>Already have an account? <Link href="/login">Login</Link></p>
                 </div>
             </div>

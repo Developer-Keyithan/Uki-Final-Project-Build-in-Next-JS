@@ -1,6 +1,7 @@
 'use client'
 
 import axios from "axios";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -191,9 +192,11 @@ const Orders = () => {
 
                                         return (
                                             <div key={product.productId} className="flex gap-8 p-4 border-b-[1px] border-gray-300 w-full">
-                                                <img
+                                                <Image
                                                     src={product.imageUrl}
                                                     alt={`Image of ${product.productName}`}
+                                                    width={160}
+                                                    height={160}
                                                     className="w-40 h-40 object-cover rounded-md"
                                                 />
                                                 <div className="flex flex-col justify-between w-full">

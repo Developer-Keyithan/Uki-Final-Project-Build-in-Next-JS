@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import RatingCart from "../../../Rating Cart/RatingCart";
 import { toast, ToastContainer } from "react-toastify";
 import { IoStar } from "react-icons/io5";
+import Image from "next/image";
 
 interface Product {
     _id: string;
@@ -166,9 +167,11 @@ const Reviews = () => {
             {reviews.length > 0 ? (
                 reviews.map(review => (
                     <div key={review._id} className="flex gap-8 p-4 ring-1 ring-gray-300 rounded-sm">
-                        <img
+                        <Image
                             src={review.productId.productImages[0].imageUrl}
                             alt={review.productId.productName}
+                            width={176}
+                            height={176}
                             className="w-44 h-44 object-cover rounded-sm"
                         />
                         <div className="w-full flex flex-col justify-between">

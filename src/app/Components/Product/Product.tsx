@@ -16,17 +16,18 @@ interface product {
         newPrice: string;
         oldPrice: string;
     };
-    productImages: string[] | StaticImageData[];
+    productImages: [{
+        imageUrl: string;
+    }];
     rating: number;
     deliveryType: string;
 }
 
 interface FilterProps {
     data: product[];
-    updateCartCount: () => void;
 }
 
-const Products: React.FC<FilterProps> = ({ data, updateCartCount }) => {
+const Products: React.FC<FilterProps> = ({ data }) => {
     const [activeFilters, setActiveFilters] = useState<string[]>([]);
 
     const handleFilterClick = (filter: string) => {
@@ -86,7 +87,7 @@ const Products: React.FC<FilterProps> = ({ data, updateCartCount }) => {
 
             <div className='carts'>
                 {data.map((item, index) => (
-                    <Cart key={index} data={item} updateCartCount={updateCartCount} />
+                    <Cart key={index} data={item} />
                 ))}
             </div>
         </div>

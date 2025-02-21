@@ -63,7 +63,7 @@ export const POST = async (req: NextRequest) => {
                     freeDelivery: product.freeDelivery
                 };
                 return acc;
-            }, {} as Record<string, any>);
+            }, {});
 
             const mergedOrderDetails = await Promise.all(orders.map(async (order) => {
                 const address = await DeliveryAddress.findById(order.deliveryAddressId);
@@ -129,7 +129,7 @@ export const POST = async (req: NextRequest) => {
                     agricationMethod: product.agricationMethod || "Not specified",
                 };
                 return acc;
-            }, {} as Record<string, any>);
+            }, {});
 
             const filteredOrderDetails = filteredOrders.map(order => ({
                 orderId: order._id,

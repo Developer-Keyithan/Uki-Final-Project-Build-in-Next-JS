@@ -46,7 +46,7 @@ const Payment = () => {
             }
         }
         fetchData()
-    }, [])
+    }, [router])
 
     if (amount <= 0) {
         return <div>Error: Invalid amount</div>;

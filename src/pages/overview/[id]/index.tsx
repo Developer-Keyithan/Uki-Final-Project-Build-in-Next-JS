@@ -20,12 +20,15 @@ interface Product {
   productName: string;
   price: { newPrice: string; oldPrice: string };
   rating: number;
-  productImages: string[];
-  relatedImages: string[];
+  productImages: [{
+    imageUrl: string;
+  }];
   description: string;
   district: string;
   freshness: string;
   agricationMethod: string;
+  productDescription: string;
+  harvestingDate: Date;
 }
 
 function ProductOverviewPage() {

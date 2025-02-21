@@ -8,6 +8,7 @@ import AddressCart from '../../app/Components/Address Cart/AddressCart';
 import OrderOverview from '../../app/Components/OrderOverview/OrderOverview';
 import DeliveryAddressForm from '../../app/Components/Delivery Address Form/DeliveryAddressForm';
 import { RiUnpinFill } from 'react-icons/ri';
+import Image from 'next/image';
 
 interface Product {
     unit: string;
@@ -22,15 +23,20 @@ interface Product {
 }
 
 interface Address {
-    id: string;
+    _id: string;
+    no: number;
+    street: string;
+    division: string;
     userId: string;
     address: string;
-    city: string;
-    state: string;
     country: string;
     postalCode: string;
     phoneNumber: string;
     isDefault: boolean;
+    town: string;
+    district: string;
+    contactNumber: string;
+    place: 'Home' | 'Work Place' | 'Other';
 }
 
 function OrderPage() {
@@ -38,10 +44,10 @@ function OrderPage() {
     // const [showCardForm, setShowCardForm] = useState(false);
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>();
     const [userId, setUserId] = useState<string>('');
     const [addresses, setAddresses] = useState<Address[]>([]);
-    const [selectedAddress, setSelectedAddress] = useState<any>({});
+    const [selectedAddress, setSelectedAddress] = useState<Address>();
     // interface Card {
     //     // Define the properties of a card here
     //     id: string;
@@ -49,10 +55,11 @@ function OrderPage() {
     //     expiryDate: string;
     //     cardHolderName: string;
     // }
-    
+
     // const [cards, setCards] = useState<Card[]>([]);
     // const [selectedCard, setSelectedCard] = useState(null);
     const [paymentMethod, setPaymentMethod] = useState<'card' | 'cash'>('card');
+
 
     const router = useRouter();
     const { id } = router.query;
@@ -185,9 +192,11 @@ function OrderPage() {
                                     <div key={index} className="border-b-[1px] p-4 rounded hover:bg-gray-100">
                                         <div className="w-full h-max flex gap-8 overflow-hidden">
                                             <div className='h-40 w-40 overflow-hidden bg-gray-200 rounded'>
-                                                <img
+                                                <Image
                                                     src={product.imageUrl || '/default-image.jpg'}
                                                     alt={product.productName || product.name || 'Product'}
+                                                    width={160}
+                                                    height={160}
                                                     className="h-full w-full object-cover"
                                                 />
                                             </div>
@@ -256,7 +265,7 @@ function OrderPage() {
                             />
                         </div>
                     </div>
-                )} 
+                )}
 
                 {/* {showCardForm && (
                     <div className="fixed inset-0 flex justify-center items-center px-[30vw] backdrop-blur-lg z-[100]">
@@ -267,7 +276,22 @@ function OrderPage() {
                 )} */}
             </div>
             <div className="bottom-container mt-5 sticky bottom-0 z-40">
-                <OrderOverview products={products} userId={userId} address={selectedAddress} paymentMethod={paymentMethod} />
+                <OrderOverview
+                    products={products}
+                    userId={userId}
+                    address={selectedAddress || {
+                        _id: '',
+                        no: 0,
+                        street: '',
+                        division: '',
+                        town: '',
+                        district: '',
+                        contactNumber: '',
+                        place: 'Home'
+                    }}
+                    paymentMethod={paymentMethod}
+                />
+
             </div>
             <Footer />
         </div>

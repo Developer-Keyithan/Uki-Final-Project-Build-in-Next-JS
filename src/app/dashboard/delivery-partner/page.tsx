@@ -30,7 +30,7 @@ interface Order {
   createdAt: Date;
 }
 
-const adminDashboard = () => {
+const DeliveryPartnerDashboard = () => {
   const [user, setUser] = useState({
     _id: '',
     firstName: '',
@@ -199,4 +199,4 @@ const adminDashboard = () => {
   )
 }
 
-export default adminDashboard;
+export default DeliveryPartnerDashboard;

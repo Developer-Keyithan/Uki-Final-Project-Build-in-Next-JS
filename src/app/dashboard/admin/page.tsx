@@ -10,7 +10,7 @@ import Navbar from "../../Components/Navbar/Navbar";
 import Footer from "../../Components/Footer/Footer";
 
 
-const adminDashboard = () => {
+const AdminDashboard = () => {
   const [user, setUser] = useState({
     _id: '',
     firstName: '',
@@ -88,4 +88,4 @@ const adminDashboard = () => {
   )
 }
 
-export default adminDashboard;
+export default AdminDashboard;

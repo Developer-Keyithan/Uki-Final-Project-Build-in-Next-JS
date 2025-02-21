@@ -6,14 +6,21 @@ import { FaLocationDot } from "react-icons/fa6";
 
 interface AddressData {
   _id: string;
-  no?: string | number;
-  street?: string;
+  no: number;
+  street: string;
+  division: string;
+  userId: string;
+  address: string;
+  country: string;
+  postalCode: string;
+  phoneNumber: string;
+  isDefault: boolean;
   town: string;
-  division?: string;
   district: string;
   contactNumber: string;
-  place: 'Home' | 'Work Place' | 'Undifined';
+  place: 'Home' | 'Work Place' | 'Other';
 }
+
 
 interface AddressCardItemProps {
   data: AddressData;

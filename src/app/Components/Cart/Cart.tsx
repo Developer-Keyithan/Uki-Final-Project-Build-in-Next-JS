@@ -19,12 +19,11 @@ interface ProductData {
         oldPrice: string;
     };
     rating: number;
-    productImages: [{ imageUrl: string | StaticImageData }];
+    productImages: [{ imageUrl: string }];
 }
 
 interface CartProps {
     data: ProductData;
-    updateCartCount: () => void;
 }
 
 const Cart: React.FC<CartProps> = ({ data }) => {
@@ -72,7 +71,7 @@ const Cart: React.FC<CartProps> = ({ data }) => {
         setIsHover(false);
     };
 
-    const image = typeof data.productImages[0].imageUrl === 'string' ? data.productImages[0].imageUrl : data.productImages[0].imageUrl.src;
+    const image = typeof data.productImages[0].imageUrl === 'string' ? data.productImages[0].imageUrl : data.productImages[0].imageUrl;
 
     const handleProduct = () => {
         const id = data._id;

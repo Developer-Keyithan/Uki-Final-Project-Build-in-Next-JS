@@ -14,7 +14,6 @@ const LandingPage: React.FC = () => {
     const [products, setProducts] = useState([]);
     const [visibleProducts, setVisibleProducts] = useState(12);
     const [visibleShowMoreBtn, setVisibleShowMoreBtn] = useState(true);
-    const [cartCount, setCartCount] = useState(0);
     const router = useRouter();
 
     useEffect(() => {
@@ -39,19 +38,6 @@ const LandingPage: React.FC = () => {
         router.push('/products');
     };
 
-    useEffect(() => {
-        const fetchCardCount = async () => {
-            try {
-                const { data } = await axios.get('/api/cookie');
-                const cartCountResponse = await axios.post('/api/cart/cart-size', { userId: data.user.id });
-                setCartCount(cartCountResponse.data.length)
-            } catch (error) {
-                console.error('Error updating cart count:', error);
-            }
-        };
-        fetchCardCount();
-    }, []);
-
     return (
         <div>
             <Navbar />
@@ -61,7 +47,7 @@ const LandingPage: React.FC = () => {
                     <Hero />
                 </div>
                 <div className='Products-container mx-60'>
-                    <Product data={products.slice(0, visibleProducts)} updateCartCount={() => setCartCount(cartCount)} />
+                    <Product data={products.slice(0, visibleProducts)} />
                     {visibleShowMoreBtn ? (
                         <div className="show-more">
                             <button onClick={loadMoreProducts}>Show More <FaArrowRightLong /></button>

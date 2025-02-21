@@ -29,7 +29,7 @@ const Navbar: React.FC = () => {
     const updateCartCount = async () => {
         try {
             const { data } = await axios.get('/api/cookie');
-            
+
             const fetchCartCount = async () => {
                 try {
                     const cartCountResponse = await axios.post('/api/cart/cart-size', { userId: data.user.id });
@@ -38,14 +38,14 @@ const Navbar: React.FC = () => {
                     console.error('Error fetching cart count:', error);
                 }
             };
-    
+
             await fetchCartCount();
             setInterval(fetchCartCount, 1000);
         } catch (error) {
             console.error('Error updating cart count:', error);
         }
     };
-    
+
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -93,7 +93,7 @@ const Navbar: React.FC = () => {
                     <div className="">
                         <div className='flex flex-row gap-2'>
                             <SearchBar />
-                            <NavBarIcons userData={user} cartCount={cartCount} updateCartCount={updateCartCount} />
+                            {user && <NavBarIcons userData={user} cartCount={cartCount} updateCartCount={updateCartCount} />}
                         </div>
                     </div>
                 </div>

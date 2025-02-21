@@ -7,13 +7,14 @@ import { IoIosRemove, IoIosAdd } from "react-icons/io";
 import { IoShareSocialSharp } from "react-icons/io5";
 import { FaRegHeart } from "react-icons/fa";
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 interface productProps {
   product: {
     _id: string;
     productName: string;
     productDescription: string;
-    harvestingDate: string;
+    harvestingDate: Date;
     agricationMethod: string;
     price: {
       newPrice: string;
@@ -72,8 +73,7 @@ const ProductCart: React.FC<productProps> = ({ product }) => {
   return (
     <div className='productcart-container border-[1px] border-gray-800 mt-5 rounded-[5px]'>
       <div className="product-images">
-        <img src={product.productImages[0].imageUrl} alt="" className='h-full object-cover' />
-
+        <Image src={product.productImages[0].imageUrl} alt="" className='h-full object-cover' />
       </div>
 
       <div className="product-overview-content">
@@ -92,7 +92,7 @@ const ProductCart: React.FC<productProps> = ({ product }) => {
         <div className="extra-product-info">
           {/* <p>From: {district || 'Vavuniya'}</p> */}
           <p>From: {'Vavuniya'}</p>
-          <p>Freshness: {harvestingDate}</p>
+          <p>Freshness: {harvestingDate.toDateString()}</p>
           <p>Agriculture Method: {agricationMethod}</p>
         </div>
 

@@ -100,9 +100,9 @@ export const GET = async () => {
             })
 
         const modifiedOrders = orders.map(order => ({
-            ...order._doc,
+            ...order.toObject(),
             products: order.products.map((product: Product) => ({
-                ...product._doc,
+                ...product,
                 productId: {
                     productName: product.productId.productName,
                     productImage: product.productId.productImages?.[0]?.imageUrl || null

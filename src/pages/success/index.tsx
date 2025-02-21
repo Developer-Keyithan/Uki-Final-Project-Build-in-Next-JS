@@ -59,7 +59,7 @@ const Success = () => {
       }
     }
     fetchUser();
-  }, [redirect_status, userId, orderId, amount, router]);
+  }, [payment_intent ,redirect_status, userId, orderId, amount, router]);
   return (
     <div className='min-h-screen flex items-center justify-center'>
       <div className='px-20 py-40 shadow-xl animate-fade-in-scale text-white text-center border m-10 rounded-md bg-gradient-to-tr from-primaryColor to-primaryButtonColor'>

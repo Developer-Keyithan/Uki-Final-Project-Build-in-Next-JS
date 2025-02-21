@@ -11,7 +11,7 @@ import { BiUser } from 'react-icons/bi';
 import Navbar from '../../app/Components/Navbar/Navbar';
 import Footer from '../../app/Components/Footer/Footer';
 
-const sellerForm = () => {
+const SellerForm = () => {
     const router = useRouter();
     const [businessName, setBusinessName] = useState('');
     const [businessEmail, setBusinessEmail] = useState('');
@@ -103,9 +103,10 @@ const sellerForm = () => {
                 });
             }
 
-        } catch (error: any) {
+        } catch (error) {
+            console.log(error);
             toast.error(
-                error.response?.data?.error || "Something went wrong. Please try again.",
+                "Something went wrong. Please try again.",
                 {
                     style: {
                         width: '500px',
@@ -396,4 +397,4 @@ const sellerForm = () => {
     )
 }
 
-export default sellerForm
+export default SellerForm

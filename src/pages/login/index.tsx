@@ -25,8 +25,15 @@ const Login: React.FC = () => {
         setIsLoading(true)
         const errors = [];
 
-        if (!emailOrMobileNumber) {errors.push('e-mail or mobile number'),setIsLoading(false)};
-        if (!password) {errors.push('password'),setIsLoading(false)};
+        if (!emailOrMobileNumber) {
+            errors.push('e-mail or mobile number');
+            setIsLoading(false);
+        }
+        
+        if (!password) {
+            errors.push('password');
+            setIsLoading(false);
+        }        
 
         if (errors.length > 0) {
             const errorMessage = errors
@@ -86,9 +93,10 @@ const Login: React.FC = () => {
             }
 
 
-        } catch (error: any) {
+        } catch (error) {
+            console.log(error);
             toast.error(
-                error.response?.data?.error || "Something went wrong. Please try again.",
+                "Something went wrong. Please try again.",
                 {
                     style: {
                         width: '500px',

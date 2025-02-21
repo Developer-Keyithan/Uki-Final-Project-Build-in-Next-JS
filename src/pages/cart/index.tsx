@@ -7,6 +7,7 @@ import Footer from '../../app/Components/Footer/Footer';
 import { RiUnpinFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 interface CartItem {
     price: { newPrice: number };
@@ -201,7 +202,7 @@ function CartPage() {
                                         <div className="flex w-full ring-1 ring-gray-300 rounded-sm p-3 gap-8">
                                             <div className='w-1/5'>
                                                 {cartItem.productImage && cartItem.productImage.length > 0 && (
-                                                    <img src={cartItem.productImage} className='h-[8.2rem] w-full object-cover rounded-sm' />
+                                                    <Image src={cartItem.productImage} alt={cartItem.productName} height={132} width={132} className='h-[8.2rem] w-full object-cover rounded-sm' />
                                                 )}
 
                                             </div>
@@ -278,14 +279,14 @@ function CartPage() {
                     <h2 className='font-semibold text-2xl mb-5'>Order Summary</h2>
                     <div className="h-[75%] overflow-y-auto no-scrollbar">
                         {selectedItems.size === 0 ? (
-                            <p className="flex items-center justify-center text-gray-500 py-4 w-full h-full">You didn't select an item for order</p>
+                            <p className="flex items-center justify-center text-gray-500 py-4 w-full h-full">You did not select an item for order</p>
                         ) : (
                             [...selectedItems].map((selectedItemId) => {
                                 const selectedItem = cartItems.find(item => item._id === selectedItemId);
                                 return selectedItem ? (
                                     <div key={selectedItem._id} className='flex gap-8 p-4 border-b-[1px] hover:bg-gray-100 transition ease-in-out duration-300'>
                                         <div className='w-1/4 h-24'>
-                                            <img src={selectedItem.productImage} alt={selectedItem.productName} className='object-cover h-full w-full' />
+                                            <Image src={selectedItem.productImage} alt={selectedItem.productName} width={96} height={96} className='object-cover h-full w-full' />
                                         </div>
                                         <div className='w-3/4'>
                                             <div className='flex justify-between items-start w-full'>

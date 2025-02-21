@@ -84,7 +84,7 @@ const Profile: React.FC = () => {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [editedEmail]);
 
   const handleEmailEdit = () => setIsEmailEdit(true);
   const handleMobileNumberEdit = () => setIsMobileNumberEdit(true);

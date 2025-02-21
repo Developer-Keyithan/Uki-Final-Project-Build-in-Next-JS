@@ -266,7 +266,7 @@ const DeliveryAddressForm: React.FC<DeliveryAddressFormProps> = ({ handleClose, 
                                     type="radio"
                                     name='delivery-place'
                                     id='other-address'
-                                    value='Undifined'
+                                    value='Other'
                                     className='cursor-pointer'
                                     onChange={handleAddressChange}
                                 />

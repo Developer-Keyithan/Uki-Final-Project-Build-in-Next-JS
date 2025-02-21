@@ -22,17 +22,6 @@ type UserDataType = {
   updatedAt: string;
 };
 
-interface ProductType {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  quantity: number;
-  userId: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
 const DashboardPage = () => {
   const [user, setUser] = useState<UserDataType | null>(null);
   const [loading, setLoading] = useState<boolean>(true);

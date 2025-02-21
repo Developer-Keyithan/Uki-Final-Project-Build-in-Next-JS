@@ -11,7 +11,7 @@ import Footer from "../../Components/Footer/Footer";
 import Payments from "@/app/Components/Dashboard Components/Admins/Payments";
 
 
-const adminDashboard = () => {
+const SuperAdminDashboard = () => {
   const [user, setUser] = useState({
     _id: '',
     firstName: '',
@@ -90,4 +90,4 @@ const adminDashboard = () => {
   )
 }
 
-export default adminDashboard;
+export default SuperAdminDashboard;

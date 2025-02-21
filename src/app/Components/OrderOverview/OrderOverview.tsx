@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 
 interface Address {
     _id: string;
-    no?: number;
+    no: number;
     street: string;
     town: string;
     division: string;

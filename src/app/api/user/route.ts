@@ -104,7 +104,19 @@ export const PUT = async (req: NextRequest) => {
         }
         
         
-        const data: Record<string, any> = {}
+        const data: Partial<{
+            firstName: string;
+            lastName: string;
+            email: string;
+            mobileNumber: string;
+            password: string;
+            userType: string;
+            profileName: string;
+            profileImage: string;
+            favProduct: string;
+            favReview: string;
+            isBlocked: boolean;
+        }> = {};        
         if (newFirstName) data.firstName = newFirstName;
         if (newLastName) data.lastName = newLastName;
         if (newEmail) {

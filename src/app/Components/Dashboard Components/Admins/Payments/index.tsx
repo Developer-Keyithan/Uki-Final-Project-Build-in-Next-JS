@@ -18,7 +18,7 @@ interface TransactionType {
     orderId: string;
     status: string;
 }
-const index = () => {
+const Index = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const router = useRouter();
     const [transactions, setTransactions] = useState<TransactionType[] | null>(null);
@@ -82,4 +82,4 @@ const index = () => {
     )
 }
 
-export default index
+export default Index

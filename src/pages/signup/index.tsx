@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 
 import { MdOutlineAccountBalanceWallet } from "react-icons/md";
-import { FaGoogle, FaFacebook, FaApple, FaTiktok } from "react-icons/fa";
+// import { FaGoogle, FaFacebook, FaApple, FaTiktok } from "react-icons/fa";
 import { BiUser } from 'react-icons/bi';
 
 import Navbar from '../../app/Components/Navbar/Navbar';

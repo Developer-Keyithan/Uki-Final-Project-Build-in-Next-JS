@@ -8,7 +8,7 @@ import Orders from "../../Components/Dashboard Components/Admins/Orders";
 import Contacts from "../../Components/Dashboard Components/Admins/Contacts";
 import Navbar from "../../Components/Navbar/Navbar";
 import Footer from "../../Components/Footer/Footer";
-import Payments from "@/app/Components/Dashboard Components/Admins/Payments";
+import Payments from "../../Components/Dashboard Components/Admins/Payments";
 
 
 const SuperAdminDashboard = () => {

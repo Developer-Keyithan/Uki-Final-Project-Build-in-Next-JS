@@ -45,7 +45,7 @@ const Checkout = ({ finalAmount, orderId, userId }: { finalAmount: number, order
       elements,
       clientSecret,
       confirmParams: {
-        return_url: `http://localhost:3000/success?amount=${finalAmount}&orderId=${orderId}&userId=${userId}`
+        return_url: `http://www.fermire.vercel.app/success?amount=${finalAmount}&orderId=${orderId}&userId=${userId}`
       }
     });
 

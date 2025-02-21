@@ -28,7 +28,7 @@ interface Product {
   freshness: string;
   agricationMethod: string;
   productDescription: string;
-  harvestingDate: Date;
+  harvestingDate: string;
 }
 
 function ProductOverviewPage() {

@@ -51,7 +51,7 @@ export default function DashboardLayout({
                     router.push('/dashboard/admin');
                     break;
                 case 'seller':
-                    router.push('/dashboard/business');
+                    router.push('/dashboard/seller');
                     break;
                 case 'super-admin':
                     router.push('/dashboard/super-admin');

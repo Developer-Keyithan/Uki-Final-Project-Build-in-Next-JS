@@ -9,9 +9,7 @@ import { toast } from "react-toastify";
 
 interface Product {
   _id: string;
-  productId: {
-    productName: string
-  }
+  productName: string
   price: number;
   quantity: {
     unit: string;
@@ -77,6 +75,8 @@ const DeliveryPartnerDashboard = () => {
 
     fetchAllOrders()
   }, [])
+
+  console.log(orders)
 
   if (error) {
     return (
@@ -146,7 +146,7 @@ const DeliveryPartnerDashboard = () => {
                           return (
                             <div key={product._id} className="flex gap-8 p-4 border-b-[1px] first:border-t-[1px] border-gray-300 w-full items-center">
                               <div className="flex flex-col justify-between w-full">
-                                <h4 className="text-2xl font-semibold">{product.productId.productName}</h4>
+                                <h4 className="text-2xl font-semibold">{product.productName}</h4>
                                 <div className="grid grid-cols-3">
                                   <div>
                                     <p className="text-sm text-gray-500 font-semibold">Amount:</p>

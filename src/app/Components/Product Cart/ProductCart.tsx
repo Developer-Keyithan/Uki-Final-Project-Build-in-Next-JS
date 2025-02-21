@@ -1,3 +1,5 @@
+'use client'
+
 import './ProductCart.css';
 import { useState } from 'react';
 import RatingCart from '../Rating Cart/RatingCart';
@@ -14,7 +16,7 @@ interface productProps {
     _id: string;
     productName: string;
     productDescription: string;
-    harvestingDate: Date;
+    harvestingDate: string;
     agricationMethod: string;
     price: {
       newPrice: string;
@@ -73,7 +75,7 @@ const ProductCart: React.FC<productProps> = ({ product }) => {
   return (
     <div className='productcart-container border-[1px] border-gray-800 mt-5 rounded-[5px]'>
       <div className="product-images">
-        <Image src={product.productImages[0].imageUrl} alt="" className='h-full object-cover' />
+        <Image src={product.productImages[0].imageUrl} alt="" width={400} height={400} className='h-full object-cover' />
       </div>
 
       <div className="product-overview-content">
@@ -92,7 +94,7 @@ const ProductCart: React.FC<productProps> = ({ product }) => {
         <div className="extra-product-info">
           {/* <p>From: {district || 'Vavuniya'}</p> */}
           <p>From: {'Vavuniya'}</p>
-          <p>Freshness: {harvestingDate.toDateString()}</p>
+          <p>Freshness: {harvestingDate}</p>
           <p>Agriculture Method: {agricationMethod}</p>
         </div>
 

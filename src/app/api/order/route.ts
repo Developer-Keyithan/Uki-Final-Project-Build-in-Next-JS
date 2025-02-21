@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import DBconnect from "../../lib/db";
 import Cart from "../../lib/Models/Cart";
 import Order from "../../lib/Models/Order";
+import Product from "../../lib/Models/Product";
 
 
 interface Product {
@@ -10,11 +11,30 @@ interface Product {
     pricePerKg: number;
     productId: {
         productName: string;
-        productImages: {
+        productImages: [{
             imageUrl: string;
-        }[];
+        }];
     };
 }
+
+interface Order {
+    _id: string;
+    products: {
+      _id: string;
+      productName: string;
+      price: number;
+      quantity: {
+        unit: string;
+        value: number;
+      };
+      isCanceled: boolean;
+      isDelayed: boolean;
+    }[];
+    isCashOnDelivery: boolean;
+    isCanceled: boolean;
+    updatedAt: Date;
+    createdAt: Date;
+  }
 
 export const POST = async (req: NextRequest) => {
     try {
@@ -92,23 +112,45 @@ export const POST = async (req: NextRequest) => {
 export const GET = async () => {
     try {
         await DBconnect();
-        const orders = await Order.find()
-            .sort({ updatedAt: -1 })
-            .populate({
-                path: 'products.productId',
-                select: 'productImages productName'
-            })
 
-        const modifiedOrders = orders.map(order => ({
-            ...order.toObject(),
-            products: order.products.map((product: Product) => ({
-                ...product,
-                productId: {
-                    productName: product.productId.productName,
-                    productImage: product.productId.productImages?.[0]?.imageUrl || null
+        // Fetch orders
+        const orders = await Order.find().sort({ updatedAt: -1 });
+
+        const modifiedOrders: Order[] = [];
+
+        // Loop through each order
+        for (const order of orders) {
+            const modifiedProducts = [];
+
+            // Loop through each product in the order
+            for (const product of order.products) {
+                const productData = await Product.findById(product.productId);
+
+                if (productData) {
+                    modifiedProducts.push({
+                        _id: product._id,
+                        productName: productData.productName,
+                        price: product.price,
+                        quantity: {
+                            unit: product.quantity.unit,
+                            value: product.quantity.value,
+                        },
+                        isCanceled: product.isCanceled,
+                        isDelayed: product.isDelayed,
+                    });
                 }
-            }))
-        }));
+            }
+
+            // Push the modified order with updated product information
+            modifiedOrders.push({
+                _id: order._id.toString(),
+                products: modifiedProducts,
+                isCashOnDelivery: order.isCashOnDelivery,
+                isCanceled: order.isCanceled,
+                updatedAt: order.updatedAt,
+                createdAt: order.createdAt,
+            });
+        }
 
         return NextResponse.json({ success: true, orders: modifiedOrders });
     } catch (error) {

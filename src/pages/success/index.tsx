@@ -34,10 +34,6 @@ const Success = () => {
           transactionId: payment_intent
         });
 
-        if (transactionAPIResponse.status !== 200) {
-          router.push(`/payment?a=${amount}&o=${orderId}&u=${userId}`);
-        }
-
         if (transactionAPIResponse.status === 200) {
           const updateOrderAPIResponse = await axios.put('/api/order/', {
             orderId: orderId,
@@ -45,16 +41,18 @@ const Success = () => {
           });
 
           if (updateOrderAPIResponse.status === 200) {
-            setTimeout(() => {
-              router.push('/dashboard');
-            }
-              , 5000);
+            router.push('/dashboard');
           }
+          
           if (updateOrderAPIResponse.status !== 200) {
             router.push(`/payment?a=${amount}&o=${orderId}&u=${userId}`);
           }
-
         }
+        if (transactionAPIResponse.status !== 200) {
+          router.push(`/payment?a=${amount}&o=${orderId}&u=${userId}`);
+        }
+
+
 
       } catch (error) {
         console.error(error);

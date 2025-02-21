@@ -1,9 +1,8 @@
 import './CardsCart.css';
-// import sampleData from '../../Data/CardData';
 import visa from '../../Assets/visa-card.png';
 import master from '../../Assets/master-card.png';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Image, { StaticImageData } from 'next/image';
 
 interface BankCard {
@@ -11,7 +10,7 @@ interface BankCard {
   cardNumber: number;
   expireDate: {
     month: number;
-    year: number
+    year: number;
   };
   savedDate: string;
   cardType: 'Master Card' | 'Visa Card';
@@ -67,17 +66,19 @@ function CardsCard({ data, onSelectCard }: { data: BankCard[], onSelectCard: (ca
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   useEffect(() => {
-    const defaultIndex = data.findIndex((item) => item.default === true);
-    if (defaultIndex !== -1) {
-      setSelectedIndex(defaultIndex);
-      onSelectCard(data[defaultIndex]);
+    if (data.length > 0) {
+      const defaultIndex = data.findIndex((item) => item.default === true);
+      if (defaultIndex !== -1) {
+        setSelectedIndex(defaultIndex);
+        onSelectCard(data[defaultIndex]); // Default card selection
+      }
     }
-  }, []);
+  }, [data, onSelectCard]); // ✅ Fixed Hook Warning
 
-  const handleClick = (index: number, item: BankCard) => {
+  const handleClick = useCallback((index: number, item: BankCard) => {
     setSelectedIndex(index);
-    onSelectCard(item)
-  };
+    onSelectCard(item);
+  }, [onSelectCard]); // ✅ Memoized function
 
   return (
     <div className='card-card-container'>

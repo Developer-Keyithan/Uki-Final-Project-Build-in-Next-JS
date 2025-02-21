@@ -192,11 +192,14 @@ const UploadProduct: React.FC<CardFormProps> = ({ handleClose }) => {
                         </label>
                         {previewUrl && (
                             <div className="w-28 h-28">
-                                <img
-                                    src={previewUrl}
-                                    alt="Preview"
-                                    className="rounded h-full w-full object-cover"
-                                />
+                            <Image
+                                src={previewUrl}
+                                alt="Preview"
+                                width={112} // 28 * 4 (tailwind w-28)
+                                height={112} // 28 * 4
+                                className="rounded h-full w-full object-cover"
+                            />
+
                             </div>
                         )}
                         {/* {file && <span className="text-gray-600 text-sm mt-24">{file.name}</span>} */}

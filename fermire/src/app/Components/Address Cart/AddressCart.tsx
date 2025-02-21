@@ -70,12 +70,14 @@ function AddressCard({ data, onSelectAddress }: { data: AddressData[], onSelectA
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   useEffect(() => {
-    const defaultIndex = data.findIndex((item) => item.place === 'Home');
-    if (defaultIndex !== -1) {
-      setSelectedIndex(defaultIndex);
-      onSelectAddress(data[defaultIndex]);  // Send default address on load
+    if (data.length > 0) {
+      const defaultIndex = data.findIndex((item) => item.place === 'Home');
+      if (defaultIndex !== -1) {
+        setSelectedIndex(defaultIndex);
+        onSelectAddress(data[defaultIndex]);  // Send default address on load
+      }
     }
-  }, []);
+  }, [data, onSelectAddress]);
 
   const handleClick = (index: number, item: AddressData) => {
     setSelectedIndex(index);
